@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/providers/search_music_provider.dart';
+import 'package:spotify_clone/utils/flatten_artists_name.dart';
 import 'package:spotify_clone/view/widget/music_player.dart';
 
 class SearchMusicScreens extends StatefulWidget {
@@ -118,13 +119,14 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
                                 ?.copyWith(
                                   fontWeight: FontWeight.w900,
                                 )),
-                        subtitle: Text(searchResult.artists?[0].name ?? "",
+                        subtitle: Text(
+                            flattenArtistName(searchResult.artists) ?? "",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(
-                                  color: Colors.white.withOpacity(0.6),
-                                )),
+                                    color: Colors.white.withOpacity(0.6),
+                                    overflow: TextOverflow.ellipsis)),
                         leading: Image.network(
                             searchResult.album!.images?[0].url ?? ''),
                       );
