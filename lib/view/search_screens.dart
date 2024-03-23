@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotify_clone/main.dart';
 import 'package:spotify_clone/view/search_music_screens.dart';
 
 class SearchScreens extends StatefulWidget {
@@ -24,7 +25,7 @@ class _SearchScreensState extends State<SearchScreens> {
               ),
             ),
             onPressed: () =>
-                Navigator.pushNamed(context, SearchMusicScreens.id),
+                navigatorKey.currentState?.pushNamed(SearchMusicScreens.id),
             child: Row(
               children: <Widget>[
                 Icon(Icons.search, color: Colors.black.withOpacity(0.8)),

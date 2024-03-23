@@ -6,7 +6,8 @@ class Youtube {
 
   static Future<Music> getVideo(
       {required String songName, required String artistName}) async {
-    final video = (await yt.search.search("$songName $artistName")).first;
+    final video =
+        (await yt.search.search("$songName $artistName official audio")).first;
     final videoId = video.id.value;
     final manifest = await yt.videos.streamsClient.getManifest(videoId);
     final audio = manifest.audio.withHighestBitrate();

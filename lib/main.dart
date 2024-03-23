@@ -9,6 +9,8 @@ import 'package:spotify_clone/view/main_layout.dart';
 import 'package:spotify_clone/view/search_music_screens.dart';
 import 'package:spotify_clone/view/search_screens.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
@@ -62,6 +64,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: const MainLayout(),
+        navigatorKey: navigatorKey,
         routes: {
           MyHomePage.id: (context) => const MyHomePage(),
           SearchScreens.id: (context) => const SearchScreens(),
