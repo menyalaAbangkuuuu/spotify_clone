@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:spotify_clone/providers/category_provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/providers/music_provider.dart';
 import 'package:spotify_clone/providers/search_music_provider.dart';
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => MusicProvider()),
         ChangeNotifierProvider(create: (context) => SearchProvider()),
-        ChangeNotifierProvider(create: (context) => MusicPlayerProvider())
+        ChangeNotifierProvider(create: (context) => MusicPlayerProvider()),
+        ChangeNotifierProvider(create: (context) => CategoryProvider())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

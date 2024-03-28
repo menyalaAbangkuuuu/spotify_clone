@@ -1,13 +1,10 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/main.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:spotify_clone/view/full_lyric.dart';
 import 'package:spotify_clone/view/widget/stream_lyric.dart';
 

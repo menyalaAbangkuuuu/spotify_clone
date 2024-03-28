@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:spotify_clone/view/home_screens.dart';
 import 'package:spotify_clone/view/search_screens.dart';

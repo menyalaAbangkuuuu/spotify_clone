@@ -19,7 +19,7 @@ class _FullLyricScreensState extends State<FullLyricScreens> {
     return Scaffold(
       backgroundColor:
           HSLColor.fromColor(widget.musicPlayerProvider.currentTrackColor)
-              .withLightness(0.8)
+              .withLightness(0.6)
               .toColor(),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -101,8 +101,8 @@ class _FullLyricScreensState extends State<FullLyricScreens> {
                         color: Colors.white,
                       ),
                       StreamBuilder(
-                          stream: widget
-                              .musicPlayerProvider.audioPlayer.onPlayerComplete,
+                          stream: widget.musicPlayerProvider.audioPlayer
+                              .onPositionChanged,
                           builder: (context, snapshot) {
                             return IconButton(
                               onPressed: () {

@@ -21,87 +21,71 @@ class _StreamLyricState extends State<StreamLyric> {
   int _currentLyricIndex = -1;
   @override
   Widget build(BuildContext context) {
-    return widget.musicPlayerProvider.lyric!.lines.isNotEmpty &&
-            widget.musicPlayerProvider.lyric != null
-        ? StreamBuilder(
-            stream: widget.musicPlayerProvider.audioPlayer.onPositionChanged,
-            builder: (context, snapshots) {
-              if (snapshots.hasData) {
-                Duration? currentDuration = snapshots.data;
-                int lastIndex = -1;
-                for (int i = 0;
-                    i < widget.musicPlayerProvider.lyric!.lines.length;
-                    i++) {
-                  if (int.parse(widget
-                          .musicPlayerProvider.lyric!.lines[i].startTimeMs) <=
-                      currentDuration!.inMilliseconds) {
-                    lastIndex = i;
-                  } else {
-                    // Once you find a line that starts after the current time, stop the loop.
-                    break;
-                  }
-                }
+    return StreamBuilder(
+        stream: widget.musicPlayerProvider.audioPlayer.onPositionChanged,
+        builder: (context, snapshots) {
+          if (snapshots.hasData) {
+            Duration? currentDuration = snapshots.data;
+            int lastIndex = -1;
 
-                // Use lastIndex instead of currentIndex from here on
-                if (_currentLyricIndex != lastIndex) {
-                  _currentLyricIndex = lastIndex;
-                  if (lastIndex >= 0 && itemScrollController.isAttached) {
-                    itemScrollController.scrollTo(
-                      index: lastIndex,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOutCubic,
-                    );
-                  }
-                }
+            for (int i = 0;
+                i < widget.musicPlayerProvider.lyric!.lines.length;
+                i++) {
+              if (int.parse(
+                      widget.musicPlayerProvider.lyric!.lines[i].startTimeMs) <=
+                  currentDuration!.inMilliseconds) {
+                lastIndex = i < 3 ? 0 : i - 2;
+              } else {
+                break;
+              }
+            }
 
-                return ScrollablePositionedList.builder(
-                  itemCount: widget.musicPlayerProvider.lyric!.lines.length,
-                  itemBuilder: (context, index) {
-                    Duration duration =
-                        snapshots.data ?? const Duration(seconds: 0);
-
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          widget.musicPlayerProvider.audioPlayer.seek(Duration(
-                              milliseconds: int.parse(widget.musicPlayerProvider
-                                  .lyric!.lines[index].startTimeMs)));
-                        },
-                        child: Text(
-                          widget.musicPlayerProvider.lyric!.lines[index].words,
-                          style: TextStyle(
-                            color: int.parse(widget.musicPlayerProvider.lyric!
-                                        .lines[index].startTimeMs) <=
-                                    duration.inMilliseconds.toInt()
-                                ? Colors.white
-                                : Colors.black,
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  itemScrollController: itemScrollController,
-                  scrollOffsetController: scrollOffsetController,
-                  itemPositionsListener: itemPositionsListener,
-                  scrollOffsetListener: scrollOffsetListener,
+            if (_currentLyricIndex != lastIndex) {
+              _currentLyricIndex = lastIndex;
+              if (lastIndex >= 0 && itemScrollController.isAttached) {
+                itemScrollController.scrollTo(
+                  index: lastIndex,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOutCubic,
                 );
               }
-              return const SizedBox();
-            })
-        : const SizedBox(
-            height: 100,
-            child: Center(
-              child: Text(
-                'No lyrics found.',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ));
+            }
+
+            return ScrollablePositionedList.builder(
+              itemCount: widget.musicPlayerProvider.lyric!.lines.length,
+              itemBuilder: (context, index) {
+                bool isCurrent = index == _currentLyricIndex + 2;
+                bool isPast = index < _currentLyricIndex + 2;
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      widget.musicPlayerProvider.audioPlayer.seek(Duration(
+                          milliseconds: int.parse(widget.musicPlayerProvider
+                              .lyric!.lines[index].startTimeMs)));
+                    },
+                    child: Text(
+                      widget.musicPlayerProvider.lyric!.lines[index].words,
+                      style: TextStyle(
+                        color: isPast
+                            ? Colors.white.withOpacity(0.7)
+                            : isCurrent
+                                ? Colors.white
+                                : Colors.black,
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                );
+              },
+              itemScrollController: itemScrollController,
+              scrollOffsetController: scrollOffsetController,
+              itemPositionsListener: itemPositionsListener,
+              scrollOffsetListener: scrollOffsetListener,
+            );
+          }
+          return const SizedBox();
+        });
   }
 }

@@ -6,10 +6,10 @@ class MusicProvider extends ChangeNotifier {
   List<PlaylistSimple>? topTracks;
 
   MusicProvider() {
-    getTopPLaylist();
+    getTopPlaylist();
   }
 
-  Future<void> getTopPLaylist() async {
+  Future<void> getTopPlaylist() async {
     topTracks = await SpotifyService.getTopTracks();
     notifyListeners();
   }

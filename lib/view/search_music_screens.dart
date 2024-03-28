@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
@@ -122,8 +121,7 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
                                 ?.copyWith(
                                   fontWeight: FontWeight.w900,
                                 )),
-                        subtitle: Text(
-                            flattenArtistName(searchResult.artists) ?? "",
+                        subtitle: Text(flattenArtistName(searchResult.artists),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium

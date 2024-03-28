@@ -15,11 +15,11 @@ class Lyric {
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['error'] = error;
-    _data['syncType'] = syncType;
-    _data['lines'] = lines.map((e) => e.toJson()).toList();
-    return _data;
+    final data = <String, dynamic>{};
+    data['error'] = error;
+    data['syncType'] = syncType;
+    data['lines'] = lines.map((e) => e.toJson()).toList();
+    return data;
   }
 }
 
@@ -43,11 +43,11 @@ class Lines {
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['startTimeMs'] = startTimeMs;
-    _data['words'] = words;
-    _data['syllables'] = syllables;
-    _data['endTimeMs'] = endTimeMs;
-    return _data;
+    final data = <String, dynamic>{};
+    data['startTimeMs'] = startTimeMs;
+    data['words'] = words;
+    data['syllables'] = syllables;
+    data['endTimeMs'] = endTimeMs;
+    return data;
   }
 }

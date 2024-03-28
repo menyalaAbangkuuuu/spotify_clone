@@ -103,8 +103,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
                                     ),
                                     Text(
                                       flattenArtistName(musicPlayerProvider
-                                              .currentTrack?.artists) ??
-                                          "Unknown Artist",
+                                          .currentTrack?.artists),
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium

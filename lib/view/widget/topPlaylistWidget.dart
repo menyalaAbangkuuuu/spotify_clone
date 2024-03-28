@@ -4,6 +4,8 @@ import 'package:spotify/spotify.dart';
 import 'package:spotify_clone/providers/music_provider.dart';
 
 class TopTracksWidget extends StatelessWidget {
+  const TopTracksWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Access the MusicProvider
