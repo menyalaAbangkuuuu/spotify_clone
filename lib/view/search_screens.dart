@@ -1,12 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:spotify_clone/main.dart';
 import 'package:spotify_clone/view/search_music_screens.dart';
 import 'package:spotify_clone/view/widget/categories_tile.dart';
 
 class SearchScreens extends StatefulWidget {
-  static const id = 'search_screens';
+  static const id = '/search';
   const SearchScreens({super.key});
 
   @override
@@ -32,8 +31,7 @@ class _SearchScreensState extends State<SearchScreens> {
                 ),
               ),
             ),
-            onPressed: () =>
-                navigatorKey.currentState?.pushNamed(SearchMusicScreens.id),
+            onPressed: () => context.push(SearchMusicScreens.id),
             child: Column(children: [
               Row(
                 children: <Widget>[

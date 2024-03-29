@@ -1,25 +1,39 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:spotify_clone/view/home_screens.dart';
-import 'package:spotify_clone/view/search_screens.dart';
 import 'package:spotify_clone/view/widget/music_player.dart';
 import 'package:spotify_clone/view/widget/search_screen_app_bar.dart';
 
-class MainLayout extends StatefulWidget {
-  static const id = 'main_layout';
-  const MainLayout({super.key});
+class MainScreen extends StatefulWidget {
+  final Widget screen;
+  const MainScreen({super.key, required this.screen});
 
   @override
-  State<MainLayout> createState() => _MainLayoutState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainLayoutState extends State<MainLayout> {
-  int currentPageIndex = 0;
-
-  final _pages = <Widget>[const MyHomePage(), const SearchScreens()];
+class _MainScreenState extends State<MainScreen> {
+  int _currentPageIndex = 0;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _currentPageIndex = index;
+    });
+    switch (_currentPageIndex) {
+      case 0:
+        context.go(MyHomePage.id);
+        break;
+      case 1:
+        context.go('/search');
+        break;
+      // Handle other indices appropriately
+    }
   }
 
   @override
@@ -31,23 +45,14 @@ class _MainLayoutState extends State<MainLayout> {
       ),
       body: Column(
         children: [
-          Expanded(
-            child: IndexedStack(
-              index: currentPageIndex,
-              children: _pages,
-            ),
-          ),
+          Expanded(child: widget.screen),
           const MusicPlayer(),
         ],
       ),
       bottomNavigationBar: NavigationBar(
-        selectedIndex: currentPageIndex,
+        selectedIndex: _currentPageIndex,
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
+        onDestinationSelected: _onItemTapped,
         destinations: <Widget>[
           NavigationDestination(
             selectedIcon: const Icon(

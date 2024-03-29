@@ -2,13 +2,15 @@ import 'dart:math';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
+import 'package:spotify_clone/view/search_screens.dart';
 import 'package:spotify_clone/view/widget/mini_lyric.dart';
 
 class MusicDetailScreens extends StatefulWidget {
-  static const id = 'music_detail_screens';
+  static const id = '/music_detail';
   const MusicDetailScreens({super.key});
 
   @override
@@ -29,7 +31,7 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
               child: const Icon(Icons.arrow_forward_ios),
             ),
             onPressed: () {
-              Navigator.pop(context);
+              context.go(SearchScreens.id);
             },
           ),
         ),

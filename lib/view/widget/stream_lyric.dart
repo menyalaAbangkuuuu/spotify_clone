@@ -1,3 +1,7 @@
+import 'dart:math';
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -34,7 +38,7 @@ class _StreamLyricState extends State<StreamLyric> {
               if (int.parse(
                       widget.musicPlayerProvider.lyric!.lines[i].startTimeMs) <=
                   currentDuration!.inMilliseconds) {
-                lastIndex = i < 3 ? 0 : i - 2;
+                lastIndex = i;
               } else {
                 break;
               }
@@ -42,48 +46,102 @@ class _StreamLyricState extends State<StreamLyric> {
 
             if (_currentLyricIndex != lastIndex) {
               _currentLyricIndex = lastIndex;
-              if (lastIndex >= 0 && itemScrollController.isAttached) {
+              final scrollToIndex = max(lastIndex - 1, 0);
+              final maxIndex = widget.musicPlayerProvider.lyric!.lines.length;
+
+              if (itemScrollController.isAttached) {
                 itemScrollController.scrollTo(
-                  index: lastIndex,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOutCubic,
+                  index: min(scrollToIndex, maxIndex),
+                  alignment: _currentLyricIndex < 4
+                      ? 0.0
+                      : _currentLyricIndex + 3 < maxIndex
+                          ? 0.2
+                          : 0.6,
+                  duration: const Duration(milliseconds: 200),
                 );
               }
             }
 
-            return ScrollablePositionedList.builder(
-              itemCount: widget.musicPlayerProvider.lyric!.lines.length,
-              itemBuilder: (context, index) {
-                bool isCurrent = index == _currentLyricIndex + 2;
-                bool isPast = index < _currentLyricIndex + 2;
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      widget.musicPlayerProvider.audioPlayer.seek(Duration(
-                          milliseconds: int.parse(widget.musicPlayerProvider
-                              .lyric!.lines[index].startTimeMs)));
-                    },
-                    child: Text(
-                      widget.musicPlayerProvider.lyric!.lines[index].words,
-                      style: TextStyle(
-                        color: isPast
-                            ? Colors.white.withOpacity(0.7)
-                            : isCurrent
-                                ? Colors.white
-                                : Colors.black,
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
+            return Stack(children: [
+              ScrollablePositionedList.builder(
+                itemCount: widget.musicPlayerProvider.lyric!.lines.length,
+                padding: const EdgeInsets.all(20),
+                itemBuilder: (context, index) {
+                  bool isCurrent = index == _currentLyricIndex;
+                  bool isPast = index < _currentLyricIndex;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        widget.musicPlayerProvider.audioPlayer.seek(Duration(
+                            milliseconds: int.parse(widget.musicPlayerProvider
+                                .lyric!.lines[index].startTimeMs)));
+                      },
+                      child: AnimatedDefaultTextStyle(
+                        duration: const Duration(milliseconds: 200),
+                        style: TextStyle(
+                          color: isPast
+                              ? Colors.white.withOpacity(0.7)
+                              : isCurrent
+                                  ? Colors.white
+                                  : Colors.black,
+                        ),
+                        child: Text(
+                          widget.musicPlayerProvider.lyric!.lines[index].words,
+                          style: const TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
+                  );
+                },
+                itemScrollController: itemScrollController,
+                scrollOffsetController: scrollOffsetController,
+                itemPositionsListener: itemPositionsListener,
+                scrollOffsetListener: scrollOffsetListener,
+              ),
+              Positioned(
+                right: 0,
+                top: 0,
+                left: 0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        widget.musicPlayerProvider.currentTrackColor
+                            .withOpacity(0.5),
+                        widget.musicPlayerProvider.currentTrackColor
+                      ],
+                    ),
                   ),
-                );
-              },
-              itemScrollController: itemScrollController,
-              scrollOffsetController: scrollOffsetController,
-              itemPositionsListener: itemPositionsListener,
-              scrollOffsetListener: scrollOffsetListener,
-            );
+                  height: 30,
+                  width: 100,
+                ),
+              ),
+              Positioned(
+                  right: 0,
+                  bottom: 0,
+                  left: 0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          widget.musicPlayerProvider.currentTrackColor
+                              .withOpacity(0.5),
+                          widget.musicPlayerProvider.currentTrackColor
+                        ],
+                      ),
+                    ),
+                    height: 30,
+                    width: 100,
+                  )),
+            ]);
           }
           return const SizedBox();
         });

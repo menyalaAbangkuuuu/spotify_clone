@@ -2,10 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/main.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
-import 'package:spotify_clone/view/full_lyric.dart';
+import 'package:spotify_clone/view/full_lyric_screen.dart';
 import 'package:spotify_clone/view/widget/stream_lyric.dart';
 
 class MiniLyric extends StatefulWidget {
@@ -23,22 +25,11 @@ class _MiniLyricState extends State<MiniLyric> {
       return Stack(
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  HSLColor.fromColor(musicPlayerProvider.currentTrackColor)
-                      .withLightness(0.6)
-                      .toColor(),
-                  HSLColor.fromColor(musicPlayerProvider.currentTrackColor)
-                      .withLightness(0.8)
-                      .toColor(),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(10),
+              color: musicPlayerProvider.currentTrackColor,
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
+            padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -55,9 +46,8 @@ class _MiniLyricState extends State<MiniLyric> {
                         angle: pi / 2,
                         child: IconButton(
                           onPressed: () {
-                            navigatorKey.currentState?.pushNamed(
-                                FullLyricScreens.id,
-                                arguments: musicPlayerProvider);
+                            context.push(FullLyricScreens.id,
+                                extra: musicPlayerProvider);
                           },
                           icon: const Icon(CupertinoIcons.fullscreen),
                         ),
@@ -65,7 +55,7 @@ class _MiniLyricState extends State<MiniLyric> {
                     ]),
                 const SizedBox(height: 10),
                 SizedBox(
-                    height: 200,
+                    height: 270,
                     child: musicPlayerProvider.lyric != null
                         ? StreamLyric(
                             musicPlayerProvider: musicPlayerProvider,
