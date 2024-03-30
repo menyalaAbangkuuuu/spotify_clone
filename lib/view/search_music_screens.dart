@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/providers/search_music_provider.dart';
@@ -8,7 +9,7 @@ import 'package:spotify_clone/utils/flatten_artists_name.dart';
 import 'package:spotify_clone/view/widget/music_player.dart';
 
 class SearchMusicScreens extends StatefulWidget {
-  static const String id = 'search_music_screens';
+  static const String id = '/search_music';
   const SearchMusicScreens({super.key});
 
   @override
@@ -79,7 +80,7 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
               onPressed: () {
                 Provider.of<SearchProvider>(context, listen: false)
                     .clearSearchResults();
-                Navigator.pop(context);
+                GoRouter.of(context).pop();
               },
               child: Text('Cancel',
                   style: Theme.of(context)
@@ -136,7 +137,6 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
                 },
               ),
             ),
-            const MusicPlayer()
           ]),
         ),
       ),

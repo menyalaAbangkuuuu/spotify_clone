@@ -1,10 +1,12 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/view/widget/stream_lyric.dart';
 
 class FullLyricScreens extends StatefulWidget {
-  static const String id = 'full_lyric_screens';
+  static const String id = '/full_lyric';
   final MusicPlayerProvider musicPlayerProvider;
 
   const FullLyricScreens({super.key, required this.musicPlayerProvider});
@@ -17,10 +19,7 @@ class _FullLyricScreensState extends State<FullLyricScreens> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          HSLColor.fromColor(widget.musicPlayerProvider.currentTrackColor)
-              .withLightness(0.6)
-              .toColor(),
+      backgroundColor: widget.musicPlayerProvider.currentTrackColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: const Row(
@@ -43,19 +42,15 @@ class _FullLyricScreensState extends State<FullLyricScreens> {
             const SizedBox(
               height: 20,
             ),
-            Flexible(
-              flex: 1,
+            Expanded(
               child: widget.musicPlayerProvider.lyric != null
-                  ? SingleChildScrollView(
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(10),
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height,
-                          child: StreamLyric(
-                            musicPlayerProvider: widget.musicPlayerProvider,
-                          ),
-                        ),
+                  ? Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height,
+                      color: Colors.transparent,
+                      padding: const EdgeInsets.all(10),
+                      child: StreamLyric(
+                        musicPlayerProvider: widget.musicPlayerProvider,
                       ),
                     )
                   : Center(

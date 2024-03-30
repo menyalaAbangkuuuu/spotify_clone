@@ -1,5 +1,6 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/main.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
@@ -24,11 +25,9 @@ class _MusicPlayerState extends State<MusicPlayer> {
     return Consumer<MusicPlayerProvider>(
       builder: (context, musicPlayerProvider, child) {
         return musicPlayerProvider.currentTrack != null
-            ? InkWell(
+            ? GestureDetector(
                 onTap: () {
-                  navigatorKey.currentState?.pushNamed(
-                    MusicDetailScreens.id,
-                  );
+                  context.push(MusicDetailScreens.id);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),

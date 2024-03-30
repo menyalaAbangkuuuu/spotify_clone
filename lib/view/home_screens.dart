@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spotify_clone/view/widget/topPlaylistWidget.dart';
 
 class MyHomePage extends StatefulWidget {
-  static const String id = "home";
+  static const String id = "/home";
   const MyHomePage({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -32,11 +32,13 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return const SafeArea(
-      child: Column(
-        children: <Widget>[
-          Expanded(child: TopTracksWidget()),
-        ],
+    return const Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Expanded(child: TopTracksWidget()),
+          ],
+        ),
       ),
     );
   }
