@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify/spotify.dart' as Spotify;
 import 'package:spotify_clone/providers/category_provider.dart';
+import 'package:spotify_clone/view/category_detail.dart';
 
 class CategoryTiles extends StatelessWidget {
   const CategoryTiles({super.key});
@@ -27,7 +29,8 @@ class CategoryTiles extends StatelessWidget {
 
         return GestureDetector(
           onTap: () {
-            print("hello");
+            context.pushNamed(CategoryDetailScreen.routeName,
+                pathParameters: {'id': category?.id ?? ""});
           },
           child: GridTile(
               child: Container(

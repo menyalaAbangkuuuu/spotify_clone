@@ -56,7 +56,7 @@ class _StreamLyricState extends State<StreamLyric> {
                       ? 0.0
                       : _currentLyricIndex + 3 < maxIndex
                           ? 0.2
-                          : 0.6,
+                          : 0.7,
                   duration: const Duration(milliseconds: 200),
                 );
               }
@@ -89,7 +89,7 @@ class _StreamLyricState extends State<StreamLyric> {
                         child: Text(
                           widget.musicPlayerProvider.lyric!.lines[index].words,
                           style: const TextStyle(
-                            fontSize: 26,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

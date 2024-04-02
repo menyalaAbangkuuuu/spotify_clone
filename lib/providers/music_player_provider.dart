@@ -9,15 +9,20 @@ import 'package:spotify_clone/services/youtube.dart';
 
 class MusicPlayerProvider extends ChangeNotifier {
   MusicPlayerProvider() {
-    _audioPlayer.onPlayerComplete.listen((event) {
-      // When the audio finishes playing, update the state to reflect this.
-      _isPlaying = false;
-      notifyListeners();
-    });
-
-    _audioPlayer.onPositionChanged.listen((Duration duration) {
+    _audioPlayer.onPositionChanged.listen((Duration duration) async {
       if (duration != _totalDuration) {
         _currentPosition = duration;
+        notifyListeners();
+      }
+      if (_queue.isEmpty) {
+        _currentPosition = Duration.zero;
+        _totalDuration = Duration.zero;
+        notifyListeners();
+      }
+      if (_audioPlayer.state == PlayerState.completed && _queue.isNotEmpty) {
+        _queue.removeAt(0);
+        await play();
+
         notifyListeners();
       }
     });
@@ -42,7 +47,7 @@ class MusicPlayerProvider extends ChangeNotifier {
   Duration get totalDuration => _totalDuration;
 
   final List<Track> _queue = [];
-  List<Track> get queue => _queue;
+  List<Track> get queue => _queue.isEmpty ? [] : _queue.sublist(1);
 
   Lyric? _lyric;
   Lyric? get lyric => _lyric;
@@ -62,7 +67,12 @@ class MusicPlayerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void play() async {
+  void setToFirst(int currentIndex) {
+    _queue.removeRange(0, currentIndex + 1);
+    notifyListeners();
+  }
+
+  Future<void> play() async {
     _currentTrack = _queue.first;
     Music music = await Youtube.getVideo(
         songName: _currentTrack!.name!,
@@ -76,7 +86,7 @@ class MusicPlayerProvider extends ChangeNotifier {
 
     _lyric = await LyricService.getLyric(_currentTrack!.id!);
 
-    _audioPlayer.play(UrlSource(music.url));
+    await _audioPlayer.play(UrlSource(music.url));
     _isPlaying = true;
     notifyListeners();
   }
@@ -90,5 +100,13 @@ class MusicPlayerProvider extends ChangeNotifier {
   void seek(Duration position) {
     _audioPlayer.seek(position);
     notifyListeners();
+  }
+
+  void next() async {
+    if (_queue.isNotEmpty) {
+      _queue.removeAt(0);
+      await play();
+      notifyListeners();
+    }
   }
 }

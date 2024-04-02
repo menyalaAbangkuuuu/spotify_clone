@@ -1,12 +1,18 @@
 import 'dart:async';
+import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/providers/search_music_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
-import 'package:spotify_clone/view/widget/music_player.dart';
+import 'package:spotify_clone/view/widget/slider_item_music.dart';
 
 class SearchMusicScreens extends StatefulWidget {
   static const String id = '/search_music';
@@ -106,31 +112,82 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
                     itemCount: searchProvider.searchResults.length,
                     itemBuilder: (context, index) {
                       var searchResult = searchProvider.searchResults[index];
-                      return ListTile(
-                        onTap: () {
-                          Provider.of<MusicPlayerProvider>(context,
-                                  listen: false)
-                              .addToQueue(searchResult, 0);
-                          Provider.of<MusicPlayerProvider>(context,
-                                  listen: false)
-                              .play();
-                        },
-                        title: Text(searchResult.name ?? "",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w900,
-                                )),
-                        subtitle: Text(flattenArtistName(searchResult.artists),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                    color: Colors.white.withOpacity(0.6),
-                                    overflow: TextOverflow.ellipsis)),
-                        leading: Image.network(
-                            searchResult.album!.images?[0].url ?? ''),
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Slidable(
+                          key: const ValueKey(0),
+                          closeOnScroll: true,
+                          groupTag: 1,
+                          startActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            extentRatio: 0.2,
+                            children: [
+                              SliderItemMusic(
+                                track: searchResult,
+                              ),
+                            ],
+                          ),
+                          child: ListTile(
+                            onTap: () {
+                              Provider.of<MusicPlayerProvider>(context,
+                                      listen: false)
+                                  .addToQueue(searchResult, 0);
+                              Provider.of<MusicPlayerProvider>(context,
+                                      listen: false)
+                                  .play();
+                            },
+                            title: Text(
+                              searchResult.name ?? "",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            subtitle: Row(children: [
+                              searchResult.explicit != null &&
+                                      searchResult.explicit == true
+                                  ? Container(
+                                      decoration: const BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(3))),
+                                      padding: const EdgeInsets.only(
+                                          left: 5, right: 5),
+                                      child: const Text(
+                                        "E",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    )
+                                  : const SizedBox(
+                                      width: 0,
+                                    ),
+                              SizedBox(
+                                width: searchResult.explicit != null &&
+                                        searchResult.explicit == true
+                                    ? 5
+                                    : 0,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  flattenArtistName(searchResult.artists),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: Colors.white.withOpacity(0.6),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                ),
+                              ),
+                            ]),
+                            leading: Image.network(
+                                searchResult.album!.images?[0].url ?? ''),
+                          ),
+                        ),
                       );
                     },
                   );

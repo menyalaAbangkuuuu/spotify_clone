@@ -2,6 +2,7 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/view/widget/stream_lyric.dart';
 
@@ -16,6 +17,11 @@ class FullLyricScreens extends StatefulWidget {
 }
 
 class _FullLyricScreensState extends State<FullLyricScreens> {
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,9 +118,11 @@ class _FullLyricScreensState extends State<FullLyricScreens> {
                               color: Colors.white,
                             );
                           }),
-                      const IconButton(
-                        onPressed: null,
-                        icon: Icon(Icons.skip_next),
+                      IconButton(
+                        onPressed: () {
+                          widget.musicPlayerProvider.next();
+                        },
+                        icon: const Icon(Icons.skip_next),
                         iconSize: 40,
                         color: Colors.white,
                       ),

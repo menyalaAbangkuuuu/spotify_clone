@@ -1,4 +1,5 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -100,17 +101,19 @@ class _MusicPlayerState extends State<MusicPlayer> {
                                           ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    Text(
-                                      flattenArtistName(musicPlayerProvider
-                                          .currentTrack?.artists),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            color:
-                                                Colors.white.withOpacity(0.6),
-                                          ),
-                                      overflow: TextOverflow.ellipsis,
+                                    Expanded(
+                                      child: Text(
+                                        flattenArtistName(musicPlayerProvider
+                                            .currentTrack?.artists),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color:
+                                                  Colors.white.withOpacity(0.6),
+                                            ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -132,6 +135,12 @@ class _MusicPlayerState extends State<MusicPlayer> {
                           stream:
                               musicPlayerProvider.audioPlayer.onPositionChanged,
                           builder: (context, snapshots) {
+                            if (snapshots.hasData &&
+                                snapshots.data! ==
+                                    musicPlayerProvider.totalDuration) {
+                              // If the current position is greater than or equal to total duration, play next song
+                              musicPlayerProvider.next();
+                            }
                             return ProgressBar(
                               progress:
                                   snapshots.data ?? const Duration(seconds: 0),

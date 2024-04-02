@@ -1,17 +1,24 @@
 # spotify_clone
 
-A new Flutter project.
+## Description
 
-## Getting Started
+ini akan diisi dengan deskripsi.
 
-This project is a starting point for a Flutter application.
+## TODO
 
-A few resources to get you started if this is your first Flutter project:
+-   [ ] refator folder structure.
+-   [ ] authentication.
+-   [ ] server lyric.
+-   [ ] category in search page.
+-   [ ] category detail.
+-   [ ] splash screen
+-   [ ] home page
+-   [ ] playlist detail
+-   [ ] add to queue playlist
+-   [ ] delete, reorder queue.
+-   [ ] share music.
+-   [ ] library.
+-   [ ] update lyric page (add about artist, credit and related video.).
+-   [ ] documentation set up and key feature (Screenshot).
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# spotify_clone
+[contoh documentasi](https://gist.github.com/kostaskps/3504ae011f05ea1d7174e6fdd3882e75)

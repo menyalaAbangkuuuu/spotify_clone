@@ -1,11 +1,13 @@
 import 'dart:math';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
+import 'package:spotify_clone/view/queue_list_screen.dart';
 import 'package:spotify_clone/view/search_screens.dart';
 import 'package:spotify_clone/view/widget/mini_lyric.dart';
 
@@ -22,7 +24,9 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Music Detail Screens'),
+          title: Text(
+              Provider.of<MusicPlayerProvider>(context).currentTrack?.name ??
+                  ""),
           backgroundColor:
               Provider.of<MusicPlayerProvider>(context).currentTrackColor,
           leading: IconButton(
@@ -146,7 +150,28 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Icon(
+                          CupertinoIcons.share_up,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        IconButton(
+                            onPressed: () =>
+                                context.push(QueueListScreen.routeName),
+                            icon: const Icon(
+                              Icons.queue_music,
+                              color: Colors.white,
+                              size: 30,
+                            ))
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
                     const MiniLyric()
                   ],
                 ),

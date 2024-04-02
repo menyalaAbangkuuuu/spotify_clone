@@ -27,7 +27,7 @@ class _MiniLyricState extends State<MiniLyric> {
           Container(
             decoration: BoxDecoration(
               color: musicPlayerProvider.currentTrackColor,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(16)),
             ),
             padding: const EdgeInsets.all(10),
             child: Column(
@@ -55,7 +55,7 @@ class _MiniLyricState extends State<MiniLyric> {
                     ]),
                 const SizedBox(height: 10),
                 SizedBox(
-                    height: 270,
+                    height: 250,
                     child: musicPlayerProvider.lyric != null
                         ? StreamLyric(
                             musicPlayerProvider: musicPlayerProvider,

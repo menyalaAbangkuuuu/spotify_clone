@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
+import 'package:spotify_clone/view/category_detail.dart';
 import 'package:spotify_clone/view/full_lyric_screen.dart';
 import 'package:spotify_clone/view/home_screens.dart';
 import 'package:spotify_clone/view/main_screens.dart';
 import 'package:spotify_clone/view/music_detail_screens.dart';
+import 'package:spotify_clone/view/queue_list_screen.dart';
 import 'package:spotify_clone/view/search_music_screens.dart';
 import 'package:spotify_clone/view/search_screens.dart';
 
@@ -89,7 +91,7 @@ class AppRouter {
                 child: child,
               );
             },
-            transitionDuration: const Duration(milliseconds: 300),
+            transitionDuration: const Duration(milliseconds: 50),
           );
         },
       ),
@@ -98,6 +100,34 @@ class AppRouter {
         pageBuilder: (context, state) {
           return const MaterialPage(
             child: MusicDetailScreens(),
+          );
+        },
+      ),
+      GoRoute(
+          path: '/category/:id',
+          name: CategoryDetailScreen.routeName,
+          pageBuilder: (context, state) {
+            final id = state.pathParameters['id']!;
+            return MaterialPage(
+              child: CategoryDetailScreen(
+                id: id,
+              ),
+            );
+          }),
+      GoRoute(
+        path: QueueListScreen.routeName,
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            child: const QueueListScreen(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              // create fade transition
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
+            transitionDuration: const Duration(milliseconds: 300),
           );
         },
       ),
