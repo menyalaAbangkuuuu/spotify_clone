@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:spotify_clone/main.dart';
 import 'package:spotify_clone/view/search_music_screens.dart';
 import 'package:spotify_clone/view/widget/categories_tile.dart';
 

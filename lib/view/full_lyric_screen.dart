@@ -1,8 +1,6 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
+
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/view/widget/stream_lyric.dart';
 
@@ -25,7 +23,8 @@ class _FullLyricScreensState extends State<FullLyricScreens> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: widget.musicPlayerProvider.currentTrackColor,
+      backgroundColor:
+          Color(int.parse(widget.musicPlayerProvider.lyric!.colors.background)),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: const Row(

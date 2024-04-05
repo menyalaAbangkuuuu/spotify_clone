@@ -26,7 +26,8 @@ class _MiniLyricState extends State<MiniLyric> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: musicPlayerProvider.currentTrackColor,
+              color: Color(
+                  int.parse(musicPlayerProvider.lyric!.colors.background)),
               borderRadius: const BorderRadius.all(Radius.circular(16)),
             ),
             padding: const EdgeInsets.all(10),
