@@ -62,7 +62,9 @@ class MusicPlayerProvider extends ChangeNotifier {
     if (index != null) {
       _queue.insert(index, track);
     } else {
+      _queue.clear();
       _queue.add(track);
+      _currentTrack = _queue.first;
     }
     notifyListeners();
   }
@@ -73,7 +75,6 @@ class MusicPlayerProvider extends ChangeNotifier {
   }
 
   Future<void> play() async {
-    _currentTrack = _queue.first;
     Music music = await Youtube.getVideo(
         songName: _currentTrack!.name!,
         artistName: _currentTrack!.artists!.first.name!);

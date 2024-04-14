@@ -113,11 +113,13 @@ class _StreamLyricState extends State<StreamLyric> {
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
                       colors: [
-                        Color(int.parse(widget
-                                .musicPlayerProvider.lyric!.colors.background))
+                        Color(int.parse(widget.musicPlayerProvider.lyric?.colors
+                                    .background ??
+                                "0xFF000000"))
                             .withOpacity(0.5),
                         Color(int.parse(widget
-                            .musicPlayerProvider.lyric!.colors.background))
+                                .musicPlayerProvider.lyric?.colors.background ??
+                            "0xFF000000"))
                       ],
                     ),
                   ),
