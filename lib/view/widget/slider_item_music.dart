@@ -27,8 +27,12 @@ class _SliderItemMusicState extends State<SliderItemMusic> {
       autoClose: false,
       onPressed: (context) {
         _onPressed();
-        Provider.of<MusicPlayerProvider>(context, listen: false)
-            .addToQueue(widget.track, null);
+        Provider.of<MusicPlayerProvider>(context, listen: false).addToQueue(
+            widget.track,
+            Provider.of<MusicPlayerProvider>(context, listen: false)
+                    .queue
+                    .length +
+                1);
         Slidable.of(context)?.close(duration: const Duration(seconds: 1));
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
