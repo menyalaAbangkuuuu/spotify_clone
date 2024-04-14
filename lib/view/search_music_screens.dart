@@ -1,11 +1,6 @@
 import 'dart:async';
-import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -131,7 +126,7 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
                             onTap: () {
                               Provider.of<MusicPlayerProvider>(context,
                                       listen: false)
-                                  .addToQueue(searchResult, 0);
+                                  .addToQueue(searchResult, null);
                               Provider.of<MusicPlayerProvider>(context,
                                       listen: false)
                                   .play();
