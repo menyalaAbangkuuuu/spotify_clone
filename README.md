@@ -8,11 +8,11 @@ ini akan diisi dengan deskripsi.
 
 -   [ ] refator folder structure.
 -   [ ] authentication.
--   [ ] server lyric.
+-   [x] server lyric.
 -   [ ] category in search page.
 -   [ ] category detail.
 -   [ ] splash screen
--   [ ] home page
+-   [x] home page
 -   [ ] playlist detail
 -   [ ] add to queue playlist
 -   [ ] delete, reorder queue.
