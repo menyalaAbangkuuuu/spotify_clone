@@ -9,7 +9,7 @@ class LyricService {
   static Future<Lyric?> getLyric(String trackId) async {
     final response = await http.get(
       Uri.parse(
-          'http://192.168.100.143:3000/api/lyric?trackId=$trackId&token=${Credentials.token}'),
+          'https://spotify-lyric-server.vercel.app/api/lyric?trackId=$trackId&token=${Credentials.token}'),
     );
     if (response.statusCode == 200) {
       var jsonData = jsonDecode(response.body);
