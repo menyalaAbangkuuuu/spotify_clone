@@ -1,7 +1,5 @@
 import 'dart:math';
-import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -33,10 +31,10 @@ class _StreamLyricState extends State<StreamLyric> {
             int lastIndex = -1;
 
             for (int i = 0;
-                i < widget.musicPlayerProvider.lyric!.lines.length;
+                i < widget.musicPlayerProvider.lyric!.lyrics.lines.length;
                 i++) {
-              if (int.parse(
-                      widget.musicPlayerProvider.lyric!.lines[i].startTimeMs) <=
+              if (widget
+                      .musicPlayerProvider.lyric!.lyrics.lines[i].startTimeMs <=
                   currentDuration!.inMilliseconds) {
                 lastIndex = i;
               } else {
@@ -47,7 +45,8 @@ class _StreamLyricState extends State<StreamLyric> {
             if (_currentLyricIndex != lastIndex) {
               _currentLyricIndex = lastIndex;
               final scrollToIndex = max(lastIndex - 1, 0);
-              final maxIndex = widget.musicPlayerProvider.lyric!.lines.length;
+              final maxIndex =
+                  widget.musicPlayerProvider.lyric!.lyrics.lines.length;
 
               if (itemScrollController.isAttached) {
                 itemScrollController.scrollTo(
@@ -64,7 +63,8 @@ class _StreamLyricState extends State<StreamLyric> {
 
             return Stack(children: [
               ScrollablePositionedList.builder(
-                itemCount: widget.musicPlayerProvider.lyric!.lines.length,
+                itemCount:
+                    widget.musicPlayerProvider.lyric!.lyrics.lines.length,
                 padding: const EdgeInsets.all(20),
                 itemBuilder: (context, index) {
                   bool isCurrent = index == _currentLyricIndex;
@@ -74,8 +74,8 @@ class _StreamLyricState extends State<StreamLyric> {
                     child: GestureDetector(
                       onTap: () {
                         widget.musicPlayerProvider.audioPlayer.seek(Duration(
-                            milliseconds: int.parse(widget.musicPlayerProvider
-                                .lyric!.lines[index].startTimeMs)));
+                            milliseconds: widget.musicPlayerProvider.lyric!
+                                .lyrics.lines[index].startTimeMs));
                       },
                       child: AnimatedDefaultTextStyle(
                         duration: const Duration(milliseconds: 200),
@@ -87,7 +87,8 @@ class _StreamLyricState extends State<StreamLyric> {
                                   : Colors.black,
                         ),
                         child: Text(
-                          widget.musicPlayerProvider.lyric!.lines[index].words,
+                          widget.musicPlayerProvider.lyric!.lyrics.lines[index]
+                              .words,
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -112,9 +113,13 @@ class _StreamLyricState extends State<StreamLyric> {
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
                       colors: [
-                        widget.musicPlayerProvider.currentTrackColor
+                        Color(int.parse(widget.musicPlayerProvider.lyric?.colors
+                                    .background ??
+                                "0xFF000000"))
                             .withOpacity(0.5),
-                        widget.musicPlayerProvider.currentTrackColor
+                        Color(int.parse(widget
+                                .musicPlayerProvider.lyric?.colors.background ??
+                            "0xFF000000"))
                       ],
                     ),
                   ),
@@ -132,9 +137,11 @@ class _StreamLyricState extends State<StreamLyric> {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          widget.musicPlayerProvider.currentTrackColor
+                          Color(int.parse(widget.musicPlayerProvider.lyric!
+                                  .colors.background))
                               .withOpacity(0.5),
-                          widget.musicPlayerProvider.currentTrackColor
+                          Color(int.parse(widget
+                              .musicPlayerProvider.lyric!.colors.background))
                         ],
                       ),
                     ),
