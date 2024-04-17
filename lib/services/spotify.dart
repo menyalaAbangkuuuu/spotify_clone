@@ -28,4 +28,14 @@ class SpotifyService {
     final data = _spotifyApi.categories.get(categoryId);
     return data;
   }
+
+  static Future<Playlist> getPlaylist(String playlistId) async {
+    final playlist = await _spotifyApi.playlists.get(playlistId);
+    return playlist;
+  }
+
+  static Future<Playlist> getPlaylistDetail(String playlistId) async {
+    final playlist = await _spotifyApi.playlists.get(playlistId);
+    return playlist;
+  }
 }

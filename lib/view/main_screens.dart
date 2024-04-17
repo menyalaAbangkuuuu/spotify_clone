@@ -32,6 +32,9 @@ class _MainScreenState extends State<MainScreen> {
       case 1:
         context.go('/search');
         break;
+      case 2:
+        context.go('/library');
+        break;
       // Handle other indices appropriately
     }
   }

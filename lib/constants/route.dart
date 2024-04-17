@@ -9,6 +9,7 @@ import 'package:spotify_clone/view/music_detail_screens.dart';
 import 'package:spotify_clone/view/queue_list_screen.dart';
 import 'package:spotify_clone/view/search_music_screens.dart';
 import 'package:spotify_clone/view/search_screens.dart';
+import 'package:spotify_clone/view/library_screens.dart';
 
 class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -104,16 +105,19 @@ class AppRouter {
         },
       ),
       GoRoute(
-          path: '/category/:id',
-          name: CategoryDetailScreen.routeName,
-          pageBuilder: (context, state) {
-            final id = state.pathParameters['id']!;
-            return MaterialPage(
-              child: CategoryDetailScreen(
-                id: id,
-              ),
-            );
-          }),
+        path: '/category/:id/:categoryName',
+        name: CategoryDetailScreen.routeName,
+        pageBuilder: (context, state) {
+          final id = state.pathParameters['id']!;
+          final categoryName = state.pathParameters['categoryName']!;
+          return MaterialPage(
+            child: CategoryDetailScreen(
+              id: id,
+              categoryName: categoryName,
+            ),
+          );
+        },
+      ),
       GoRoute(
         path: QueueListScreen.routeName,
         pageBuilder: (context, state) {
@@ -128,6 +132,14 @@ class AppRouter {
               );
             },
             transitionDuration: const Duration(milliseconds: 300),
+          );
+        },
+      ),
+      GoRoute(
+        path: Library.id,
+        pageBuilder: (context, state) {
+          return MaterialPage<void>(
+            child: Library(),
           );
         },
       ),
