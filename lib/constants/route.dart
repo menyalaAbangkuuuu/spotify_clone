@@ -6,6 +6,8 @@ import 'package:spotify_clone/view/full_lyric_screen.dart';
 import 'package:spotify_clone/view/home_screens.dart';
 import 'package:spotify_clone/view/main_screens.dart';
 import 'package:spotify_clone/view/music_detail_screens.dart';
+import 'package:spotify_clone/view/playlist_detail_screen.dart';
+import 'package:spotify_clone/view/playlist_screen.dart';
 import 'package:spotify_clone/view/queue_list_screen.dart';
 import 'package:spotify_clone/view/search_music_screens.dart';
 import 'package:spotify_clone/view/search_screens.dart';
@@ -138,8 +140,16 @@ class AppRouter {
       GoRoute(
         path: Library.id,
         pageBuilder: (context, state) {
-          return MaterialPage<void>(
+          return const MaterialPage<void>(
             child: Library(),
+          );
+        },
+      ),
+      GoRoute(
+        path: PlaylistScreen.routeName,
+        pageBuilder: (context, state) {
+          return const MaterialPage<void>(
+            child: PlaylistScreen(),
           );
         },
       ),

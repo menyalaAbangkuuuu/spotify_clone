@@ -7,10 +7,10 @@ class PlaylistDetailScreen extends StatelessWidget {
   final String playlistName;
 
   const PlaylistDetailScreen({
-    Key? key,
+    super.key,
     required this.playlistId,
     required this.playlistName,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

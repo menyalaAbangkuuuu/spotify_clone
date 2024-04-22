@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/playlist_provider.dart';
 import 'package:spotify_clone/view/playlist_screen.dart';
@@ -10,10 +11,10 @@ class CategoryDetailScreen extends StatelessWidget {
   final String categoryName;
 
   const CategoryDetailScreen({
-    Key? key,
+    super.key,
     required this.id,
     required this.categoryName,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +56,8 @@ class CategoryDetailScreen extends StatelessWidget {
               title: Text(playlist.name ?? 'Unknown'),
               subtitle: Text(playlist.description ?? ''),
               onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  PlaylistDetailScreen.routeName,
-                  arguments: PlaylistDetailScreenArguments(
-                    playlistId: playlist.id!,
-                    playlistName: playlist.name ?? 'Unknown',
-                  ),
+                context.push(
+                  PlaylistScreen.routeName,
                 );
               },
             );

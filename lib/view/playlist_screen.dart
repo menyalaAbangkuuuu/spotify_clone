@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
 
-class PlaylistDetailScreenArguments {
-  final String playlistId;
-  final String playlistName;
-
-  PlaylistDetailScreenArguments({
-    required this.playlistId,
-    required this.playlistName,
-  });
-}
-
-class PlaylistDetailScreen extends StatelessWidget {
+class PlaylistScreen extends StatelessWidget {
   static const routeName = '/playlist';
+
+  const PlaylistScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
