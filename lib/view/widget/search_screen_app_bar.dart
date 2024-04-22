@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
 
 class SearchScreenAppBar extends StatelessWidget {
-  const SearchScreenAppBar({super.key});
+  final bool showSearchText;
+  final bool showSearchIcon;
+
+  const SearchScreenAppBar({
+    Key? key,
+    this.showSearchText = true,
+    this.showSearchIcon = true,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.black,
-      title: const Row(
+      title: Row(
         children: <Widget>[
-          Icon(Icons.search, color: Colors.white),
+          if (showSearchIcon)
+            Icon(Icons.search, color: Colors.white),
           SizedBox(
             width: 10,
           ),
-          Text(
-            'Search',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
-          )
+          if (showSearchText)
+            Text(
+              'Search',
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+            )
         ],
       ),
     );

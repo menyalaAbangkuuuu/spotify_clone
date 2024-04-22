@@ -42,9 +42,13 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PreferredSize(
+      appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
-        child: SearchScreenAppBar(),
+        child: SearchScreenAppBar(
+          // Tentukan apakah harus menampilkan teks "Search" atau tidak
+          showSearchText: _currentPageIndex ==
+              1, // Misalnya hanya pada halaman indeks 1 (halaman pencarian)
+        ),
       ),
       body: Column(
         children: [
