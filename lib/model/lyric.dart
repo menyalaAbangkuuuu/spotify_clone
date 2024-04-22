@@ -56,7 +56,7 @@ class Lyrics {
   late final int impressionsRemaining;
 
   Lyrics.fromJson(Map<String, dynamic> json) {
-    syncType = json['syncType'];
+    syncType = json['syncType'] ?? '';
     lines = List.from(json['lines']).map((e) => Lines.fromJson(e)).toList();
     provider = json['provider'];
     providerLyricsId = json['providerLyricsId'];
@@ -105,7 +105,7 @@ class Lines {
   late final int endTimeMs;
 
   Lines.fromJson(Map<String, dynamic> json) {
-    startTimeMs = json['startTimeMs'];
+    startTimeMs = json['startTimeMs'] ?? 0;
     words = json['words'];
     syllables = List.castFrom<dynamic, dynamic>(json['syllables']);
     endTimeMs = json['endTimeMs'];
