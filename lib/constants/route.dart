@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:spotify/spotify.dart' hide Offset;
 import 'package:spotify_clone/providers/music_player_provider.dart';
+import 'package:spotify_clone/services/spotify.dart';
 import 'package:spotify_clone/view/category_detail.dart';
 import 'package:spotify_clone/view/full_lyric_screen.dart';
 import 'package:spotify_clone/view/home_screens.dart';
+import 'package:spotify_clone/view/login_screen.dart';
 import 'package:spotify_clone/view/main_screens.dart';
 import 'package:spotify_clone/view/music_detail_screens.dart';
 import 'package:spotify_clone/view/queue_list_screen.dart';
@@ -78,13 +81,13 @@ class AppRouter {
             ),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              var begin = const Offset(0.0, 1.0);
-              var end = Offset.zero;
-              var curve = Curves.ease;
+              const Offset begin = Offset(0.0, 1.0);
+              const end = Offset.zero;
+              const curve = Curves.ease;
 
-              var tween =
+              final tween =
                   Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-              var offsetAnimation = animation.drive(tween);
+              final offsetAnimation = animation.drive(tween);
 
               return SlideTransition(
                 position: offsetAnimation,
@@ -131,7 +134,22 @@ class AppRouter {
           );
         },
       ),
+      GoRoute(
+          path: LoginScreen.routeName,
+          pageBuilder: (context, state) {
+            return const MaterialPage(
+              child: LoginScreen(),
+            );
+          }),
     ],
+    redirect: (BuildContext context, GoRouterState state) async {
+      final User? user = await SpotifyService.getUser();
+      final bool loggingIn = state.matchedLocation == LoginScreen.routeName;
+      if (user?.id == null) return LoginScreen.routeName;
+      if (loggingIn) return state.matchedLocation;
+      // no need to redirect at all
+      return null;
+    },
   );
   static GoRouter get router => _router;
 }
