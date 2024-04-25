@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:spotify/spotify.dart' hide Offset;
+import 'package:spotify_clone/providers/auth_provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/services/spotify.dart';
 import 'package:spotify_clone/view/category_detail.dart';
@@ -143,12 +145,20 @@ class AppRouter {
           }),
     ],
     redirect: (BuildContext context, GoRouterState state) async {
-      final User? user = await SpotifyService.getUser();
-      final bool loggingIn = state.matchedLocation == LoginScreen.routeName;
-      if (user?.id == null) return LoginScreen.routeName;
-      if (loggingIn) return state.matchedLocation;
-      // no need to redirect at all
-      return null;
+      final User? user =
+          Provider.of<AuthProvider>(context, listen: false).currentUser;
+
+      // Check if user is not logged in and trying to access other than login screen
+      if (user?.id == null && state.matchedLocation != LoginScreen.routeName) {
+        return LoginScreen.routeName; // Redirect to login if not logged in
+      }
+
+      if (user?.id != null && state.matchedLocation == LoginScreen.routeName) {
+        return MyHomePage.id;
+      }
+
+      // No redirection necessary
+      return state.matchedLocation;
     },
   );
   static GoRouter get router => _router;

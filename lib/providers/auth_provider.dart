@@ -10,7 +10,6 @@ class AuthProvider extends ChangeNotifier {
 
   void login(Uri uri) async {
     final user = await SpotifyService.handleSpotifyRedirect(uri);
-    print(user?.email);
     if (user != null) {
       _user = user;
       _isAuthenticated = true;

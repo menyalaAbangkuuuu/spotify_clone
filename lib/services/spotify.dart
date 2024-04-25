@@ -35,16 +35,6 @@ class SpotifyService {
     return await _spotifyApi.getCredentials();
   }
 
-  static Future<User?> getUser() async {
-    try {
-      final response = await _spotifyApi.me.get();
-      return response;
-    } catch (e) {
-      print("Error");
-    }
-    return null;
-  }
-
   static Future login() async {
     await const FlutterSecureStorage()
         .write(key: "codeVerifier", value: generatePKCECodes.codeVerifier);
