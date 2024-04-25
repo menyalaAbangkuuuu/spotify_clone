@@ -53,6 +53,7 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
           children: <Widget>[
             Expanded(
                 child: TextField(
+              autocorrect: false,
               cursorColor: Colors.white,
               style: Theme.of(context)
                   .textTheme
