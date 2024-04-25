@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/view/widget/stream_lyric.dart';
@@ -27,6 +30,16 @@ class _FullLyricScreensState extends State<FullLyricScreens> {
           Color(int.parse(widget.musicPlayerProvider.lyric!.colors.background)),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: Transform.rotate(
+            angle: pi / 2,
+            child: const Icon(Icons.arrow_forward_ios),
+          ),
+          onPressed: () {
+            context.pop();
+          },
+        ),
+        automaticallyImplyLeading: false,
         title: const Row(
           children: <Widget>[
             Icon(Icons.search, color: Colors.white),
@@ -59,14 +72,15 @@ class _FullLyricScreensState extends State<FullLyricScreens> {
                       ),
                     )
                   : Center(
-                      child: Text('No lyric available',
-                          style: Theme.of(context)
-                              .textTheme
-                              .displayMedium
-                              ?.copyWith(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ))),
+                      child: Text(
+                        'No lyric available',
+                        style:
+                            Theme.of(context).textTheme.displayMedium?.copyWith(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
+                    ),
             ),
             Container(
               padding: const EdgeInsets.all(10),

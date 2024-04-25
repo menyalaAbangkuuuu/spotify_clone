@@ -35,7 +35,7 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
               child: const Icon(Icons.arrow_forward_ios),
             ),
             onPressed: () {
-              context.go(SearchScreens.id);
+              context.pop();
             },
           ),
         ),
