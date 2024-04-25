@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/providers/search_music_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
@@ -179,8 +181,21 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
                                 ),
                               ),
                             ]),
-                            leading: Image.network(
-                                searchResult.album!.images?[0].url ?? ''),
+                            leading: CachedNetworkImage(
+                              imageUrl:
+                                  searchResult.album!.images?[0].url ?? '',
+                              placeholder: (context, url) => Shimmer.fromColors(
+                                baseColor: Colors.grey,
+                                highlightColor: Colors.white,
+                                child: Container(
+                                  width: 50,
+                                  height: 50,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                            ),
                           ),
                         ),
                       );

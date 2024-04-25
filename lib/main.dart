@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:provider/provider.dart';
@@ -17,6 +18,14 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  static final customCacheManager = CacheManager(
+    Config(
+      'customCacheKey',
+      stalePeriod: const Duration(days: 7),
+      maxNrOfCacheObjects: 20,
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
