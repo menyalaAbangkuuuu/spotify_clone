@@ -30,26 +30,11 @@ class AppRouter {
                 const MaterialPage(child: MyHomePage()),
           ),
           GoRoute(
-              path: SearchScreens.id,
-              pageBuilder: (context, state) => CustomTransitionPage(
-                    child: const SearchScreens(),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      var begin = const Offset(-1.0, 0.0);
-                      var end = Offset.zero;
-                      var curve = Curves.ease;
-
-                      var tween = Tween(begin: begin, end: end)
-                          .chain(CurveTween(curve: curve));
-                      var offsetAnimation = animation.drive(tween);
-
-                      return SlideTransition(
-                        position: offsetAnimation,
-                        child: child,
-                      );
-                    },
-                    transitionDuration: const Duration(milliseconds: 300),
-                  )),
+            path: SearchScreens.id,
+            pageBuilder: (context, state) => const MaterialPage(
+              child: SearchScreens(),
+            ),
+          ),
           GoRoute(
             path: SearchMusicScreens.id,
             pageBuilder: (context, state) {
@@ -72,26 +57,10 @@ class AppRouter {
         path: FullLyricScreens.id,
         pageBuilder: (context, state) {
           final args = state.extra;
-          return CustomTransitionPage(
+          return MaterialPage(
             child: FullLyricScreens(
               musicPlayerProvider: args as MusicPlayerProvider,
             ),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              var begin = const Offset(0.0, 1.0);
-              var end = Offset.zero;
-              var curve = Curves.ease;
-
-              var tween =
-                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-              var offsetAnimation = animation.drive(tween);
-
-              return SlideTransition(
-                position: offsetAnimation,
-                child: child,
-              );
-            },
-            transitionDuration: const Duration(milliseconds: 50),
           );
         },
       ),

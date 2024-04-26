@@ -9,7 +9,14 @@ class SearchScreenAppBar extends StatelessWidget {
       backgroundColor: Colors.black,
       title: const Row(
         children: <Widget>[
-          Icon(Icons.search, color: Colors.white),
+          CircleAvatar(
+              radius: 15,
+              backgroundColor: Colors.white,
+              child: Icon(
+                Icons.person,
+                color: Colors.black,
+                size: 20,
+              )),
           SizedBox(
             width: 10,
           ),

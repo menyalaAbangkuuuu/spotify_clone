@@ -70,7 +70,7 @@ class _StreamLyricState extends State<StreamLyric> {
                   bool isCurrent = index == _currentLyricIndex;
                   bool isPast = index < _currentLyricIndex;
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
+                    padding: const EdgeInsets.only(bottom: 10.0),
                     child: GestureDetector(
                       onTap: () {
                         widget.musicPlayerProvider.audioPlayer.seek(Duration(
@@ -79,20 +79,17 @@ class _StreamLyricState extends State<StreamLyric> {
                       },
                       child: AnimatedDefaultTextStyle(
                         duration: const Duration(milliseconds: 200),
-                        style: TextStyle(
-                          color: isPast
-                              ? Colors.white.withOpacity(0.7)
-                              : isCurrent
-                                  ? Colors.white
-                                  : Colors.black,
-                        ),
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              color: isPast
+                                  ? Colors.white.withOpacity(0.7)
+                                  : isCurrent
+                                      ? Colors.white
+                                      : Colors.black,
+                              fontWeight: FontWeight.w600,
+                            ),
                         child: Text(
                           widget.musicPlayerProvider.lyric!.lyrics.lines[index]
                               .words,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
                         ),
                       ),
                     ),

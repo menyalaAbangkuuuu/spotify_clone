@@ -1,7 +1,11 @@
+import 'dart:math';
+
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:spotify_clone/providers/music_player_provider.dart';
+import 'package:spotify_clone/utils/flatten_artists_name.dart';
 import 'package:spotify_clone/view/widget/stream_lyric.dart';
 
 class FullLyricScreens extends StatefulWidget {
@@ -27,16 +31,35 @@ class _FullLyricScreensState extends State<FullLyricScreens> {
           Color(int.parse(widget.musicPlayerProvider.lyric!.colors.background)),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const Row(
+        leading: IconButton(
+          icon: Transform.rotate(
+            angle: pi / 2,
+            child: const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+            ),
+          ),
+          onPressed: () {
+            context.pop();
+          },
+        ),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(Icons.search, color: Colors.white),
-            SizedBox(
+            Text(
+              widget.musicPlayerProvider.currentTrack?.name ?? "",
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            const SizedBox(
               width: 10,
             ),
             Text(
-              'Search',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+              flattenArtistName(
+                      widget.musicPlayerProvider.currentTrack?.artists) ??
+                  "",
+              style: Theme.of(context).textTheme.titleSmall,
             )
           ],
         ),
@@ -59,14 +82,15 @@ class _FullLyricScreensState extends State<FullLyricScreens> {
                       ),
                     )
                   : Center(
-                      child: Text('No lyric available',
-                          style: Theme.of(context)
-                              .textTheme
-                              .displayMedium
-                              ?.copyWith(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ))),
+                      child: Text(
+                        'No lyric available',
+                        style:
+                            Theme.of(context).textTheme.displayMedium?.copyWith(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
+                    ),
             ),
             Container(
               padding: const EdgeInsets.all(10),
