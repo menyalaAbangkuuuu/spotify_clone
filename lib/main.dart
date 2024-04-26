@@ -8,11 +8,13 @@ import 'package:spotify_clone/providers/category_provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/providers/music_provider.dart';
 import 'package:spotify_clone/providers/search_music_provider.dart';
+import 'package:spotify_clone/services/spotify.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   await dotenv.load(fileName: ".env");
+  SpotifyService.init();
   runApp(const MyApp());
 }
 

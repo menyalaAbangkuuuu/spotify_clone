@@ -82,6 +82,8 @@ class MusicPlayerProvider extends ChangeNotifier {
 
   void setToFirst(int currentIndex) {
     _queue.removeRange(0, currentIndex + 1);
+    _currentTrack = _queue.first;
+    _audioPlayer.stop();
     notifyListeners();
   }
 
