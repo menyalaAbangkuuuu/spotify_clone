@@ -57,7 +57,7 @@ class _MusicPlayerState extends State<MusicPlayer>
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
                     padding: const EdgeInsets.all(5),
-                    height: 60,
+                    height: 50,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
                       boxShadow: [
@@ -79,15 +79,15 @@ class _MusicPlayerState extends State<MusicPlayer>
                             baseColor: Colors.grey[300]!,
                             highlightColor: Colors.grey[100]!,
                             child: Container(
-                              width: 50,
-                              height: 50,
+                              width: 40,
+                              height: 40,
                               color: Colors.grey,
                             ),
                           ),
                           errorWidget: (context, url, error) =>
                               const Icon(Icons.error),
-                          width: 50,
-                          height: 50,
+                          width: 40,
+                          height: 40,
                         ),
                         const SizedBox(
                             width: 10), // Spacer between image and text
@@ -102,7 +102,7 @@ class _MusicPlayerState extends State<MusicPlayer>
                                     "Unknown Track",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyMedium
+                                    .labelMedium
                                     ?.copyWith(fontWeight: FontWeight.w900),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -111,9 +111,10 @@ class _MusicPlayerState extends State<MusicPlayer>
                                     musicPlayerProvider.currentTrack?.artists),
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyMedium
+                                    .labelMedium
                                     ?.copyWith(
-                                        color: Colors.white.withOpacity(0.6)),
+                                      color: Colors.white.withOpacity(0.8),
+                                    ),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ],
@@ -144,6 +145,7 @@ class _MusicPlayerState extends State<MusicPlayer>
                         total: musicPlayerProvider.totalDuration,
                         timeLabelLocation: TimeLabelLocation.none,
                         bufferedBarColor: Colors.white38,
+                        barHeight: 2,
                         baseBarColor: Colors.white10,
                         thumbColor: Colors.transparent,
                         progressBarColor: Colors.white,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:spotify_clone/providers/music_player_provider.dart';
+import 'package:spotify_clone/utils/flatten_artists_name.dart';
 import 'package:spotify_clone/view/widget/stream_lyric.dart';
 
 class FullLyricScreens extends StatefulWidget {
@@ -33,23 +34,32 @@ class _FullLyricScreensState extends State<FullLyricScreens> {
         leading: IconButton(
           icon: Transform.rotate(
             angle: pi / 2,
-            child: const Icon(Icons.arrow_forward_ios),
+            child: const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+            ),
           ),
           onPressed: () {
             context.pop();
           },
         ),
         automaticallyImplyLeading: false,
-        title: const Row(
+        centerTitle: true,
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(Icons.search, color: Colors.white),
-            SizedBox(
+            Text(
+              widget.musicPlayerProvider.currentTrack?.name ?? "",
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            const SizedBox(
               width: 10,
             ),
             Text(
-              'Search',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+              flattenArtistName(
+                      widget.musicPlayerProvider.currentTrack?.artists) ??
+                  "",
+              style: Theme.of(context).textTheme.titleSmall,
             )
           ],
         ),

@@ -22,6 +22,7 @@ class SearchMusicScreens extends StatefulWidget {
 class _SearchMusicScreensState extends State<SearchMusicScreens> {
   TextEditingController searchController = TextEditingController();
   Timer? _debounce;
+  bool _isEmpty = true;
 
   @override
   void dispose() {
@@ -34,13 +35,19 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
     if (_debounce?.isActive ?? false) {
       _debounce!.cancel(); // Cancel any existing timer
     }
-    _debounce = Timer(const Duration(milliseconds: 500), () {
-      if (query.isNotEmpty) {
-        var searchProvider =
-            Provider.of<SearchProvider>(context, listen: false);
-        searchProvider.searchSong(query);
-      }
-    });
+    _debounce = Timer(
+      const Duration(milliseconds: 500),
+      () {
+        if (query.isNotEmpty) {
+          var searchProvider =
+              Provider.of<SearchProvider>(context, listen: false);
+          searchProvider.searchSong(query);
+          setState(() {
+            _isEmpty = false;
+          });
+        }
+      },
+    );
   }
 
   @override
@@ -57,7 +64,7 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
               cursorColor: Colors.white,
               style: Theme.of(context)
                   .textTheme
-                  .bodyMedium
+                  .labelLarge
                   ?.copyWith(color: Colors.white),
               controller: searchController,
               onChanged: (value) {
@@ -72,7 +79,19 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
                       Radius.circular(10),
                     )),
                 fillColor: Colors.grey.withOpacity(0.2),
-                prefixIcon: const Icon(Icons.search, color: Colors.white),
+                prefixIcon:
+                    const Icon(Icons.search, color: Colors.white, size: 20),
+                suffixIcon: !_isEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear, color: Colors.white),
+                        onPressed: () {
+                          searchController.clear();
+                          setState(() {
+                            _isEmpty = true;
+                          });
+                        },
+                      )
+                    : null,
                 hintText: 'Search for songs, artists, albums',
                 hintStyle: const TextStyle(color: Colors.white),
               ),
@@ -89,7 +108,7 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
               child: Text('Cancel',
                   style: Theme.of(context)
                       .textTheme
-                      .bodyMedium
+                      .bodySmall
                       ?.copyWith(color: Colors.white)),
             )
           ],
@@ -111,7 +130,7 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
                     itemBuilder: (context, index) {
                       var searchResult = searchProvider.searchResults[index];
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.only(bottom: 0),
                         child: Slidable(
                           key: const ValueKey(0),
                           closeOnScroll: true,
@@ -125,78 +144,98 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
                               ),
                             ],
                           ),
-                          child: ListTile(
-                            onTap: () {
-                              Provider.of<MusicPlayerProvider>(context,
-                                      listen: false)
-                                  .addToQueue(searchResult, null);
-                              Provider.of<MusicPlayerProvider>(context,
-                                      listen: false)
-                                  .play();
-                            },
-                            title: Text(
-                              searchResult.name ?? "",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                            subtitle: Row(children: [
-                              searchResult.explicit != null &&
-                                      searchResult.explicit == true
-                                  ? Container(
-                                      decoration: const BoxDecoration(
-                                          color: Colors.grey,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(3))),
-                                      padding: const EdgeInsets.only(
-                                          left: 5, right: 5),
-                                      child: const Text(
-                                        "E",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox(
-                                      width: 0,
+                          child: Consumer<MusicPlayerProvider>(
+                            builder: (context, musicPlayerProvider, child) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (musicPlayerProvider
+                                    .errorMessage.isNotEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          musicPlayerProvider.errorMessage),
+                                      backgroundColor: Colors.red[600],
+                                      duration: const Duration(seconds: 2),
                                     ),
-                              SizedBox(
-                                width: searchResult.explicit != null &&
-                                        searchResult.explicit == true
-                                    ? 5
-                                    : 0,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  flattenArtistName(searchResult.artists),
+                                  );
+                                  musicPlayerProvider.clearError();
+                                }
+                              });
+                              return ListTile(
+                                onTap: () {
+                                  musicPlayerProvider.addToQueue(
+                                      searchResult, null);
+                                  musicPlayerProvider.play();
+                                },
+                                title: Text(
+                                  searchResult.name ?? "",
                                   style: Theme.of(context)
                                       .textTheme
-                                      .bodyMedium
+                                      .titleSmall
                                       ?.copyWith(
-                                        color: Colors.white.withOpacity(0.6),
-                                        overflow: TextOverflow.ellipsis,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                 ),
-                              ),
-                            ]),
-                            leading: CachedNetworkImage(
-                              imageUrl:
-                                  searchResult.album!.images?[0].url ?? '',
-                              placeholder: (context, url) => Shimmer.fromColors(
-                                baseColor: Colors.grey,
-                                highlightColor: Colors.white,
-                                child: Container(
-                                  width: 50,
-                                  height: 50,
-                                  color: Colors.grey,
+                                subtitle: Row(children: [
+                                  searchResult.explicit != null &&
+                                          searchResult.explicit == true
+                                      ? Container(
+                                          decoration: const BoxDecoration(
+                                              color: Colors.grey,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(3))),
+                                          padding: const EdgeInsets.only(
+                                              left: 5, right: 5),
+                                          child: Text(
+                                            "E",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelSmall
+                                                ?.copyWith(
+                                                  color: Colors.black,
+                                                ),
+                                          ),
+                                        )
+                                      : const SizedBox(
+                                          width: 0,
+                                        ),
+                                  SizedBox(
+                                    width: searchResult.explicit != null &&
+                                            searchResult.explicit == true
+                                        ? 5
+                                        : 0,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      flattenArtistName(searchResult.artists),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(
+                                            color:
+                                                Colors.white.withOpacity(0.6),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                    ),
+                                  ),
+                                ]),
+                                leading: CachedNetworkImage(
+                                  height: 40,
+                                  imageUrl:
+                                      searchResult.album!.images?[0].url ?? '',
+                                  placeholder: (context, url) =>
+                                      Shimmer.fromColors(
+                                    baseColor: Colors.grey,
+                                    highlightColor: Colors.white,
+                                    child: const SizedBox(
+                                      width: 40,
+                                      height: 40,
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
                                 ),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
+                              );
+                            },
                           ),
                         ),
                       );
