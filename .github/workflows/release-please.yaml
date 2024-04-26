@@ -21,7 +21,7 @@ jobs:
           token: ${{ secrets.RELEASE_PAT }}
           # this is a built-in strategy in release-please, see "Action Inputs"
           # for more options
-          release-type: node
+          release-type: dart
       - name: tag major and minor versions
         if: ${{ steps.release.outputs.release_created }}
         run: |
