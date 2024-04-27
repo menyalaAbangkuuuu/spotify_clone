@@ -1,6 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_clone/model/lyric.dart';
 import 'package:spotify_clone/model/music.dart';
@@ -131,6 +130,7 @@ class MusicPlayerProvider extends ChangeNotifier {
 
   void seek(Duration position) {
     _audioPlayer.seek(position);
+    resume();
     notifyListeners();
   }
 
