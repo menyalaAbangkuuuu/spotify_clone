@@ -42,10 +42,13 @@ class CategoryTiles extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
-                  image: NetworkImage(category?.icons?.first.url ?? ''),
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.6), BlendMode.darken)),
+                image: NetworkImage(category?.icons?.first.url ?? ''),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.6),
+                  BlendMode.darken,
+                ),
+              ),
             ),
             child: Center(
               child: Text(

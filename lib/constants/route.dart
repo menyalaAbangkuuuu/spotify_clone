@@ -114,6 +114,8 @@ class AppRouter {
             child: CategoryDetailScreen(
               id: id,
               categoryName: categoryName,
+              currentPageIndex: 0,
+              onItemTapped: (index) {},
             ),
           );
         },
@@ -125,7 +127,6 @@ class AppRouter {
             child: const QueueListScreen(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              // create fade transition
               return FadeTransition(
                 opacity: animation,
                 child: child,
@@ -145,5 +146,6 @@ class AppRouter {
       ),
     ],
   );
+
   static GoRouter get router => _router;
 }
