@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:spotify_clone/view/category_detail.dart';
 import 'package:spotify_clone/view/home_screens.dart';
 import 'package:spotify_clone/view/widget/music_player.dart';
 import 'package:spotify_clone/view/widget/search_screen_app_bar.dart';
 
+import '../main.dart';
+
 class MainScreen extends StatefulWidget {
   final Widget screen;
+
   const MainScreen({super.key, required this.screen});
 
   @override
@@ -25,17 +29,23 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _currentPageIndex = index;
     });
+
     switch (_currentPageIndex) {
       case 0:
-        context.go(MyHomePage.id);
+        navigatorKey.currentState!.context.go(MyHomePage.id);
         break;
       case 1:
-        context.go('/search');
+        navigatorKey.currentState!.context.go('/search');
         break;
       case 2:
-        context.go('/library');
+        final currentLocation =
+            GoRouter.of(navigatorKey.currentState!.context).currentLocation;
+        if (currentLocation == CategoryDetailScreen.routeName) {
+          navigatorKey.currentState!.context.go('/search');
+        } else {
+          navigatorKey.currentState!.context.go('/library');
+        }
         break;
-      // Handle other indices appropriately
     }
   }
 
@@ -45,9 +55,7 @@ class _MainScreenState extends State<MainScreen> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
         child: SearchScreenAppBar(
-          // Tentukan apakah harus menampilkan teks "Search" atau tidak
-          showSearchText: _currentPageIndex ==
-              1, // Misalnya hanya pada halaman indeks 1 (halaman pencarian)
+          showSearchText: _currentPageIndex == 1,
         ),
       ),
       body: Column(
@@ -76,13 +84,13 @@ class _MainScreenState extends State<MainScreen> {
               color: Colors.white,
             ),
             icon: Icon(Icons.search, color: Colors.white.withOpacity(0.6)),
-            label: 'search',
+            label: 'Search',
           ),
           NavigationDestination(
             selectedIcon: const Icon(Icons.library_music, color: Colors.white),
             icon: Icon(Icons.library_music_outlined,
                 color: Colors.white.withOpacity(0.6)),
-            label: 'library',
+            label: 'Library',
           ),
         ],
       ),
