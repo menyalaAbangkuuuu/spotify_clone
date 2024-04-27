@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: const ColorScheme.dark().copyWith(
-            primary: Colors.black,
+            primary: Colors.green,
             background: Colors.black.withOpacity(0.6),
           ),
           pageTransitionsTheme: const PageTransitionsTheme(
