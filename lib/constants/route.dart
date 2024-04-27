@@ -61,6 +61,20 @@ class AppRouter {
               );
             },
           ),
+          GoRoute(
+            path: '/category/:id/:categoryName',
+            name: CategoryDetailScreen.routeName,
+            pageBuilder: (context, state) {
+              final id = state.pathParameters['id']!;
+              final categoryName = state.pathParameters['categoryName']!;
+              return MaterialPage(
+                child: CategoryDetailScreen(
+                  id: id,
+                  categoryName: categoryName,
+                ),
+              );
+            },
+          ),
         ],
       ),
       GoRoute(
@@ -103,22 +117,6 @@ class AppRouter {
         pageBuilder: (context, state) {
           return const MaterialPage(
             child: MusicDetailScreens(),
-          );
-        },
-      ),
-      GoRoute(
-        path: '/category/:id/:categoryName',
-        name: CategoryDetailScreen.routeName,
-        pageBuilder: (context, state) {
-          final id = state.pathParameters['id']!;
-          final categoryName = state.pathParameters['categoryName']!;
-          return MaterialPage(
-            child: CategoryDetailScreen(
-              id: id,
-              categoryName: categoryName,
-              currentPageIndex: 0,
-              onItemTapped: (index) {},
-            ),
           );
         },
       ),

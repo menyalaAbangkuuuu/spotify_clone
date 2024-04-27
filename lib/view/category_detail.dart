@@ -28,12 +28,12 @@ class CategoryDetailScreen extends StatelessWidget {
     return AppBar(
       title: Text(
         categoryName,
-        style: TextStyle(
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
         ),
       ),
       leading: IconButton(
-        icon: Icon(Icons.arrow_back),
+        icon: const Icon(Icons.arrow_back),
         onPressed: () {
           Navigator.of(context).pop();
         },
@@ -46,7 +46,7 @@ class CategoryDetailScreen extends StatelessWidget {
       builder: (context, playlistProvider, _) {
         if (playlistProvider.playlists == null ||
             playlistProvider.playlists!.isEmpty) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
         return ListView.builder(
           itemCount: playlistProvider.playlists!.length,
