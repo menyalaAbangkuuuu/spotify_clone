@@ -11,8 +11,7 @@ class CategoryTiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<CategoryProvider>(builder: (context, categoryProvider, _) {
-      if (categoryProvider.categories == null ||
-          categoryProvider.categories!.isEmpty) {
+      if (categoryProvider.categories.isEmpty) {
         return const Center(child: Text('Loading categories...'));
       }
       return GridView.builder(
@@ -21,19 +20,20 @@ class CategoryTiles extends StatelessWidget {
             childAspectRatio: 1.5,
             mainAxisSpacing: 10,
             crossAxisSpacing: 10),
-        itemCount: categoryProvider.categories!.length + 1,
+        itemCount: categoryProvider.categories.length + 1,
         itemBuilder: (context, index) {
-          if (index == categoryProvider.categories!.length) {
-            print(categoryProvider.categories?.length);
-            return Center(
-              child: ElevatedButton(
-                onPressed: () => categoryProvider.fetchMore(
-                    offset: categoryProvider.categories!.length ~/ 10 * 10),
-                child: const Text("Load More"),
-              ),
-            );
+          if (index == categoryProvider.categories.length) {
+            return categoryProvider.categories.length < 30
+                ? Center(
+                    child: ElevatedButton(
+                      onPressed: () => categoryProvider.fetchMore(
+                          offset: categoryProvider.categories.length ~/ 8 * 9),
+                      child: const Text("Load More"),
+                    ),
+                  )
+                : const SizedBox.shrink();
           }
-          Spotify.Category? category = categoryProvider.categories?[index];
+          Spotify.Category? category = categoryProvider.categories[index];
 
           return GestureDetector(
             onTap: () {
