@@ -25,13 +25,14 @@ class CategoryTiles extends StatelessWidget {
           crossAxisSpacing: 10),
       itemCount: categoryProvider.categories!.length + 1,
       itemBuilder: (context, index) {
+        if (index == categoryProvider.categories!.length) {
+          categoryProvider.fetchMore(
+              offset: categoryProvider.categories!.length ~/ 10 * 10);
+          return const Center(child: CircularProgressIndicator());
+        }
         Spotify.Category? category = categoryProvider.categories?[index];
 
-        if (index == categoryProvider.categories!.length + 1) {
-          return const Center(
-            child: Text("ini data baru"),
-          );
-        }
+        print(categoryProvider.categories?.length);
 
         return GestureDetector(
           onTap: () {
