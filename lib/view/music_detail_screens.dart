@@ -22,6 +22,7 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: Text(
             Provider.of<MusicPlayerProvider>(context).currentTrack?.name ?? "",
@@ -41,7 +42,8 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
         ),
         body: Consumer<MusicPlayerProvider>(
             builder: (context, musicPlayerProvider, child) {
-          return Container(
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 500),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -152,9 +154,9 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
                             color: Colors.white,
                           );
                         }),
-                        const IconButton(
-                          onPressed: null,
-                          icon: Icon(Icons.skip_next),
+                        IconButton(
+                          onPressed: () => musicPlayerProvider.next(),
+                          icon: const Icon(Icons.skip_next),
                           iconSize: 40,
                           color: Colors.white,
                         ),
