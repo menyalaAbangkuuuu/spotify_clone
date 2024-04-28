@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:spotify_clone/view/category_detail.dart';
+import 'package:spotify_clone/view/search_screens.dart';
 import 'package:spotify_clone/view/home_screens.dart';
 import 'package:spotify_clone/view/widget/music_player.dart';
 import 'package:spotify_clone/view/widget/search_screen_app_bar.dart';
@@ -32,19 +33,13 @@ class _MainScreenState extends State<MainScreen> {
 
     switch (_currentPageIndex) {
       case 0:
-        navigatorKey.currentState!.context.go(MyHomePage.id);
+        context.go(MyHomePage.id);
         break;
       case 1:
-        navigatorKey.currentState!.context.go('/search');
+        context.go(SearchScreens.id);
         break;
       case 2:
-        final currentLocation =
-            GoRouter.of(navigatorKey.currentState!.context).currentLocation;
-        if (currentLocation == CategoryDetailScreen.routeName) {
-          navigatorKey.currentState!.context.go('/search');
-        } else {
-          navigatorKey.currentState!.context.go('/library');
-        }
+        context.go('/library');
         break;
     }
   }

@@ -107,7 +107,7 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: '/category/:id/:categoryName',
+        path: '/category_detail/:id/:categoryName',
         name: CategoryDetailScreen.routeName,
         pageBuilder: (context, state) {
           final id = state.pathParameters['id']!;
@@ -116,8 +116,6 @@ class AppRouter {
             child: CategoryDetailScreen(
               id: id,
               categoryName: categoryName,
-              currentPageIndex: 0,
-              onItemTapped: (index) {},
             ),
           );
         },
