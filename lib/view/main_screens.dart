@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:spotify_clone/view/category_detail.dart';
 import 'package:spotify_clone/view/search_screens.dart';
 import 'package:spotify_clone/view/home_screens.dart';
+import 'package:spotify_clone/view/search_screens.dart';
 import 'package:spotify_clone/view/widget/music_player.dart';
 import 'package:spotify_clone/view/widget/search_screen_app_bar.dart';
 
@@ -48,7 +49,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50),
+        preferredSize: const Size.fromHeight(50),
         child: SearchScreenAppBar(
           showSearchText: _currentPageIndex == 1,
         ),
