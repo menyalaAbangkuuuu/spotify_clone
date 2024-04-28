@@ -62,7 +62,7 @@ class AppRouter {
             },
           ),
           GoRoute(
-            path: '/category/:id/:categoryName',
+            path: '${CategoryDetailScreen.routeName}/:id/:categoryName',
             name: CategoryDetailScreen.routeName,
             pageBuilder: (context, state) {
               final id = state.pathParameters['id']!;

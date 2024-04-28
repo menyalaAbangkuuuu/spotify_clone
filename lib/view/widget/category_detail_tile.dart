@@ -1,35 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:spotify/spotify.dart';
+import 'package:spotify/spotify.dart' hide Image;
 
 class CategoryDetailTile extends StatelessWidget {
-  final Playlist playlist;
+  final List<PlaylistSimple> playlists;
 
-  const CategoryDetailTile({super.key, required this.playlist});
-
-  @override
-  Widget build(BuildContext context) {
-    return _buildTile();
-  }
-
-  Widget _buildTile() {
-    return ListTileWidget(
-      title: playlist.name ?? 'Default Name',
-      onTap: () {},
-    );
-  }
-}
-
-class ListTileWidget extends StatelessWidget {
-  final String title;
-  final VoidCallback onTap;
-
-  const ListTileWidget({super.key, required this.title, required this.onTap});
+  const CategoryDetailTile({super.key, required this.playlists});
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(title),
-      onTap: onTap,
+    return ListView.builder(
+      itemCount: playlists.length, // The count of items in the list
+      itemBuilder: (context, index) {
+        final currentPlaylist = playlists[index];
+        return Card(
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start, // Align items to the start
+            children: [
+              ListTile(
+                title: Text(currentPlaylist.name ?? ""),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: currentPlaylist.images != null &&
+                        currentPlaylist.images!.isNotEmpty
+                    ? Image.network(currentPlaylist.images!.first.url ?? "",
+                        fit: BoxFit.cover)
+                    : Container(),
+              ),
+              // Add some spacing between the ListTile and the image
+              const SizedBox(height: 8.0),
+              // Add text below the image
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 8.0,
+                ),
+                child: Text(
+                    currentPlaylist.description ?? "No description available"),
+              ),
+            ],
+          ),
+        );
+      },
     );
+    ;
   }
 }

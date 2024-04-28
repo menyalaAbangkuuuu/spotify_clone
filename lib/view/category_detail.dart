@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_clone/providers/category_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:spotify_clone/services/spotify.dart';
 import 'package:spotify_clone/view/widget/category_detail_tile.dart';
 
 class CategoryDetailScreen extends StatelessWidget {
-  static const routeName = '/category_detail';
+  static const routeName = '/category';
 
   final String id;
   final String categoryName;
@@ -33,54 +34,18 @@ class CategoryDetailScreen extends StatelessWidget {
           },
         ),
       ),
-      body: Consumer<CategoryProvider>(
-        builder: (context, categoryProvider, child) {
-          if (categoryProvider.categories == null ||
-              categoryProvider.categories!.isEmpty) {
-            return const Center(child: Text('Loading playlists...'));
+      body: FutureBuilder(
+        future: SpotifyService.getCategoryPlaylists(id),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            return CategoryDetailTile(playlists: snapshot.data!);
           }
-
-          return FutureBuilder(
-            future: categoryProvider.getPlaylistsByCategoryId(id ?? ''),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              if (snapshot.hasError) {
-                return const Center(child: Text('An error occurred!'));
-              }
-
-              final playlists = snapshot.data as List<PlaylistSimple>;
-
-              if (playlists.isEmpty) {
-                return const Center(child: Text('No playlists available.'));
-              }
-
-              return ListView.builder(
-                itemCount: playlists.length,
-                itemBuilder: (context, index) {
-                  final playlist = playlists[index];
-                  return FutureBuilder<Playlist>(
-                    future: categoryProvider.getPlaylistFromSimple(playlist),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        if (snapshot.data != null) {
-                          return CategoryDetailTile(playlist: snapshot.data!);
-                        } else {
-                          return const CircularProgressIndicator();
-                        }
-                      }
-                    },
-                  );
-                },
-              );
-            },
-          );
         },
       ),
     );

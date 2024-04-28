@@ -20,8 +20,8 @@ class SpotifyService {
   static Future<List<Category>?> getCategories({int offset = 0}) async {
     final response =
         _spotifyApi.categories.list(country: Market.ID, locale: "id-ID");
-    var pages = await response.getPage(10, offset);
-    return pages.items?.toList() as List<Category>;
+    var pages = await response.getPage(11, offset);
+    return pages.items?.toList().sublist(1) as List<Category>;
   }
 
   static Future<List<PlaylistSimple>?> getCategoryDetail(

@@ -16,25 +16,21 @@ class CategoryProvider with ChangeNotifier {
   Category? get category => _category;
 
   void fetchData() async {
-    _categories =
-        await SpotifyService.getCategories(offset: _categories?.length ?? 0);
+    _categories = await SpotifyService.getCategories();
     notifyListeners();
   }
 
-  void selectCategory(Category category) {
-    _category = category;
+  void fetchMore({int offset = 0}) async {
+    final data = await SpotifyService.getCategories(offset: offset);
+    if (_category != null) {
+      _categories!.addAll(data!);
+    }
     notifyListeners();
   }
 
-  Future<void> getCategoryDetail(String categoryId) async {
-    _category =
-        (await SpotifyService.getCategoryDetail(categoryId)) as Category?;
-    notifyListeners();
-  }
-
-  Future<List<PlaylistSimple>?> getPlaylistsByCategoryId(String categoryId) {
-    return SpotifyService.getPlaylistsByCategoryId(categoryId);
-  }
+  // Future<void> getPlaylistsByCategoryId(String categoryId) {
+  //   return SpotifyService.getPlaylistsByCategoryId(categoryId);
+  // }
 
   getPlaylistFromSimple(PlaylistSimple playlist) {}
 }
