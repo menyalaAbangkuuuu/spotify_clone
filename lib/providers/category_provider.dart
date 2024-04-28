@@ -24,8 +24,9 @@ class CategoryProvider with ChangeNotifier {
     final data = await SpotifyService.getCategories(offset: offset);
     if (_category != null) {
       _categories!.addAll(data!);
+
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   // Future<void> getPlaylistsByCategoryId(String categoryId) {
