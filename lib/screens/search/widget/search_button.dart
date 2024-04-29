@@ -17,13 +17,18 @@ ElevatedButton searchButton(BuildContext context) {
       children: [
         Row(
           children: <Widget>[
-            Icon(Icons.search, color: Colors.black.withOpacity(0.8)),
+            Icon(
+              Icons.search,
+              color: Colors.black.withOpacity(0.8),
+            ),
             const SizedBox(
               width: 10,
             ),
             Text(
               'What do you want to listen to?',
-              style: TextStyle(color: Colors.black.withOpacity(0.8)),
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.8),
+              ),
             )
           ],
         ),

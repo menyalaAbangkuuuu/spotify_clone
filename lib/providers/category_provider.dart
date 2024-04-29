@@ -13,9 +13,6 @@ class CategoryProvider with ChangeNotifier {
   bool _canLoadMore = true;
   bool get canLoadMore => _canLoadMore;
 
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
-
   void fetchData() async {
     final data = await SpotifyService.getCategories() ?? [];
     data.removeAt(0);
