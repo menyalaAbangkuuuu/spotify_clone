@@ -64,4 +64,10 @@ class SpotifyService {
       PlaylistSimple playlistSimple) async {
     return await _spotifyApi.playlists.get(playlistSimple.id ?? '');
   }
+
+  static Future<List<Track>?> getMusicByPlaylist(String playlistId) async {
+    final playlist = _spotifyApi.playlists.getTracksByPlaylistId(playlistId);
+    final pages = await playlist.getPage(10);
+    return pages.items?.toList();
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +39,7 @@ class CategoryTiles extends StatelessWidget {
           return GestureDetector(
             onTap: () {
               context.push(
-                '${CategoryDetailScreen.routeName}/${category?.id ?? ""}/${category?.name}',
+                '${CategoryDetailScreen.routeName}/${category.id ?? ""}/${category.name}',
               );
             },
             child: GridTile(
@@ -46,7 +47,9 @@ class CategoryTiles extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
-                  image: NetworkImage(category?.icons?.first.url ?? ''),
+                  image: CachedNetworkImageProvider(
+                    category.icons?.first.url ?? '',
+                  ),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
                     Colors.black.withOpacity(0.6),
@@ -56,7 +59,7 @@ class CategoryTiles extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  category?.name ?? '',
+                  category.name ?? '',
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w900,
