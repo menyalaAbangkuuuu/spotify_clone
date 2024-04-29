@@ -36,7 +36,7 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
               child: const Icon(Icons.arrow_forward_ios),
             ),
             onPressed: () {
-              context.go(SearchScreens.id);
+              context.pop();
             },
           ),
         ),
@@ -121,9 +121,11 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        const IconButton(
-                          onPressed: null,
-                          icon: Icon(Icons.skip_previous),
+                        IconButton(
+                          onPressed: musicPlayerProvider.canPrev
+                              ? () => musicPlayerProvider.prev()
+                              : null,
+                          icon: const Icon(Icons.skip_previous),
                           iconSize: 40,
                           color: Colors.white,
                         ),
@@ -147,7 +149,9 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
                           );
                         }),
                         IconButton(
-                          onPressed: () => musicPlayerProvider.next(),
+                          onPressed: musicPlayerProvider.canNext
+                              ? () => musicPlayerProvider.next()
+                              : null,
                           icon: const Icon(Icons.skip_next),
                           iconSize: 40,
                           color: Colors.white,
