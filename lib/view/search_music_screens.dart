@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/providers/search_music_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
@@ -22,6 +23,7 @@ class SearchMusicScreens extends StatefulWidget {
 class _SearchMusicScreensState extends State<SearchMusicScreens> {
   TextEditingController searchController = TextEditingController();
   Timer? _debounce;
+  bool _isEmpty = true;
 
   @override
   void dispose() {
@@ -216,8 +218,41 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
                                 ),
                               ),
                             ]),
-                            leading: Image.network(
-                                searchResult.album!.images?[0].url ?? ''),
+                            leading: CachedNetworkImage(
+                              height: 50,
+                              width: 50,
+                              imageUrl:
+                                  searchResult.album?.images?.first.url ?? "",
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                width: 50.0,
+                                height: 50.0,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              placeholder: (context, url) => Shimmer.fromColors(
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                                child: Container(
+                                  color: Colors.black.withOpacity(.6),
+                                  width: double.infinity,
+                                  height: 50.0,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: Center(
+                                  child: Icon(Icons.error),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       );

@@ -1,6 +1,7 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/main.dart';
@@ -34,7 +35,8 @@ class _MusicPlayerState extends State<MusicPlayer> {
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
                     children: [
-                      Container(
+                      AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
                           padding: const EdgeInsets.all(10),
                           height: 60,
                           decoration: BoxDecoration(
