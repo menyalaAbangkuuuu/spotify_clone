@@ -83,7 +83,18 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
                       Radius.circular(10),
                     )),
                 fillColor: Colors.grey.withOpacity(0.2),
-                prefixIcon: const Icon(Icons.search, color: Colors.white),
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: !_isEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear, color: Colors.white),
+                        onPressed: () {
+                          searchController.clear();
+                          setState(() {
+                            _isEmpty = true;
+                          });
+                        },
+                      )
+                    : null,
                 hintText: 'Search for songs, artists, albums',
                 hintStyle: const TextStyle(color: Colors.white),
               ),
@@ -236,11 +247,10 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
                                 ),
                               ),
                               placeholder: (context, url) => Shimmer.fromColors(
-                                baseColor: Colors.grey[300]!,
+                                baseColor: Colors.black.withOpacity(.5),
                                 highlightColor: Colors.grey[100]!,
                                 child: Container(
                                   color: Colors.black.withOpacity(.6),
-                                  width: double.infinity,
                                   height: 50.0,
                                 ),
                               ),

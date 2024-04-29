@@ -42,6 +42,19 @@ class _MusicPlayerState extends State<MusicPlayer>
   Widget build(BuildContext context) {
     return Consumer<MusicPlayerProvider>(
       builder: (context, musicPlayerProvider, child) {
+        // if there have error , return snackbar;
+        if (musicPlayerProvider.errorMessage.isNotEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(musicPlayerProvider.errorMessage),
+                duration: const Duration(seconds: 1),
+                backgroundColor: Colors.red[300],
+              ),
+            );
+            musicPlayerProvider.clearError();
+          });
+        }
         if (musicPlayerProvider.currentTrack == null) {
           return const SizedBox.shrink();
         }

@@ -23,12 +23,7 @@ class MusicPlayerProvider extends ChangeNotifier {
       /// kalo antriannya kosong, reset semua state
       if (_queue.isEmpty) {
         _currentPosition = Duration.zero;
-        _totalDuration = Duration.zero;
         notifyListeners();
-      }
-      if (_audioPlayer.state == PlayerState.completed && _queue.isNotEmpty) {
-        _queue.removeAt(0);
-        await play();
       }
     });
 
@@ -40,6 +35,7 @@ class MusicPlayerProvider extends ChangeNotifier {
         notifyListeners();
       } else {
         await _audioPlayer.stop();
+        _isPlaying = false;
         _currentPosition = Duration.zero;
         notifyListeners();
       }
@@ -141,7 +137,10 @@ class MusicPlayerProvider extends ChangeNotifier {
 
     _lyric = await LyricService.getLyric(_currentTrack!.id!);
 
-    await _audioPlayer.play(UrlSource(music.url));
+    await _audioPlayer.play(UrlSource(music.url)).onError((error, stackTrace) {
+      _errorMessage = "this song cannot be played";
+      notifyListeners();
+    });
     _isPlaying = true;
     notifyListeners();
   }

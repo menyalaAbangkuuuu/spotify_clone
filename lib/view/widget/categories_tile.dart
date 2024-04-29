@@ -38,7 +38,7 @@ class CategoryTiles extends StatelessWidget {
           return GestureDetector(
             onTap: () {
               context.push(
-                '${CategoryDetailScreen.routeName}/${category?.id ?? ""}/${category?.name}',
+                '${CategoryDetailScreen.routeName}/${category.id ?? ""}/${category.name}',
               );
             },
             child: GridTile(

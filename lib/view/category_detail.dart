@@ -37,7 +37,6 @@ class CategoryDetailScreen extends StatelessWidget {
       body: FutureBuilder(
         future: SpotifyService.getCategoryPlaylists(id),
         builder: (context, snapshot) {
-          print("hello");
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
