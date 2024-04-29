@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:spotify_clone/view/search_screens.dart';
-import 'package:spotify_clone/screens/home/home_screens.dart';
+import 'package:spotify_clone/screens/search/search_screen.dart';
+import 'package:spotify_clone/screens/home/home_screen.dart';
 import 'package:spotify_clone/view/widget/music_player.dart';
 import 'package:spotify_clone/view/widget/search_screen_app_bar.dart';
 
@@ -29,10 +29,10 @@ class _MainScreenState extends State<MainScreen> {
 
     switch (_currentPageIndex) {
       case 0:
-        context.go(MyHomePage.id);
+        context.go(MyHomePage.routeName);
         break;
       case 1:
-        context.go(SearchScreens.id);
+        context.go(SearchScreens.routeName);
         break;
       case 2:
         context.go('/library');
@@ -43,12 +43,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
-        child: SearchScreenAppBar(
-          showSearchText: _currentPageIndex == 1,
-        ),
-      ),
       body: Column(
         children: [
           Expanded(child: widget.screen),

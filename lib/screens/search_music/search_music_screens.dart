@@ -12,16 +12,16 @@ import 'package:spotify_clone/providers/search_music_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
 import 'package:spotify_clone/view/widget/slider_item_music.dart';
 
-class SearchMusicScreens extends StatefulWidget {
-  static const String id = '/search_music';
+class SearchMusicScreen extends StatefulWidget {
+  static const String routeName = '/search_music';
 
-  const SearchMusicScreens({super.key});
+  const SearchMusicScreen({super.key});
 
   @override
-  State<SearchMusicScreens> createState() => _SearchMusicScreensState();
+  State<SearchMusicScreen> createState() => _SearchMusicScreenState();
 }
 
-class _SearchMusicScreensState extends State<SearchMusicScreens> {
+class _SearchMusicScreenState extends State<SearchMusicScreen> {
   TextEditingController searchController = TextEditingController();
   Timer? _debounce;
   bool _isEmpty = true;

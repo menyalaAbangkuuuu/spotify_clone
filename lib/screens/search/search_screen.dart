@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:spotify_clone/screens/search/search_music_screens.dart';
-import 'package:spotify_clone/view/widget/categories_tile.dart';
+import 'package:spotify_clone/screens/search/widget/search_appbar.dart';
+import 'package:spotify_clone/screens/search/widget/search_button.dart';
+import 'package:spotify_clone/screens/search_music/search_music_screens.dart';
+import 'package:spotify_clone/screens/search/widget/categories_tile.dart';
 
 class SearchScreens extends StatefulWidget {
   static const routeName = '/search';
@@ -19,58 +21,40 @@ class _SearchScreensState extends State<SearchScreens> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-            ),
-            onPressed: () => context.push(SearchMusicScreens.id),
-            child: Column(children: [
-              Row(
+    return Scaffold(
+      appBar: searchAppBar(context),
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            searchButton(context),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Icon(Icons.search, color: Colors.black.withOpacity(0.8)),
-                  const SizedBox(
-                    width: 10,
+                  SizedBox(
+                    height: 20,
                   ),
-                  Text(
-                    'What do you want to listen to?',
-                    style: TextStyle(color: Colors.black.withOpacity(0.8)),
-                  )
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Browse all',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Expanded(child: CategoryTiles())
                 ],
               ),
-            ])),
-        const Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 20,
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'Browse all',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Expanded(child: CategoryTiles())
-            ],
-          ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

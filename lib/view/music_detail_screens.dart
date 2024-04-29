@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
 import 'package:spotify_clone/view/queue_list_screen.dart';
-import 'package:spotify_clone/view/search_screens.dart';
+import 'package:spotify_clone/screens/search/search_screen.dart';
 import 'package:spotify_clone/view/widget/mini_lyric.dart';
 
 class MusicDetailScreens extends StatefulWidget {
@@ -87,8 +87,9 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
                     const SizedBox(height: 40),
                     Text(
                       musicPlayerProvider.currentTrack?.name ?? '',
-                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.w900,
+                            overflow: TextOverflow.ellipsis,
                           ),
                     ),
                     Text(
@@ -96,6 +97,7 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
                           musicPlayerProvider.currentTrack?.artists),
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.bold,
+                            color: Colors.white70,
                             overflow: TextOverflow.ellipsis,
                           ),
                     ),

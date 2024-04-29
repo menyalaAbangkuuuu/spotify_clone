@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:spotify_clone/view/category_detail.dart';
 import 'package:spotify_clone/view/full_lyric_screen.dart';
-import 'package:spotify_clone/screens/home/home_screens.dart';
+import 'package:spotify_clone/screens/home/home_screen.dart';
 import 'package:spotify_clone/screens/common/main_screen.dart';
 import 'package:spotify_clone/view/music_detail_screens.dart';
 import 'package:spotify_clone/view/playlist_screen.dart';
 import 'package:spotify_clone/view/queue_list_screen.dart';
-import 'package:spotify_clone/view/search_music_screens.dart';
-import 'package:spotify_clone/view/search_screens.dart';
+import 'package:spotify_clone/screens/search_music/search_music_screens.dart';
+import 'package:spotify_clone/screens/search/search_screen.dart';
 import 'package:spotify_clone/view/library_screens.dart';
 
 class AppRouter {
@@ -17,7 +17,7 @@ class AppRouter {
 
   static final _router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: MyHomePage.id,
+    initialLocation: MyHomePage.routeName,
     routes: [
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
@@ -26,36 +26,22 @@ class AppRouter {
         ),
         routes: [
           GoRoute(
-            path: MyHomePage.id,
-            pageBuilder: (context, state) =>
-                const MaterialPage(child: MyHomePage()),
+            path: MyHomePage.routeName,
+            pageBuilder: (context, state) => const MaterialPage(
+              child: MyHomePage(),
+            ),
           ),
           GoRoute(
-              path: SearchScreens.id,
-              pageBuilder: (context, state) => CustomTransitionPage(
-                    child: const SearchScreens(),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      var begin = const Offset(-1.0, 0.0);
-                      var end = Offset.zero;
-                      var curve = Curves.ease;
-
-                      var tween = Tween(begin: begin, end: end)
-                          .chain(CurveTween(curve: curve));
-                      var offsetAnimation = animation.drive(tween);
-
-                      return SlideTransition(
-                        position: offsetAnimation,
-                        child: child,
-                      );
-                    },
-                    transitionDuration: const Duration(milliseconds: 300),
-                  )),
+            path: SearchScreens.routeName,
+            pageBuilder: (context, state) => const MaterialPage(
+              child: SearchScreens(),
+            ),
+          ),
           GoRoute(
-            path: SearchMusicScreens.id,
+            path: SearchMusicScreen.routeName,
             pageBuilder: (context, state) {
               return const MaterialPage(
-                child: SearchMusicScreens(),
+                child: SearchMusicScreen(),
               );
             },
           ),
@@ -76,10 +62,10 @@ class AppRouter {
         ],
       ),
       GoRoute(
-        path: SearchMusicScreens.id,
+        path: SearchMusicScreen.routeName,
         pageBuilder: (context, state) {
           return const MaterialPage(
-            child: SearchMusicScreens(),
+            child: SearchMusicScreen(),
           );
         },
       ),
