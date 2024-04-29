@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:spotify_clone/view/search_music_screens.dart';
+import 'package:spotify_clone/screens/search/search_music_screens.dart';
 import 'package:spotify_clone/view/widget/categories_tile.dart';
 
 class SearchScreens extends StatefulWidget {
-  static const id = '/search';
+  static const routeName = '/search';
   const SearchScreens({super.key});
 
   @override

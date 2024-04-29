@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spotify_clone/view/widget/topPlaylistWidget.dart';
 
 class MyHomePage extends StatefulWidget {
-  static const String id = "/home";
+  static const String routeName = "/home";
   const MyHomePage({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
