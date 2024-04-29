@@ -39,7 +39,15 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: const ColorScheme.dark().copyWith(
-              primary: Colors.black, background: Colors.black.withOpacity(0.6)),
+            primary: Colors.green,
+            background: Colors.black.withOpacity(0.6),
+          ),
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: ZoomPageTransitionsBuilder(),
+              TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+            },
+          ),
           navigationBarTheme: NavigationBarThemeData(
             backgroundColor: Colors.black,
             indicatorColor: Colors.transparent,

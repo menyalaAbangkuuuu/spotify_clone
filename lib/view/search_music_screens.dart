@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
@@ -32,13 +34,23 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
     if (_debounce?.isActive ?? false) {
       _debounce!.cancel(); // Cancel any existing timer
     }
-    _debounce = Timer(const Duration(milliseconds: 500), () {
-      if (query.isNotEmpty) {
-        var searchProvider =
-            Provider.of<SearchProvider>(context, listen: false);
-        searchProvider.searchSong(query);
-      }
-    });
+    _debounce = Timer(
+      const Duration(milliseconds: 500),
+      () {
+        if (query.isNotEmpty) {
+          var searchProvider =
+              Provider.of<SearchProvider>(context, listen: false);
+          searchProvider.searchSong(query);
+          setState(() {
+            _isEmpty = false;
+          });
+        } else {
+          setState(() {
+            _isEmpty = true;
+          });
+        }
+      },
+    );
   }
 
   @override
@@ -104,8 +116,33 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
                   }
 
                   return ListView.builder(
-                    itemCount: searchProvider.searchResults.length,
+                    itemCount: searchProvider.searchResults.length + 1,
                     itemBuilder: (context, index) {
+                      if (index >= searchProvider.searchResults.length) {
+                        return searchProvider.searchResults.length < 20
+                            ? FractionallySizedBox(
+                                widthFactor: 0.5,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    searchProvider.fetchMore(
+                                        searchController.text,
+                                        searchProvider.searchResults.length ~/
+                                            10 *
+                                            10);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.primary,
+                                    padding: const EdgeInsets.all(10),
+                                  ),
+                                  child: const Text(
+                                    "fetch more",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox.shrink();
+                      }
                       var searchResult = searchProvider.searchResults[index];
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10),

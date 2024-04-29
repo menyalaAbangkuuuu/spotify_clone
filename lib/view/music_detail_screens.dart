@@ -23,6 +23,7 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: Text(
               Provider.of<MusicPlayerProvider>(context).currentTrack?.name ??
@@ -41,7 +42,8 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
         ),
         body: Consumer<MusicPlayerProvider>(
             builder: (context, musicPlayerProvider, child) {
-          return Container(
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 500),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -125,26 +127,28 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
                           iconSize: 40,
                           color: Colors.white,
                         ),
-                        StreamBuilder(
-                            stream: musicPlayerProvider
-                                .audioPlayer.onPlayerComplete,
-                            builder: (context, snapshot) {
-                              return IconButton(
-                                onPressed: () {
-                                  musicPlayerProvider.isPlaying
-                                      ? musicPlayerProvider.pause()
-                                      : musicPlayerProvider.resume();
-                                },
-                                icon: musicPlayerProvider.isPlaying
-                                    ? const Icon(Icons.pause)
-                                    : const Icon(Icons.play_arrow),
-                                iconSize: 40,
-                                color: Colors.white,
-                              );
-                            }),
-                        const IconButton(
-                          onPressed: null,
-                          icon: Icon(Icons.skip_next),
+                        Consumer<MusicPlayerProvider>(
+                            builder: (context, musicPlayerProvider, child) {
+                          return IconButton(
+                            onPressed: () {
+                              if (musicPlayerProvider.isPlaying) {
+                                musicPlayerProvider.pause();
+                              } else {
+                                musicPlayerProvider.resume();
+                              }
+                            },
+                            icon: Icon(
+                              musicPlayerProvider.isPlaying
+                                  ? Icons.pause
+                                  : Icons.play_arrow,
+                            ),
+                            iconSize: 40,
+                            color: Colors.white,
+                          );
+                        }),
+                        IconButton(
+                          onPressed: () => musicPlayerProvider.next(),
+                          icon: const Icon(Icons.skip_next),
                           iconSize: 40,
                           color: Colors.white,
                         ),

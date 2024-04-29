@@ -10,10 +10,11 @@ class SpotifyService {
     return response.items?.toList();
   }
 
-  static Future<List<dynamic>> searchMusic(String query) async {
+  static Future<List<dynamic>> searchMusic(String query,
+      [int offset = 0]) async {
     final response = _spotifyApi.search.get(query, types: {SearchType.track});
 
-    var pages = await response.getPage(10);
+    var pages = await response.getPage(10, offset);
     return pages[0].items?.toList() ?? [];
   }
 
