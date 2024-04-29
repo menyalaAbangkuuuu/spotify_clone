@@ -71,6 +71,7 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
                   .bodyMedium
                   ?.copyWith(color: Colors.white),
               controller: searchController,
+              autocorrect: false,
               onChanged: (value) {
                 _onSearchChanged(value);
               },

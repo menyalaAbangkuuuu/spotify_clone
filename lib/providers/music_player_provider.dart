@@ -76,6 +76,12 @@ class MusicPlayerProvider extends ChangeNotifier {
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
 
+  bool _canPrev = false;
+  bool get canPrev => _canPrev;
+
+  bool _canNext = false;
+  bool get canNext => _canNext;
+
   /// resume the audio player
   void resume() {
     _isPlaying = true;
@@ -102,6 +108,7 @@ class MusicPlayerProvider extends ChangeNotifier {
       _queue.add(track);
       _currentTrack = _queue.first;
     }
+    _canNext = true;
     notifyListeners();
   }
 
@@ -176,7 +183,11 @@ class MusicPlayerProvider extends ChangeNotifier {
       _prevQueue.add(_queue.first);
       _queue.removeAt(0);
       _currentTrack = _queue.first;
+      _canPrev = true;
       await play();
+      if (_queue.length == 1) {
+        _canNext = false;
+      }
       notifyListeners();
     }
   }
@@ -185,9 +196,25 @@ class MusicPlayerProvider extends ChangeNotifier {
     if (_prevQueue.isNotEmpty) {
       _queue.insert(0, _prevQueue.last);
       _prevQueue.removeLast();
+      if (_prevQueue.isEmpty) {
+        _canPrev = false;
+      }
       _currentTrack = _queue.first;
+      _canNext = true;
       await play();
       notifyListeners();
     }
+  }
+
+  void swap(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+
+    // Perform the swap
+    final item = _queue.removeAt(oldIndex + 1);
+    _queue.insert(newIndex + 1, item);
+
+    notifyListeners();
   }
 }

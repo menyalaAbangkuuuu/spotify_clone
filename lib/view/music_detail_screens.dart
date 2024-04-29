@@ -122,7 +122,9 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         IconButton(
-                          onPressed: () => musicPlayerProvider.prev(),
+                          onPressed: musicPlayerProvider.canPrev
+                              ? () => musicPlayerProvider.prev()
+                              : null,
                           icon: const Icon(Icons.skip_previous),
                           iconSize: 40,
                           color: Colors.white,
@@ -147,7 +149,9 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
                           );
                         }),
                         IconButton(
-                          onPressed: () => musicPlayerProvider.next(),
+                          onPressed: musicPlayerProvider.canNext
+                              ? () => musicPlayerProvider.next()
+                              : null,
                           icon: const Icon(Icons.skip_next),
                           iconSize: 40,
                           color: Colors.white,
