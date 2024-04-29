@@ -121,9 +121,9 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        const IconButton(
-                          onPressed: null,
-                          icon: Icon(Icons.skip_previous),
+                        IconButton(
+                          onPressed: () => musicPlayerProvider.prev(),
+                          icon: const Icon(Icons.skip_previous),
                           iconSize: 40,
                           color: Colors.white,
                         ),

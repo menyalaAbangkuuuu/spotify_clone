@@ -35,8 +35,9 @@ class MusicPlayerProvider extends ChangeNotifier {
         notifyListeners();
       } else {
         await _audioPlayer.stop();
-        _isPlaying = false;
         _currentPosition = Duration.zero;
+
+        _isPlaying = false;
         notifyListeners();
       }
     });
@@ -66,6 +67,8 @@ class MusicPlayerProvider extends ChangeNotifier {
 
   /// getter for the queue but exclude the current track
   List<Track> get queue => _queue.isEmpty ? [] : _queue.sublist(1);
+
+  final List<Track> _prevQueue = [];
 
   Lyric? _lyric;
   Lyric? get lyric => _lyric;
@@ -170,7 +173,19 @@ class MusicPlayerProvider extends ChangeNotifier {
   /// Calling this method will notify all listeners of the change.
   Future<void> next() async {
     if (_queue.isNotEmpty) {
+      _prevQueue.add(_queue.first);
       _queue.removeAt(0);
+      _currentTrack = _queue.first;
+      await play();
+      notifyListeners();
+    }
+  }
+
+  Future<void> prev() async {
+    if (_prevQueue.isNotEmpty) {
+      _queue.insert(0, _prevQueue.last);
+      _prevQueue.removeLast();
+      _currentTrack = _queue.first;
       await play();
       notifyListeners();
     }
