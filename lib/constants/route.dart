@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/view/category_detail.dart';
 import 'package:spotify_clone/view/full_lyric_screen.dart';
 import 'package:spotify_clone/view/home_screens.dart';
@@ -88,27 +87,8 @@ class AppRouter {
       GoRoute(
         path: FullLyricScreens.id,
         pageBuilder: (context, state) {
-          final args = state.extra;
-          return CustomTransitionPage(
-            child: FullLyricScreens(
-              musicPlayerProvider: args as MusicPlayerProvider,
-            ),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              var begin = const Offset(0.0, 1.0);
-              var end = Offset.zero;
-              var curve = Curves.ease;
-
-              var tween =
-                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-              var offsetAnimation = animation.drive(tween);
-
-              return SlideTransition(
-                position: offsetAnimation,
-                child: child,
-              );
-            },
-            transitionDuration: const Duration(milliseconds: 50),
+          return const MaterialPage(
+            child: FullLyricScreens(),
           );
         },
       ),

@@ -26,9 +26,11 @@ class _MiniLyricState extends State<MiniLyric> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Color(int.parse(
-                  musicPlayerProvider.lyric?.colors.background ??
-                      '0xFF000000')),
+              color: musicPlayerProvider.lyric?.colors.background != null
+                  ? Color(
+                      int.parse(musicPlayerProvider.lyric!.colors.background),
+                    )
+                  : musicPlayerProvider.currentTrackColor,
               borderRadius: const BorderRadius.all(Radius.circular(16)),
             ),
             padding: const EdgeInsets.all(10),
@@ -59,9 +61,7 @@ class _MiniLyricState extends State<MiniLyric> {
                 SizedBox(
                     height: 250,
                     child: musicPlayerProvider.lyric != null
-                        ? StreamLyric(
-                            musicPlayerProvider: musicPlayerProvider,
-                          )
+                        ? const StreamLyric()
                         : Center(
                             child: Text(
                             'No lyric available',

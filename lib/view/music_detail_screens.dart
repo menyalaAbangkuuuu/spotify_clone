@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
 import 'package:spotify_clone/view/queue_list_screen.dart';
-import 'package:spotify_clone/view/search_screens.dart';
 import 'package:spotify_clone/view/widget/mini_lyric.dart';
 
 class MusicDetailScreens extends StatefulWidget {
