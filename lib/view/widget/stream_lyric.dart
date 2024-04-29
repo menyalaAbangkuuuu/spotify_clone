@@ -60,7 +60,6 @@ class _StreamLyricState extends State<StreamLyric> {
                   );
                 }
               }
-
               return Stack(children: [
                 ScrollablePositionedList.builder(
                   itemCount: musicPlayerProvider.lyric!.lyrics.lines.length,

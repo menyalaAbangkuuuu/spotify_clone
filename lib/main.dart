@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:provider/provider.dart';
@@ -7,27 +6,21 @@ import 'package:spotify_clone/constants/route.dart';
 import 'package:spotify_clone/providers/category_provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/providers/music_provider.dart';
+import 'package:spotify_clone/providers/playlist_provider.dart';
 import 'package:spotify_clone/providers/search_music_provider.dart';
-import 'package:spotify_clone/services/spotify.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
-  SpotifyService.init();
-  runApp(const MyApp());
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  static final customCacheManager = CacheManager(
-    Config(
-      'customCacheKey',
-      stalePeriod: const Duration(days: 7),
-      maxNrOfCacheObjects: 20,
-    ),
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +29,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => MusicProvider()),
         ChangeNotifierProvider(create: (context) => SearchProvider()),
         ChangeNotifierProvider(create: (context) => MusicPlayerProvider()),
-        ChangeNotifierProvider(create: (context) => CategoryProvider())
+        ChangeNotifierProvider(create: (context) => CategoryProvider()),
+        ChangeNotifierProvider(create: (context) => PlaylistProvider())
       ],
       child: MaterialApp.router(
         routerDelegate: AppRouter.router.routerDelegate,
@@ -45,15 +39,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: const ColorScheme.dark().copyWith(
-            primary: Colors.black,
-            background: Colors.black.withOpacity(0.6),
-          ),
-          pageTransitionsTheme: const PageTransitionsTheme(
-            builders: {
-              TargetPlatform.android: ZoomPageTransitionsBuilder(),
-              TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
-            },
-          ),
+              primary: Colors.black, background: Colors.black.withOpacity(0.6)),
           navigationBarTheme: NavigationBarThemeData(
             backgroundColor: Colors.black,
             indicatorColor: Colors.transparent,

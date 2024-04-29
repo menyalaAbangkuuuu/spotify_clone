@@ -26,6 +26,10 @@ class MusicPlayerProvider extends ChangeNotifier {
         _totalDuration = Duration.zero;
         notifyListeners();
       }
+      if (_audioPlayer.state == PlayerState.completed && _queue.isNotEmpty) {
+        _queue.removeAt(0);
+        await play();
+
     });
 
     /// Listen to the audio player events
@@ -37,8 +41,6 @@ class MusicPlayerProvider extends ChangeNotifier {
       } else {
         await _audioPlayer.stop();
         _currentPosition = Duration.zero;
-
-        _isPlaying = false;
         notifyListeners();
       }
     });
@@ -71,6 +73,7 @@ class MusicPlayerProvider extends ChangeNotifier {
 
   Lyric? _lyric;
   Lyric? get lyric => _lyric;
+
 
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
@@ -127,34 +130,21 @@ class MusicPlayerProvider extends ChangeNotifier {
   /// If the current track is null, this method does nothing.
 
   Future<void> play() async {
-    try {
-      if (_currentTrack == null) {
-        return;
-      }
-      Music music = await Youtube.getVideo(
-          songName: _currentTrack!.name!,
-          artistName: _currentTrack!.artists!.first.name!);
+    Music music = await Youtube.getVideo(
+        songName: _currentTrack!.name!,
+        artistName: _currentTrack!.artists!.first.name!);
 
-      _totalDuration = music.duration!;
+    _totalDuration = music.duration!;
 
-      _currentTrackColor = await ColorGenerator.getImagePalette(
-              NetworkImage(_currentTrack!.album!.images!.first.url!)) ??
-          Colors.grey;
+    _currentTrackColor = await ColorGenerator.getImagePalette(
+            NetworkImage(_currentTrack!.album!.images!.first.url!)) ??
+        Colors.grey;
 
-      _lyric = await LyricService.getLyric(_currentTrack!.id!);
+    _lyric = await LyricService.getLyric(_currentTrack!.id!);
 
-      await _audioPlayer
-          .play(UrlSource(music.url))
-          .onError((error, stackTrace) {
-        throw AudioPlayerException(_audioPlayer,
-            cause: "this song is unavailable to play");
-      });
-      _isPlaying = true;
-      notifyListeners();
-    } on AudioPlayerException catch (e) {
-      _errorMessage = e.cause.toString();
-      notifyListeners();
-    }
+    await _audioPlayer.play(UrlSource(music.url));
+    _isPlaying = true;
+    notifyListeners();
   }
 
   /// Pauses the audio player.
@@ -183,7 +173,6 @@ class MusicPlayerProvider extends ChangeNotifier {
   Future<void> next() async {
     if (_queue.isNotEmpty) {
       _queue.removeAt(0);
-      _currentTrack = _queue.first;
       await play();
       notifyListeners();
     }
