@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
 import 'package:spotify_clone/view/queue_list_screen.dart';
+import 'package:spotify_clone/view/search_screens.dart';
 import 'package:spotify_clone/view/widget/mini_lyric.dart';
 
 class MusicDetailScreens extends StatefulWidget {
@@ -25,9 +26,8 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: Text(
-            Provider.of<MusicPlayerProvider>(context).currentTrack?.name ?? "",
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+              Provider.of<MusicPlayerProvider>(context).currentTrack?.name ??
+                  ""),
           backgroundColor:
               Provider.of<MusicPlayerProvider>(context).currentTrackColor,
           leading: IconButton(
@@ -36,7 +36,7 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
               child: const Icon(Icons.arrow_forward_ios),
             ),
             onPressed: () {
-              context.pop();
+              context.go(SearchScreens.id);
             },
           ),
         ),
@@ -65,7 +65,7 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
                     AspectRatio(
                       aspectRatio: 1,
                       child: Container(
-                        width: double.infinity,
+                        width: double.maxFinite,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
                             image: musicPlayerProvider.currentTrack?.album
@@ -87,17 +87,16 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
                     const SizedBox(height: 40),
                     Text(
                       musicPlayerProvider.currentTrack?.name ?? '',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
                             fontWeight: FontWeight.w900,
                           ),
                     ),
                     Text(
                       flattenArtistName(
                           musicPlayerProvider.currentTrack?.artists),
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
                             overflow: TextOverflow.ellipsis,
-                            color: Colors.white.withOpacity(0.6),
                           ),
                     ),
                     const SizedBox(height: 10),
@@ -112,13 +111,6 @@ class _MusicDetailScreensState extends State<MusicDetailScreens> {
                             timeLabelLocation: TimeLabelLocation.below,
                             bufferedBarColor: Colors.white38,
                             baseBarColor: Colors.white10,
-                            timeLabelTextStyle: Theme.of(context)
-                                .textTheme
-                                .labelSmall
-                                ?.copyWith(
-                                    color: Colors.white.withOpacity(0.6)),
-                            barHeight: 4,
-                            thumbRadius: 5,
                             thumbColor: Colors.white,
                             progressBarColor: Colors.white,
                             onSeek: (duration) {

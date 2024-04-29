@@ -7,21 +7,28 @@ class CategoryProvider with ChangeNotifier {
     fetchData();
   }
 
-  List<Category>? _categories;
-  List<Category>? get categories => _categories;
+  List<Category> _categories = [];
+
+  List<Category> get categories => _categories;
 
   Category? _category;
+
   Category? get category => _category;
 
   void fetchData() async {
-    _categories =
-        await SpotifyService.getCategories(offset: _categories?.length ?? 0);
+    final data = await SpotifyService.getCategories() ?? [];
+    data.removeAt(0);
+    _categories = data;
     notifyListeners();
   }
 
-  void getCategoryDetail(String categoryId) async {
-    final category = await SpotifyService.getCategoryDetail(categoryId);
-    _category = category;
+  void fetchMore({int offset = 0}) async {
+    final data = await SpotifyService.getCategories(offset: offset);
+
+    _categories.addAll(data ?? []);
+
     notifyListeners();
   }
+
+  getPlaylistFromSimple(PlaylistSimple playlist) {}
 }
