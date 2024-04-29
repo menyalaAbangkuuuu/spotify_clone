@@ -24,6 +24,17 @@ class SearchProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // fetch more
+  Future<void> fetchMore(String query, [int offset = 0]) async {
+    var jsonResponse = await SpotifyService.searchMusic(query, offset);
+    List<Track> trackList = [];
+    for (var track in jsonResponse) {
+      trackList.add(track as Track);
+    }
+    _searchResults.addAll(trackList);
+    notifyListeners();
+  }
+
   void clearSearchResults() {
     _searchResults = [];
     notifyListeners();

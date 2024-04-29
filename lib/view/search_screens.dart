@@ -52,12 +52,15 @@ class _SearchScreensState extends State<SearchScreens> {
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'Browse all',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Browse all',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               SizedBox(
