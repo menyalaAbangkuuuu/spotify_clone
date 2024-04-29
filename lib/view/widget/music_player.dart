@@ -1,9 +1,9 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:spotify_clone/main.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
 import 'package:spotify_clone/view/music_detail_screens.dart';
@@ -15,9 +15,26 @@ class MusicPlayer extends StatefulWidget {
   State<MusicPlayer> createState() => _MusicPlayerState();
 }
 
-class _MusicPlayerState extends State<MusicPlayer> {
+class _MusicPlayerState extends State<MusicPlayer>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _opacityAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+
+    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+  }
+
   @override
   void dispose() {
+    _controller.dispose();
     super.dispose();
   }
 
@@ -25,141 +42,123 @@ class _MusicPlayerState extends State<MusicPlayer> {
   Widget build(BuildContext context) {
     return Consumer<MusicPlayerProvider>(
       builder: (context, musicPlayerProvider, child) {
-        return musicPlayerProvider.currentTrack != null
-            ? GestureDetector(
-                onTap: () {
-                  context.push(MusicDetailScreens.id);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      Container(
-                          padding: const EdgeInsets.all(10),
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(5)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: musicPlayerProvider.currentTrackColor,
-                                spreadRadius: 5,
-                                offset: const Offset(0, 3),
+        if (musicPlayerProvider.currentTrack == null) {
+          return const SizedBox.shrink();
+        }
+        _controller.forward();
+        return FadeTransition(
+          opacity: _opacityAnimation,
+          child: GestureDetector(
+            onTap: () => context.push(MusicDetailScreens.id),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.all(5),
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: musicPlayerProvider.currentTrackColor,
+                          spreadRadius: 5,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        // Display the album cover image or a default icon
+                        CachedNetworkImage(
+                          imageUrl: musicPlayerProvider
+                                  .currentTrack?.album?.images?.first.url ??
+                              '',
+                          placeholder: (context, url) => Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                          width: 40,
+                          height: 40,
+                        ),
+                        const SizedBox(
+                            width: 10), // Spacer between image and text
+                        // Display track and artist name
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                musicPlayerProvider.currentTrack?.name ??
+                                    "Unknown Track",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium
+                                    ?.copyWith(fontWeight: FontWeight.w900),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                flattenArtistName(
+                                    musicPlayerProvider.currentTrack?.artists),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium
+                                    ?.copyWith(
+                                      color: Colors.white.withOpacity(0.8),
+                                    ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ],
                           ),
-                          child: Row(
-                            children: [
-                              // Display the album cover image
-                              musicPlayerProvider.currentTrack?.album?.images
-                                          ?.isNotEmpty ??
-                                      false
-                                  ? Container(
-                                      height: 40,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              musicPlayerProvider
-                                                      .currentTrack!
-                                                      .album!
-                                                      .images!
-                                                      .first
-                                                      .url ??
-                                                  ""),
-                                        ),
-                                        borderRadius: BorderRadius.circular(5),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: musicPlayerProvider
-                                                .currentTrackColor,
-                                            spreadRadius: 2,
-                                            offset: const Offset(0, 0),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : const Icon(Icons.music_note,
-                                      size:
-                                          30), // Placeholder if no image is available
-                              const SizedBox(
-                                  width: 10), // Spacer between image and text
-                              // Display track and artist name
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      musicPlayerProvider.currentTrack?.name ??
-                                          "Unknown Track",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.w900,
-                                          ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        flattenArtistName(musicPlayerProvider
-                                            .currentTrack?.artists),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.copyWith(
-                                              color:
-                                                  Colors.white.withOpacity(0.6),
-                                            ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              IconButton(
-                                onPressed: () {
-                                  musicPlayerProvider.isPlaying
-                                      ? musicPlayerProvider.pause()
-                                      : musicPlayerProvider.resume();
-                                },
-                                icon: musicPlayerProvider.isPlaying
-                                    ? const Icon(Icons.pause)
-                                    : const Icon(Icons.play_arrow),
-                              ),
-                            ],
-                          )),
-                      StreamBuilder(
-                          stream:
-                              musicPlayerProvider.audioPlayer.onPositionChanged,
-                          builder: (context, snapshots) {
-                            if (snapshots.hasData &&
-                                snapshots.data! ==
-                                    musicPlayerProvider.totalDuration) {
-                              // If the current position is greater than or equal to total duration, play next song
-                              musicPlayerProvider.next();
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            if (musicPlayerProvider.isPlaying) {
+                              musicPlayerProvider.pause();
+                            } else {
+                              musicPlayerProvider.resume();
                             }
-                            return ProgressBar(
-                              progress:
-                                  snapshots.data ?? const Duration(seconds: 0),
-                              total: musicPlayerProvider.totalDuration,
-                              timeLabelLocation: TimeLabelLocation.none,
-                              bufferedBarColor: Colors.white38,
-                              baseBarColor: Colors.white10,
-                              thumbColor: Colors.transparent,
-                              progressBarColor: Colors.white,
-                              onSeek: (duration) {
-                                musicPlayerProvider.seek(duration);
-                              },
-                            );
-                          }),
-                    ],
+                          },
+                          icon: Icon(
+                            musicPlayerProvider.isPlaying
+                                ? Icons.pause
+                                : Icons.play_arrow,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              )
-            : const SizedBox();
+                  StreamBuilder<Duration>(
+                    stream: musicPlayerProvider.audioPlayer.onPositionChanged,
+                    builder: (context, snapshot) {
+                      return ProgressBar(
+                        progress: snapshot.data ?? Duration.zero,
+                        total: musicPlayerProvider.totalDuration,
+                        timeLabelLocation: TimeLabelLocation.none,
+                        bufferedBarColor: Colors.white38,
+                        barHeight: 2,
+                        baseBarColor: Colors.white10,
+                        thumbColor: Colors.transparent,
+                        progressBarColor: Colors.white,
+                        onSeek: (duration) =>
+                            musicPlayerProvider.seek(duration),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
       },
     );
   }

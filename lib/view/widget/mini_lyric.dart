@@ -2,10 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:spotify_clone/main.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/view/full_lyric_screen.dart';
 import 'package:spotify_clone/view/widget/stream_lyric.dart';
@@ -26,9 +24,11 @@ class _MiniLyricState extends State<MiniLyric> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Color(int.parse(
-                  musicPlayerProvider.lyric?.colors.background ??
-                      '0xFF000000')),
+              color: musicPlayerProvider.lyric?.colors.background != null
+                  ? Color(
+                      int.parse(musicPlayerProvider.lyric!.colors.background),
+                    )
+                  : musicPlayerProvider.currentTrackColor,
               borderRadius: const BorderRadius.all(Radius.circular(16)),
             ),
             padding: const EdgeInsets.all(10),
@@ -59,9 +59,7 @@ class _MiniLyricState extends State<MiniLyric> {
                 SizedBox(
                     height: 250,
                     child: musicPlayerProvider.lyric != null
-                        ? StreamLyric(
-                            musicPlayerProvider: musicPlayerProvider,
-                          )
+                        ? const StreamLyric()
                         : Center(
                             child: Text(
                             'No lyric available',

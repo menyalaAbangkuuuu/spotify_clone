@@ -1,10 +1,22 @@
 import 'package:spotify/spotify.dart';
 import 'package:spotify_clone/constants/credentials.dart';
 
-final _spotifyApi = SpotifyApi(
-    SpotifyApiCredentials(Credentials.clientId, Credentials.clientSecret));
-
 class SpotifyService {
+  static late SpotifyApi _spotifyApi;
+
+  static void init() {
+    _spotifyApi = SpotifyApi(
+        SpotifyApiCredentials(
+          Credentials.clientId,
+          Credentials.clientSecret,
+        ),
+        onCredentialsRefreshed: _onCredentialsRefreshed);
+  }
+
+  static void _onCredentialsRefreshed(SpotifyApiCredentials credentials) {
+    _spotifyApi = SpotifyApi(credentials);
+  }
+
   static Future<List<PlaylistSimple>?> getTopTracks() async {
     final response = await _spotifyApi.playlists.featured.getPage(10);
     return response.items?.toList();
