@@ -38,7 +38,6 @@ class PlaylistDetailScreen extends StatelessWidget {
                 );
               } else {
                 final playlist = snapshot.data;
-                print(playlist?.first.name);
                 return CustomScrollView(
                   slivers: [
                     SliverAppBar(

@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:spotify_clone/view/category_detail.dart';
 import 'package:spotify_clone/view/search_screens.dart';
-import 'package:spotify_clone/view/home_screens.dart';
-import 'package:spotify_clone/view/search_screens.dart';
+import 'package:spotify_clone/screens/home/home_screens.dart';
 import 'package:spotify_clone/view/widget/music_player.dart';
 import 'package:spotify_clone/view/widget/search_screen_app_bar.dart';
-
-import '../main.dart';
 
 class MainScreen extends StatefulWidget {
   final Widget screen;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:provider/provider.dart';
-import 'package:spotify_clone/constants/route.dart';
+import 'package:spotify_clone/config/route.dart';
 import 'package:spotify_clone/providers/category_provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/providers/music_provider.dart';
