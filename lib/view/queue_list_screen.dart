@@ -1,6 +1,9 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -131,70 +134,89 @@ class QueueListScreen extends StatelessWidget {
                         fontSize: 16),
                   ),
                 ),
-                sliver: SliverList.builder(
+                sliver: SliverReorderableList(
+                  onReorder: (int oldIndex, int newIndex) {
+                    musicPlayerProvider.swap(oldIndex, newIndex);
+                    HapticFeedback.mediumImpact();
+                  },
+                  onReorderStart: (_) => HapticFeedback.mediumImpact(),
                   itemCount: musicPlayerProvider.queue.length,
                   itemBuilder: (context, index) {
                     var currentItem = musicPlayerProvider.queue[index];
                     if (musicPlayerProvider.queue.isEmpty) {
                       return const Text("hello");
                     }
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: ListTile(
-                        onTap: () {
-                          musicPlayerProvider.setToFirst(index);
-                          musicPlayerProvider.play();
-                        },
-                        title: Text(
-                          currentItem.name ?? "",
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                        subtitle: Row(
-                          children: [
-                            currentItem.explicit != null &&
-                                    currentItem.explicit == true
-                                ? Container(
-                                    decoration: const BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(3)),
-                                    ),
-                                    padding: const EdgeInsets.only(
-                                        left: 5, right: 5),
-                                    child: const Text(
-                                      "E",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  )
-                                : const SizedBox(width: 0),
-                            SizedBox(
-                              width: currentItem.explicit != null &&
-                                      currentItem.explicit == true
-                                  ? 5
-                                  : 0,
-                            ),
-                            Expanded(
-                              child: Text(
-                                flattenArtistName(currentItem.artists),
+                    return Row(
+                      key: ValueKey(currentItem.id),
+                      children: [
+                        Expanded(
+                          child: Material(
+                            child: ListTile(
+                              onTap: () {
+                                musicPlayerProvider.setToFirst(index);
+                                musicPlayerProvider.play();
+                              },
+                              title: Text(
+                                currentItem.name ?? "",
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium
                                     ?.copyWith(
-                                      color: Colors.white.withOpacity(0.6),
-                                      overflow: TextOverflow.ellipsis,
+                                      fontWeight: FontWeight.bold,
                                     ),
                               ),
+                              subtitle: Row(
+                                children: [
+                                  currentItem.explicit != null &&
+                                          currentItem.explicit == true
+                                      ? Container(
+                                          decoration: const BoxDecoration(
+                                            color: Colors.grey,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(3)),
+                                          ),
+                                          padding: const EdgeInsets.only(
+                                              left: 5, right: 5),
+                                          child: const Text(
+                                            "E",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        )
+                                      : const SizedBox(width: 0),
+                                  SizedBox(
+                                    width: currentItem.explicit != null &&
+                                            currentItem.explicit == true
+                                        ? 5
+                                        : 0,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      flattenArtistName(currentItem.artists),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color:
+                                                Colors.white.withOpacity(0.6),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              leading: Image.network(
+                                  currentItem.album!.images?[0].url ?? ''),
                             ),
-                          ],
+                          ),
                         ),
-                        leading: Image.network(
-                            currentItem.album!.images?[0].url ?? ''),
-                      ),
+                        ReorderableDragStartListener(
+                            index: index,
+                            key: ValueKey(currentItem.id),
+                            child: const Icon(Icons.reorder)),
+                        SizedBox.fromSize(size: const Size(10, 10)),
+                      ],
                     );
                   },
                 ),

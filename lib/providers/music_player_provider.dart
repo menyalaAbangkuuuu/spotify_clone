@@ -23,12 +23,7 @@ class MusicPlayerProvider extends ChangeNotifier {
       /// kalo antriannya kosong, reset semua state
       if (_queue.isEmpty) {
         _currentPosition = Duration.zero;
-        _totalDuration = Duration.zero;
         notifyListeners();
-      }
-      if (_audioPlayer.state == PlayerState.completed && _queue.isNotEmpty) {
-        _queue.removeAt(0);
-        await play();
       }
     });
 
@@ -41,6 +36,8 @@ class MusicPlayerProvider extends ChangeNotifier {
       } else {
         await _audioPlayer.stop();
         _currentPosition = Duration.zero;
+
+        _isPlaying = false;
         notifyListeners();
       }
     });
@@ -71,11 +68,19 @@ class MusicPlayerProvider extends ChangeNotifier {
   /// getter for the queue but exclude the current track
   List<Track> get queue => _queue.isEmpty ? [] : _queue.sublist(1);
 
+  final List<Track> _prevQueue = [];
+
   Lyric? _lyric;
   Lyric? get lyric => _lyric;
 
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
+
+  bool _canPrev = false;
+  bool get canPrev => _canPrev;
+
+  bool _canNext = false;
+  bool get canNext => _canNext;
 
   /// resume the audio player
   void resume() {
@@ -103,6 +108,7 @@ class MusicPlayerProvider extends ChangeNotifier {
       _queue.add(track);
       _currentTrack = _queue.first;
     }
+    _canNext = true;
     notifyListeners();
   }
 
@@ -141,7 +147,10 @@ class MusicPlayerProvider extends ChangeNotifier {
 
     _lyric = await LyricService.getLyric(_currentTrack!.id!);
 
-    await _audioPlayer.play(UrlSource(music.url));
+    await _audioPlayer.play(UrlSource(music.url)).onError((error, stackTrace) {
+      _errorMessage = "this song cannot be played";
+      notifyListeners();
+    });
     _isPlaying = true;
     notifyListeners();
   }
@@ -171,9 +180,41 @@ class MusicPlayerProvider extends ChangeNotifier {
   /// Calling this method will notify all listeners of the change.
   Future<void> next() async {
     if (_queue.isNotEmpty) {
+      _prevQueue.add(_queue.first);
       _queue.removeAt(0);
+      _currentTrack = _queue.first;
+      _canPrev = true;
+      await play();
+      if (_queue.length == 1) {
+        _canNext = false;
+      }
+      notifyListeners();
+    }
+  }
+
+  Future<void> prev() async {
+    if (_prevQueue.isNotEmpty) {
+      _queue.insert(0, _prevQueue.last);
+      _prevQueue.removeLast();
+      if (_prevQueue.isEmpty) {
+        _canPrev = false;
+      }
+      _currentTrack = _queue.first;
+      _canNext = true;
       await play();
       notifyListeners();
     }
+  }
+
+  void swap(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+
+    // Perform the swap
+    final item = _queue.removeAt(oldIndex + 1);
+    _queue.insert(newIndex + 1, item);
+
+    notifyListeners();
   }
 }
