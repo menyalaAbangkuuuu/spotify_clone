@@ -29,7 +29,7 @@ class MusicPlayerProvider extends ChangeNotifier {
       if (_audioPlayer.state == PlayerState.completed && _queue.isNotEmpty) {
         _queue.removeAt(0);
         await play();
-
+      }
     });
 
     /// Listen to the audio player events
@@ -73,7 +73,6 @@ class MusicPlayerProvider extends ChangeNotifier {
 
   Lyric? _lyric;
   Lyric? get lyric => _lyric;
-
 
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
