@@ -125,9 +125,28 @@ class MusicPlayerProvider extends ChangeNotifier {
   /// Parameters:
   /// - [index]: The position of the track to remove from the queue.
   void setToFirst(int currentIndex) {
+    _audioPlayer.stop();
     _queue.removeRange(0, currentIndex + 1);
     _currentTrack = _queue.first;
     _audioPlayer.stop();
+    notifyListeners();
+  }
+
+  /// function ini digunakan untuk menambahkan lagu dari playlist ke queue
+  /// semua list lagu sebelum index akan dimasukan ke prevQueue
+  /// semua list lagu setelah index akan dimasukan ke queue
+  void addFromPlaylist(List<Track> tracks, index) {
+    if (index != 0) {
+      _canPrev = true;
+      _canNext = true;
+      notifyListeners();
+    }
+    _audioPlayer.stop();
+    _prevQueue.clear();
+    _prevQueue.addAll(tracks.sublist(0, index));
+    _queue.clear();
+    _queue.addAll(tracks.sublist(index));
+    _currentTrack = _queue.first;
     notifyListeners();
   }
 
@@ -194,6 +213,7 @@ class MusicPlayerProvider extends ChangeNotifier {
   /// Calling this method will notify all listeners of the change.
   Future<void> next() async {
     if (_queue.isNotEmpty) {
+      _audioPlayer.stop();
       _prevQueue.add(_queue.first);
       _queue.removeAt(0);
       _currentTrack = _queue.first;
@@ -208,6 +228,7 @@ class MusicPlayerProvider extends ChangeNotifier {
 
   Future<void> prev() async {
     if (_prevQueue.isNotEmpty) {
+      _audioPlayer.stop();
       _queue.insert(0, _prevQueue.last);
       _prevQueue.removeLast();
       if (_prevQueue.isEmpty) {

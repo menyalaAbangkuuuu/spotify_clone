@@ -29,7 +29,7 @@ class CategoryProvider with ChangeNotifier {
       return;
     }
 
-    _categories.addAll(data ?? []);
+    _categories.addAll(data);
     notifyListeners();
   }
 

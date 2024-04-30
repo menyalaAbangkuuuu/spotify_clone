@@ -1,11 +1,11 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 
 Column musicPlayer(
-    BuildContext context, MusicPlayerProvider musicPlayerProvider) {
+    BuildContext context, MusicPlayerProvider musicPlayerProvider,
+    {bool withNextPrevButton = true}) {
   return Column(
     children: [
       StreamBuilder(
@@ -31,14 +31,16 @@ Column musicPlayer(
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          IconButton(
-            onPressed: musicPlayerProvider.canPrev
-                ? () => musicPlayerProvider.prev()
-                : null,
-            icon: const Icon(Icons.skip_previous_rounded),
-            iconSize: 40,
-            color: Colors.white,
-          ),
+          withNextPrevButton
+              ? IconButton(
+                  onPressed: musicPlayerProvider.canPrev
+                      ? () => musicPlayerProvider.prev()
+                      : null,
+                  icon: const Icon(Icons.skip_previous_rounded),
+                  iconSize: 40,
+                  color: Colors.white,
+                )
+              : const SizedBox(),
           IconButton(
             onPressed: () {
               if (musicPlayerProvider.isPlaying) {
@@ -61,14 +63,16 @@ Column musicPlayer(
               ),
             ),
           ),
-          IconButton(
-            onPressed: musicPlayerProvider.canNext
-                ? () => musicPlayerProvider.next()
-                : null,
-            icon: const Icon(Icons.skip_next_rounded),
-            iconSize: 40,
-            color: Colors.white,
-          ),
+          withNextPrevButton
+              ? IconButton(
+                  onPressed: musicPlayerProvider.canNext
+                      ? () => musicPlayerProvider.next()
+                      : null,
+                  icon: const Icon(Icons.skip_next_rounded),
+                  iconSize: 40,
+                  color: Colors.white,
+                )
+              : const SizedBox.shrink(),
         ],
       ),
     ],

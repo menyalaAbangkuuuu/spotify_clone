@@ -74,7 +74,7 @@ class PlaylistDetailScreen extends StatelessWidget {
                             onTap: () {
                               Provider.of<MusicPlayerProvider>(context,
                                       listen: false)
-                                  .addToQueue(track!);
+                                  .addFromPlaylist(playlist!, index);
                               Provider.of<MusicPlayerProvider>(context,
                                       listen: false)
                                   .play();

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
-import 'package:spotify_clone/view/full_lyric_screen.dart';
+import 'package:spotify_clone/screens/lyric/full_lyric_screen.dart';
 import 'package:spotify_clone/widget/stream_lyric.dart';
 
 class MiniLyric extends StatefulWidget {

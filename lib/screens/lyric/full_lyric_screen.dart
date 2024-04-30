@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
+import 'package:spotify_clone/widget/music_player.dart';
 import 'package:spotify_clone/widget/stream_lyric.dart';
 
 class FullLyricScreens extends StatefulWidget {
@@ -95,67 +96,10 @@ class _FullLyricScreensState extends State<FullLyricScreens> {
                           ),
                         ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 10),
-                      StreamBuilder(
-                          stream:
-                              musicPlayerProvider.audioPlayer.onPositionChanged,
-                          builder: (context, snapshots) {
-                            return ProgressBar(
-                              progress: snapshots.data ??
-                                  musicPlayerProvider.currentPosition,
-                              total: musicPlayerProvider.totalDuration,
-                              timeLabelLocation: TimeLabelLocation.below,
-                              bufferedBarColor: Colors.white38,
-                              baseBarColor: Colors.white10,
-                              thumbColor: Colors.white,
-                              progressBarColor: Colors.white,
-                              onSeek: (duration) {
-                                musicPlayerProvider.seek(duration);
-                              },
-                            );
-                          }),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const IconButton(
-                            onPressed: null,
-                            icon: Icon(Icons.skip_previous),
-                            iconSize: 40,
-                            color: Colors.white,
-                          ),
-                          StreamBuilder(
-                              stream: musicPlayerProvider
-                                  .audioPlayer.onPositionChanged,
-                              builder: (context, snapshot) {
-                                return IconButton(
-                                  onPressed: () {
-                                    musicPlayerProvider.isPlaying
-                                        ? musicPlayerProvider.pause()
-                                        : musicPlayerProvider.resume();
-                                  },
-                                  icon: musicPlayerProvider.isPlaying
-                                      ? const Icon(Icons.pause)
-                                      : const Icon(Icons.play_arrow),
-                                  iconSize: 40,
-                                  color: Colors.white,
-                                );
-                              }),
-                          IconButton(
-                            onPressed: () {
-                              musicPlayerProvider.next();
-                            },
-                            icon: const Icon(Icons.skip_next),
-                            iconSize: 40,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: musicPlayer(context, musicPlayerProvider,
+                      withNextPrevButton: false),
                 ),
               ],
             ),
