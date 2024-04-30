@@ -4,7 +4,7 @@ import 'package:spotify_clone/view/category_detail.dart';
 import 'package:spotify_clone/view/full_lyric_screen.dart';
 import 'package:spotify_clone/screens/home/home_screen.dart';
 import 'package:spotify_clone/screens/common/main_screen.dart';
-import 'package:spotify_clone/view/music_detail_screens.dart';
+import 'package:spotify_clone/screens/music_detail/music_detail_screen.dart';
 import 'package:spotify_clone/view/playlist_screen.dart';
 import 'package:spotify_clone/view/queue_list_screen.dart';
 import 'package:spotify_clone/screens/search_music/search_music_screens.dart';
@@ -78,10 +78,10 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: MusicDetailScreens.id,
+        path: MusicDetailScreen.routeName,
         pageBuilder: (context, state) {
           return const MaterialPage(
-            child: MusicDetailScreens(),
+            child: MusicDetailScreen(),
           );
         },
       ),

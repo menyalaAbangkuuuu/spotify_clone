@@ -11,15 +11,15 @@ import 'package:spotify_clone/view/queue_list_screen.dart';
 import 'package:spotify_clone/screens/search/search_screen.dart';
 import 'package:spotify_clone/view/widget/mini_lyric.dart';
 
-class MusicDetailScreens extends StatefulWidget {
-  static const id = '/music_detail';
-  const MusicDetailScreens({super.key});
+class MusicDetailScreen extends StatefulWidget {
+  static const routeName = '/music_detail';
+  const MusicDetailScreen({super.key});
 
   @override
-  State<MusicDetailScreens> createState() => _MusicDetailScreensState();
+  State<MusicDetailScreen> createState() => _MusicDetailScreenState();
 }
 
-class _MusicDetailScreensState extends State<MusicDetailScreens> {
+class _MusicDetailScreenState extends State<MusicDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

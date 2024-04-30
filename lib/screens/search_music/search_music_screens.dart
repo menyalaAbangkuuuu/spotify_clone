@@ -1,15 +1,17 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/providers/search_music_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
-import 'package:spotify_clone/view/widget/slider_item_music.dart';
+import 'package:spotify_clone/screens/search_music/widget/slider_item_music.dart';
 
 class SearchMusicScreen extends StatefulWidget {
   static const String routeName = '/search_music';
@@ -21,15 +23,32 @@ class SearchMusicScreen extends StatefulWidget {
 }
 
 class _SearchMusicScreenState extends State<SearchMusicScreen> {
-  TextEditingController searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   Timer? _debounce;
   bool _isEmpty = true;
 
   @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
   void dispose() {
     _debounce?.cancel();
-    searchController.dispose();
+    _searchController.dispose();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  _onScroll() {
+    if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent &&
+        context.read<SearchProvider>().canLoadMore == true) {
+      context.read<SearchProvider>().fetchMore(_searchController.text,
+          context.read<SearchProvider>().searchResults.length ~/ 10 * 10);
+    }
   }
 
   _onSearchChanged(String query) {
@@ -70,11 +89,9 @@ class _SearchMusicScreenState extends State<SearchMusicScreen> {
                   .textTheme
                   .bodyMedium
                   ?.copyWith(color: Colors.white),
-              controller: searchController,
+              controller: _searchController,
               autocorrect: false,
-              onChanged: (value) {
-                _onSearchChanged(value);
-              },
+              onChanged: _onSearchChanged,
               decoration: InputDecoration(
                 filled: true,
                 contentPadding: const EdgeInsets.all(5),
@@ -89,7 +106,7 @@ class _SearchMusicScreenState extends State<SearchMusicScreen> {
                     ? IconButton(
                         icon: const Icon(Icons.clear, color: Colors.white),
                         onPressed: () {
-                          searchController.clear();
+                          _searchController.clear();
                           setState(() {
                             _isEmpty = true;
                           });
@@ -107,7 +124,7 @@ class _SearchMusicScreenState extends State<SearchMusicScreen> {
               onPressed: () {
                 Provider.of<SearchProvider>(context, listen: false)
                     .clearSearchResults();
-                GoRouter.of(context).pop();
+                context.pop();
               },
               child: Text('Cancel',
                   style: Theme.of(context)
@@ -131,31 +148,17 @@ class _SearchMusicScreenState extends State<SearchMusicScreen> {
 
                   return ListView.builder(
                     itemCount: searchProvider.searchResults.length + 1,
+                    controller: _scrollController,
                     itemBuilder: (context, index) {
                       if (index >= searchProvider.searchResults.length) {
-                        return searchProvider.searchResults.length < 20
-                            ? FractionallySizedBox(
-                                widthFactor: 0.5,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    searchProvider.fetchMore(
-                                        searchController.text,
-                                        searchProvider.searchResults.length ~/
-                                            10 *
-                                            10);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.primary,
-                                    padding: const EdgeInsets.all(10),
-                                  ),
-                                  child: const Text(
-                                    "fetch more",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              )
-                            : const SizedBox.shrink();
+                        if (searchProvider.canLoadMore) {
+                          return Center(
+                            child: LoadingAnimationWidget.waveDots(
+                                color: Colors.white, size: 40),
+                          );
+                        } else {
+                          return const Center(child: Text("No more results"));
+                        }
                       }
                       var searchResult = searchProvider.searchResults[index];
                       return Padding(

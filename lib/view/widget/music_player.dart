@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
-import 'package:spotify_clone/view/music_detail_screens.dart';
+import 'package:spotify_clone/screens/music_detail/music_detail_screen.dart';
 
 class MusicPlayer extends StatefulWidget {
   const MusicPlayer({super.key});
@@ -62,7 +62,7 @@ class _MusicPlayerState extends State<MusicPlayer>
         return FadeTransition(
           opacity: _opacityAnimation,
           child: GestureDetector(
-            onTap: () => context.push(MusicDetailScreens.id),
+            onTap: () => context.push(MusicDetailScreen.routeName),
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
