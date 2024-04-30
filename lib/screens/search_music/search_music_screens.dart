@@ -180,7 +180,7 @@ class _SearchMusicScreenState extends State<SearchMusicScreen> {
                             onTap: () {
                               Provider.of<MusicPlayerProvider>(context,
                                       listen: false)
-                                  .addToQueue(searchResult, null);
+                                  .addToQueue(searchResult);
                               Provider.of<MusicPlayerProvider>(context,
                                       listen: false)
                                   .play();

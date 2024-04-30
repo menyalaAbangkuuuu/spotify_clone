@@ -1,9 +1,7 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +17,12 @@ class QueueListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            Provider.of<MusicPlayerProvider>(context).currentTrack?.name ?? ""),
+          Provider.of<MusicPlayerProvider>(context).currentTrack?.name ?? "",
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+        ),
         backgroundColor: Colors.transparent,
         leading: IconButton(
           icon: Transform.rotate(

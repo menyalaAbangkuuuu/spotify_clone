@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
-import 'package:spotify_clone/view/widget/stream_lyric.dart';
+import 'package:spotify_clone/widget/stream_lyric.dart';
 
 class FullLyricScreens extends StatefulWidget {
   static const String id = '/full_lyric';

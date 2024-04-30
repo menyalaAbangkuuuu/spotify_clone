@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -8,8 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
 import 'package:spotify_clone/view/queue_list_screen.dart';
-import 'package:spotify_clone/screens/search/search_screen.dart';
-import 'package:spotify_clone/view/widget/mini_lyric.dart';
+import 'package:spotify_clone/screens/music_detail/widget/mini_lyric.dart';
+import 'package:spotify_clone/widget/music_player.dart';
 
 class MusicDetailScreen extends StatefulWidget {
   static const routeName = '/music_detail';
@@ -23,25 +22,29 @@ class _MusicDetailScreenState extends State<MusicDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: Text(
-              Provider.of<MusicPlayerProvider>(context).currentTrack?.name ??
-                  ""),
-          backgroundColor:
-              Provider.of<MusicPlayerProvider>(context).currentTrackColor,
-          leading: IconButton(
-            icon: Transform.rotate(
-              angle: pi / 2,
-              child: const Icon(Icons.arrow_forward_ios),
-            ),
-            onPressed: () {
-              context.pop();
-            },
-          ),
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        title: Text(
+          Provider.of<MusicPlayerProvider>(context).currentTrack?.name ?? "",
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
         ),
-        body: Consumer<MusicPlayerProvider>(
-            builder: (context, musicPlayerProvider, child) {
+        backgroundColor:
+            Provider.of<MusicPlayerProvider>(context).currentTrackColor,
+        leading: IconButton(
+          icon: Transform.rotate(
+            angle: pi / 2,
+            child: const Icon(Icons.arrow_forward_ios),
+          ),
+          onPressed: () {
+            context.pop();
+          },
+        ),
+      ),
+      body: Consumer<MusicPlayerProvider>(
+        builder: (context, musicPlayerProvider, child) {
           return AnimatedContainer(
             duration: const Duration(milliseconds: 500),
             decoration: BoxDecoration(
@@ -102,80 +105,17 @@ class _MusicDetailScreenState extends State<MusicDetailScreen> {
                           ),
                     ),
                     const SizedBox(height: 10),
-                    StreamBuilder(
-                        stream:
-                            musicPlayerProvider.audioPlayer.onPositionChanged,
-                        builder: (context, snapshots) {
-                          return ProgressBar(
-                            progress: snapshots.data ??
-                                musicPlayerProvider.currentPosition,
-                            total: musicPlayerProvider.totalDuration,
-                            timeLabelLocation: TimeLabelLocation.below,
-                            bufferedBarColor: Colors.white38,
-                            baseBarColor: Colors.white10,
-                            thumbColor: Colors.white,
-                            progressBarColor: Colors.white,
-                            onSeek: (duration) {
-                              musicPlayerProvider.seek(duration);
-                            },
-                          );
-                        }),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        IconButton(
-                          onPressed: musicPlayerProvider.canPrev
-                              ? () => musicPlayerProvider.prev()
-                              : null,
-                          icon: const Icon(Icons.skip_previous),
-                          iconSize: 40,
-                          color: Colors.white,
-                        ),
-                        Consumer<MusicPlayerProvider>(
-                            builder: (context, musicPlayerProvider, child) {
-                          return IconButton(
-                            onPressed: () {
-                              if (musicPlayerProvider.isPlaying) {
-                                musicPlayerProvider.pause();
-                              } else {
-                                musicPlayerProvider.resume();
-                              }
-                            },
-                            icon: Icon(
-                              musicPlayerProvider.isPlaying
-                                  ? Icons.pause
-                                  : Icons.play_arrow,
-                            ),
-                            iconSize: 40,
-                            color: Colors.white,
-                          );
-                        }),
-                        IconButton(
-                          onPressed: musicPlayerProvider.canNext
-                              ? () => musicPlayerProvider.next()
-                              : null,
-                          icon: const Icon(Icons.skip_next),
-                          iconSize: 40,
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
+                    musicPlayer(context, musicPlayerProvider),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        const Icon(
-                          CupertinoIcons.share_up,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
                         IconButton(
                             onPressed: () =>
                                 context.push(QueueListScreen.routeName),
                             icon: const Icon(
-                              Icons.queue_music,
+                              CupertinoIcons.list_bullet,
                               color: Colors.white,
-                              size: 30,
+                              size: 24,
                             ))
                       ],
                     ),
@@ -188,6 +128,8 @@ class _MusicDetailScreenState extends State<MusicDetailScreen> {
               ),
             ),
           );
-        }));
+        },
+      ),
+    );
   }
 }

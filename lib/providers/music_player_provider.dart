@@ -82,6 +82,9 @@ class MusicPlayerProvider extends ChangeNotifier {
   bool _canNext = false;
   bool get canNext => _canNext;
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
   /// resume the audio player
   void resume() {
     _isPlaying = true;
@@ -100,7 +103,8 @@ class MusicPlayerProvider extends ChangeNotifier {
   /// Parameters:
   /// - [track]: The `Track` object to add to the queue.
   /// - [index]: The position at which to insert the track. If null, the queue is cleared and the track is added at the end.
-  void addToQueue(Track track, int? index) {
+  void addToQueue(Track track, [int? index]) {
+    _audioPlayer.stop();
     if (index != null) {
       _queue.insert(index, track);
     } else {
@@ -108,7 +112,10 @@ class MusicPlayerProvider extends ChangeNotifier {
       _queue.add(track);
       _currentTrack = _queue.first;
     }
-    _canNext = true;
+    if (_queue.length > 1) {
+      _canNext = true;
+      notifyListeners();
+    }
     notifyListeners();
   }
 
@@ -135,24 +142,31 @@ class MusicPlayerProvider extends ChangeNotifier {
   /// If the current track is null, this method does nothing.
 
   Future<void> play() async {
-    Music music = await Youtube.getVideo(
-        songName: _currentTrack!.name!,
-        artistName: _currentTrack!.artists!.first.name!);
+    try {
+      Music music = await Youtube.getVideo(
+          songName: _currentTrack!.name!,
+          artistName: _currentTrack!.artists!.first.name!);
 
-    _totalDuration = music.duration!;
+      _totalDuration = music.duration!;
 
-    _currentTrackColor = await ColorGenerator.getImagePalette(
-            NetworkImage(_currentTrack!.album!.images!.first.url!)) ??
-        Colors.grey;
+      _currentTrackColor = await ColorGenerator.getImagePalette(
+              NetworkImage(_currentTrack!.album!.images!.first.url!)) ??
+          Colors.grey;
 
-    _lyric = await LyricService.getLyric(_currentTrack!.id!);
+      _lyric = await LyricService.getLyric(_currentTrack!.id!);
 
-    await _audioPlayer.play(UrlSource(music.url)).onError((error, stackTrace) {
-      _errorMessage = "this song cannot be played";
+      await _audioPlayer.play(UrlSource(music.url));
+
+      _isPlaying = true;
       notifyListeners();
-    });
-    _isPlaying = true;
-    notifyListeners();
+    } catch (e) {
+      _errorMessage = "this song cannot be played";
+      _isPlaying = false;
+      notifyListeners();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   /// Pauses the audio player.
