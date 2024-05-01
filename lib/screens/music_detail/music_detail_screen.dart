@@ -4,12 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:spotify/spotify.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/screens/music_detail/widget/artist_card.dart';
 import 'package:spotify_clone/screens/music_detail/widget/mini_lyric.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
-import 'package:spotify_clone/view/queue_list_screen.dart';
+import 'package:spotify_clone/screens/queue/queue_list_screen.dart';
 import 'package:spotify_clone/widget/music_player.dart';
 
 class MusicDetailScreen extends StatelessWidget {
@@ -98,8 +97,7 @@ class MusicDetailScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       IconButton(
-                          onPressed: () =>
-                              context.push(QueueListScreen.routeName),
+                          onPressed: () => context.push(QueueScreen.routeName),
                           icon: const Icon(
                             CupertinoIcons.list_bullet,
                             color: Colors.white,

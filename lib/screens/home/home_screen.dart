@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spotify_clone/view/widget/topPlaylistWidget.dart';
+import 'package:spotify_clone/screens/home/widget/top_playlist_widget.dart';
 
 class MyHomePage extends StatefulWidget {
   static const String routeName = "/home";

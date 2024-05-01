@@ -32,11 +32,6 @@ class SpotifyService {
     return pages.items?.toList();
   }
 
-  static Future<Playlist> getPlaylist(String playlistId) async {
-    final playlist = await _spotifyApi.playlists.get(playlistId);
-    return playlist;
-  }
-
   static Future<List<Track>?> getPlaylistDetail(String playlistId) async {
     final playlist = _spotifyApi.playlists.getTracksByPlaylistId(playlistId);
     final pages = await playlist.getPage(10);
@@ -64,6 +59,15 @@ class SpotifyService {
   static Future<Playlist> getPlaylistFromSimple(
       PlaylistSimple playlistSimple) async {
     return await _spotifyApi.playlists.get(playlistSimple.id ?? '');
+  }
+
+  static Future<Playlist> getPlaylistById(String playlistId) async {
+    final playlist = await _spotifyApi.playlists.get(playlistId);
+    final playlistMusic =
+        _spotifyApi.playlists.getTracksByPlaylistId(playlistId);
+    final pages = await playlistMusic.getPage(50);
+    playlist.tracks?.itemsNative = pages.items;
+    return playlist;
   }
 
   static Future<List<Track>?> getMusicByPlaylist(String playlistId) async {

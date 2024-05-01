@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:spotify_clone/screens/search/search_screen.dart';
 import 'package:spotify_clone/screens/home/home_screen.dart';
-import 'package:spotify_clone/view/widget/music_player.dart';
-import 'package:spotify_clone/view/widget/search_screen_app_bar.dart';
+import 'package:spotify_clone/widget/mini_player.dart';
 
 class MainScreen extends StatefulWidget {
   final Widget screen;
@@ -46,7 +45,7 @@ class _MainScreenState extends State<MainScreen> {
       body: Column(
         children: [
           Expanded(child: widget.screen),
-          const MusicPlayer(),
+          const MiniPlayer(),
         ],
       ),
       bottomNavigationBar: NavigationBar(

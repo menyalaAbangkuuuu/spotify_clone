@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:spotify/spotify.dart' hide Image;
-import 'package:spotify_clone/view/playlist_detail_screen.dart';
+import 'package:spotify_clone/screens/playlist/playlist_screen.dart';
 
 class CategoryDetailTile extends StatelessWidget {
   final List<PlaylistSimple> playlists;
 
-  const CategoryDetailTile({Key? key, required this.playlists})
-      : super(key: key);
+  const CategoryDetailTile({required this.playlists, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +16,7 @@ class CategoryDetailTile extends StatelessWidget {
         final currentPlaylist = playlists[index];
         return GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PlaylistDetailScreen(
-                  playlistId: currentPlaylist.id ?? '',
-                  playlistName: currentPlaylist.name ?? '',
-                  playlistImage: currentPlaylist.images?.first.url ?? '',
-                ),
-              ),
-            );
+            context.push('${PlaylistScreen.routeName}/${currentPlaylist.id}');
           },
           child: Card(
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),

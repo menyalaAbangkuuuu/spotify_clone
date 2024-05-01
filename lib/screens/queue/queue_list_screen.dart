@@ -8,9 +8,9 @@ import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
 
-class QueueListScreen extends StatelessWidget {
+class QueueScreen extends StatelessWidget {
   static const routeName = '/queue';
-  const QueueListScreen({super.key});
+  const QueueScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

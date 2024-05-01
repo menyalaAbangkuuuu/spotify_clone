@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:spotify/spotify.dart';
-import 'package:spotify_clone/providers/category_provider.dart';
-import 'package:provider/provider.dart';
+
 import 'package:spotify_clone/services/spotify.dart';
-import 'package:spotify_clone/view/widget/category_detail_tile.dart';
+import 'package:spotify_clone/screens/category_detail/widget/category_detail_tile.dart';
 
 class CategoryDetailScreen extends StatelessWidget {
   static const routeName = '/category';

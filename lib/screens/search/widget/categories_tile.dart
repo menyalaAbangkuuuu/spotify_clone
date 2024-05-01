@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:spotify/spotify.dart' as spotify;
 import 'package:spotify_clone/providers/category_provider.dart';
-import 'package:spotify_clone/view/category_detail.dart';
+import 'package:spotify_clone/screens/category_detail/category_detail.dart';
 
 class CategoryTiles extends StatefulWidget {
   const CategoryTiles({super.key});

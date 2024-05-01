@@ -17,14 +17,4 @@ class PlaylistProvider with ChangeNotifier {
     _playlists = await SpotifyService.getTopTracks();
     notifyListeners();
   }
-
-  void selectPlaylist(PlaylistSimple playlist) {
-    _selectedPlaylist = playlist;
-    notifyListeners();
-  }
-
-  Future<void> getPlaylist(String playlistId) async {
-    _selectedPlaylist = await SpotifyService.getPlaylist(playlistId);
-    notifyListeners();
-  }
 }

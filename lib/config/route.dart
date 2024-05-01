@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:spotify_clone/view/category_detail.dart';
+import 'package:spotify_clone/screens/category_detail/category_detail.dart';
 import 'package:spotify_clone/screens/lyric/full_lyric_screen.dart';
 import 'package:spotify_clone/screens/home/home_screen.dart';
 import 'package:spotify_clone/screens/common/main_screen.dart';
 import 'package:spotify_clone/screens/music_detail/music_detail_screen.dart';
-import 'package:spotify_clone/view/playlist_screen.dart';
-import 'package:spotify_clone/view/queue_list_screen.dart';
+import 'package:spotify_clone/screens/queue/queue_list_screen.dart';
 import 'package:spotify_clone/screens/search_music/search_music_screens.dart';
 import 'package:spotify_clone/screens/search/search_screen.dart';
-import 'package:spotify_clone/view/library_screens.dart';
+import 'package:spotify_clone/screens/library/library_screens.dart';
+
+import '../screens/playlist/playlist_screen.dart';
 
 class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -59,6 +60,17 @@ class AppRouter {
               );
             },
           ),
+          GoRoute(
+            path: '${PlaylistScreen.routeName}/:id',
+            pageBuilder: (context, state) {
+              final id = state.pathParameters['id']!;
+              return MaterialPage<void>(
+                child: PlaylistScreen(
+                  playlistId: id,
+                ),
+              );
+            },
+          ),
         ],
       ),
       GoRoute(
@@ -86,10 +98,10 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: QueueListScreen.routeName,
+        path: QueueScreen.routeName,
         pageBuilder: (context, state) {
           return CustomTransitionPage(
-            child: const QueueListScreen(),
+            child: const QueueScreen(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return FadeTransition(
@@ -102,18 +114,10 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: Library.id,
+        path: LibraryScreen.routeName,
         pageBuilder: (context, state) {
           return const MaterialPage<void>(
-            child: Library(),
-          );
-        },
-      ),
-      GoRoute(
-        path: PlaylistScreen.routeName,
-        pageBuilder: (context, state) {
-          return const MaterialPage<void>(
-            child: PlaylistScreen(),
+            child: LibraryScreen(),
           );
         },
       ),

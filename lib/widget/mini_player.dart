@@ -8,14 +8,14 @@ import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
 import 'package:spotify_clone/screens/music_detail/music_detail_screen.dart';
 
-class MusicPlayer extends StatefulWidget {
-  const MusicPlayer({super.key});
+class MiniPlayer extends StatefulWidget {
+  const MiniPlayer({super.key});
 
   @override
-  State<MusicPlayer> createState() => _MusicPlayerState();
+  State<MiniPlayer> createState() => _MiniPlayerState();
 }
 
-class _MusicPlayerState extends State<MusicPlayer>
+class _MiniPlayerState extends State<MiniPlayer>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
@@ -42,7 +42,6 @@ class _MusicPlayerState extends State<MusicPlayer>
   Widget build(BuildContext context) {
     return Consumer<MusicPlayerProvider>(
       builder: (context, musicPlayerProvider, child) {
-        // if there have error , return snackbar;
         if (musicPlayerProvider.errorMessage.isNotEmpty) {
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
             ScaffoldMessenger.of(context).showSnackBar(

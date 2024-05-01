@@ -25,33 +25,6 @@ class MusicPlayerProvider extends ChangeNotifier {
         _currentPosition = Duration.zero;
       }
     });
-    MusicPlayerProvider() {
-      /// Listen to the audio player events
-      _audioPlayer.onPositionChanged.listen((Duration duration) async {
-        if (duration != _totalDuration) {
-          _currentPosition = duration;
-        }
-
-        /// kalo antriannya kosong, reset semua state
-        if (_queue.isEmpty) {
-          _currentPosition = Duration.zero;
-        }
-      });
-
-      /// Listen to the audio player events
-      _audioPlayer.onPlayerComplete.listen((event) async {
-        /// kalo antriannya lebih dari 1, lanjut ke lagu berikutnya
-        if (_queue.length > 1) {
-          await next();
-        } else {
-          await _audioPlayer.stop();
-          _currentPosition = Duration.zero;
-
-          _isPlaying = false;
-          notifyListeners();
-        }
-      });
-    }
 
     /// Listen to the audio player events
     _audioPlayer.onPlayerComplete.listen((event) async {

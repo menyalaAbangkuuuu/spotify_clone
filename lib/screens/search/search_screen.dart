@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:spotify_clone/screens/search/widget/categories_tile.dart';
 import 'package:spotify_clone/screens/search/widget/search_appbar.dart';
 import 'package:spotify_clone/screens/search/widget/search_button.dart';
-import 'package:spotify_clone/screens/search_music/search_music_screens.dart';
-import 'package:spotify_clone/screens/search/widget/categories_tile.dart';
 
 class SearchScreens extends StatefulWidget {
   static const routeName = '/search';

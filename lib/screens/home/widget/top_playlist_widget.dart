@@ -44,7 +44,7 @@ class TopTracksWidget extends StatelessWidget {
                     : Container(),
               ),
               // Add some spacing between the ListTile and the image
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               // Add text below the image
               Padding(
                 padding: const EdgeInsets.symmetric(
