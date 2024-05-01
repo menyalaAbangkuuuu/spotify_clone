@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:spotify_clone/screens/category_detail/category_detail.dart';
+import 'package:spotify_clone/screens/common/splash_screen.dart';
 import 'package:spotify_clone/screens/lyric/full_lyric_screen.dart';
 import 'package:spotify_clone/screens/home/home_screen.dart';
 import 'package:spotify_clone/screens/common/main_screen.dart';
@@ -18,7 +19,7 @@ class AppRouter {
 
   static final _router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: MyHomePage.routeName,
+    initialLocation: SplashScreen.routeName,
     routes: [
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
@@ -72,6 +73,14 @@ class AppRouter {
             },
           ),
         ],
+      ),
+      GoRoute(
+        path: SplashScreen.routeName,
+        pageBuilder: (context, state) {
+          return const MaterialPage(
+            child: SplashScreen(),
+          );
+        },
       ),
       GoRoute(
         path: SearchMusicScreen.routeName,

@@ -19,66 +19,69 @@ class PlaylistScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: SpotifyService.getPlaylistById(playlistId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: LoadingAnimationWidget.waveDots(
-                    color: Colors.white, size: 48));
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          } else {
-            final playlist = snapshot.data;
-            final tracks =
-                playlist?.tracks?.itemsNative?.toList() as List<Track>;
-            return CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  expandedHeight: 200.0,
-                  pinned: true,
-                  floating: true,
-                  flexibleSpace: LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints constraints) {
-                      var top = constraints.biggest.height;
-                      return Container(
-                        alignment: Alignment.center,
-                        child: top > 80
-                            ? CachedNetworkImage(
-                                imageUrl: playlist?.images?.first.url ?? "",
-                                fit: BoxFit.cover,
-                              )
-                            : Text(
-                                playlist?.name ?? "",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.0,
+      body: SafeArea(
+        child: FutureBuilder(
+          future: SpotifyService.getPlaylistById(playlistId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                  child: LoadingAnimationWidget.waveDots(
+                      color: Colors.white, size: 48));
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error: ${snapshot.error}'),
+              );
+            } else {
+              final playlist = snapshot.data;
+              final tracks =
+                  playlist?.tracks?.itemsNative?.toList() as List<Track>;
+              return CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    expandedHeight: 200.0,
+                    pinned: true,
+                    floating: true,
+                    shadowColor: Colors.black,
+                    flexibleSpace: LayoutBuilder(
+                      builder:
+                          (BuildContext context, BoxConstraints constraints) {
+                        var top = constraints.biggest.height;
+                        return Container(
+                          alignment: Alignment.center,
+                          child: top > 80
+                              ? CachedNetworkImage(
+                                  imageUrl: playlist?.images?.first.url ?? "",
+                                  fit: BoxFit.cover,
+                                )
+                              : Text(
+                                  playlist?.name ?? "",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.0,
+                                  ),
                                 ),
-                              ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final track = tracks[index];
-                      return searchItemMusic(context,
-                          track: track,
-                          isFromPlaylist: true,
-                          currentIndex: index,
-                          tracks: tracks);
-                    },
-                    childCount: playlist?.tracks?.itemsNative?.length ?? 0,
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final track = tracks[index];
+                        return searchItemMusic(context,
+                            track: track,
+                            isFromPlaylist: true,
+                            currentIndex: index,
+                            tracks: tracks);
+                      },
+                      childCount: playlist?.tracks?.itemsNative?.length ?? 0,
+                    ),
                   ),
-                ),
-              ],
-            );
-          }
-        },
+                ],
+              );
+            }
+          },
+        ),
       ),
     );
   }
