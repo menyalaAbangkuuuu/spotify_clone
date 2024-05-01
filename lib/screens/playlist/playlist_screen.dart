@@ -32,6 +32,8 @@ class PlaylistScreen extends StatelessWidget {
             );
           } else {
             final playlist = snapshot.data;
+            final tracks =
+                playlist?.tracks?.itemsNative?.toList() as List<Track>;
             return CustomScrollView(
               slivers: [
                 SliverAppBar(
@@ -63,9 +65,12 @@ class PlaylistScreen extends StatelessWidget {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      final track = playlist?.tracks?.itemsNative
-                          ?.toList()[index] as Track;
-                      return searchItemMusic(context, track: track);
+                      final track = tracks[index];
+                      return searchItemMusic(context,
+                          track: track,
+                          isFromPlaylist: true,
+                          currentIndex: index,
+                          tracks: tracks);
                     },
                     childCount: playlist?.tracks?.itemsNative?.length ?? 0,
                   ),

@@ -8,7 +8,11 @@ import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/screens/search_music/widget/slider_item_music.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
 
-Padding searchItemMusic(BuildContext context, {required Track track}) {
+Padding searchItemMusic(BuildContext context,
+    {required Track track,
+    bool isFromPlaylist = false,
+    List<Track> tracks = const [],
+    int currentIndex = 0}) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 10),
     child: Slidable(
@@ -26,8 +30,11 @@ Padding searchItemMusic(BuildContext context, {required Track track}) {
       ),
       child: ListTile(
         onTap: () {
-          Provider.of<MusicPlayerProvider>(context, listen: false)
-              .addToQueue(track);
+          isFromPlaylist
+              ? Provider.of<MusicPlayerProvider>(context, listen: false)
+                  .addFromPlaylist(tracks, currentIndex)
+              : Provider.of<MusicPlayerProvider>(context, listen: false)
+                  .addToQueue(track);
           Provider.of<MusicPlayerProvider>(context, listen: false).play();
         },
         title: Text(
