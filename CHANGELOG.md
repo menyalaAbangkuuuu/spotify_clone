@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/menyalaAbangkuuuu/spotify_clone/compare/v1.0.1...v1.0.2) (2024-05-01)
+
+
+### Bug Fixes
+
+* fix add to playlist feature on search item widget ([b5ea3ba](https://github.com/menyalaAbangkuuuu/spotify_clone/commit/b5ea3baa7ceba82454d9a9a6110ad26292eff44e))
+
 ## [1.0.1](https://github.com/menyalaAbangkuuuu/spotify_clone/compare/v1.0.0...v1.0.1) (2024-04-29)
 
 
