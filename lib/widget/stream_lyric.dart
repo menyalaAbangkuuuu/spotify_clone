@@ -1,12 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class StreamLyric extends StatefulWidget {
-  const StreamLyric({super.key});
+  final bool scrollAble;
+  const StreamLyric({this.scrollAble = true, super.key});
 
   @override
   State<StreamLyric> createState() => _StreamLyricState();
@@ -28,6 +30,12 @@ class _StreamLyricState extends State<StreamLyric> {
       return StreamBuilder(
           stream: musicPlayerProvider.audioPlayer.onPositionChanged,
           builder: (context, snapshots) {
+            if (snapshots.connectionState.name == "waiting") {
+              return Center(
+                child: LoadingAnimationWidget.fallingDot(
+                    color: Colors.white, size: 48),
+              );
+            }
             if (snapshots.hasData) {
               Duration? currentDuration = snapshots.data;
               int lastIndex = -1;
@@ -63,6 +71,9 @@ class _StreamLyricState extends State<StreamLyric> {
               return Stack(children: [
                 ScrollablePositionedList.builder(
                   itemCount: musicPlayerProvider.lyric!.lyrics.lines.length,
+                  physics: widget.scrollAble
+                      ? const AlwaysScrollableScrollPhysics()
+                      : const NeverScrollableScrollPhysics(),
                   padding: const EdgeInsets.all(20),
                   itemBuilder: (context, index) {
                     bool isCurrent = index == _currentLyricIndex;

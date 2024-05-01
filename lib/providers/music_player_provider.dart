@@ -5,6 +5,7 @@ import 'package:spotify_clone/model/lyric.dart';
 import 'package:spotify_clone/model/music.dart';
 import 'package:spotify_clone/services/color_generator.dart';
 import 'package:spotify_clone/services/lyric.dart';
+import 'package:spotify_clone/services/spotify.dart';
 import 'package:spotify_clone/services/youtube.dart';
 
 /// A provider class that provides the music player state
@@ -17,15 +18,40 @@ class MusicPlayerProvider extends ChangeNotifier {
     _audioPlayer.onPositionChanged.listen((Duration duration) async {
       if (duration != _totalDuration) {
         _currentPosition = duration;
-        notifyListeners();
       }
 
       /// kalo antriannya kosong, reset semua state
       if (_queue.isEmpty) {
         _currentPosition = Duration.zero;
-        notifyListeners();
       }
     });
+    MusicPlayerProvider() {
+      /// Listen to the audio player events
+      _audioPlayer.onPositionChanged.listen((Duration duration) async {
+        if (duration != _totalDuration) {
+          _currentPosition = duration;
+        }
+
+        /// kalo antriannya kosong, reset semua state
+        if (_queue.isEmpty) {
+          _currentPosition = Duration.zero;
+        }
+      });
+
+      /// Listen to the audio player events
+      _audioPlayer.onPlayerComplete.listen((event) async {
+        /// kalo antriannya lebih dari 1, lanjut ke lagu berikutnya
+        if (_queue.length > 1) {
+          await next();
+        } else {
+          await _audioPlayer.stop();
+          _currentPosition = Duration.zero;
+
+          _isPlaying = false;
+          notifyListeners();
+        }
+      });
+    }
 
     /// Listen to the audio player events
     _audioPlayer.onPlayerComplete.listen((event) async {
@@ -62,6 +88,9 @@ class MusicPlayerProvider extends ChangeNotifier {
 
   Duration _totalDuration = Duration.zero;
   Duration get totalDuration => _totalDuration;
+
+  Artist? _currentArtist;
+  Artist? get currentArtist => _currentArtist;
 
   final List<Track> _queue = [];
 
@@ -161,27 +190,25 @@ class MusicPlayerProvider extends ChangeNotifier {
   /// If the current track is null, this method does nothing.
 
   Future<void> play() async {
+    if (_queue.isEmpty || _currentTrack == null) return;
+
+    _isLoading = true;
+    notifyListeners();
     try {
       Music music = await Youtube.getVideo(
           songName: _currentTrack!.name!,
           artistName: _currentTrack!.artists!.first.name!);
-
+      await _getCurrentArtist();
       _totalDuration = music.duration!;
-
       _currentTrackColor = await ColorGenerator.getImagePalette(
               NetworkImage(_currentTrack!.album!.images!.first.url!)) ??
           Colors.grey;
-
       _lyric = await LyricService.getLyric(_currentTrack!.id!);
-
       await _audioPlayer.play(UrlSource(music.url));
-
       _isPlaying = true;
-      notifyListeners();
     } catch (e) {
-      _errorMessage = "this song cannot be played";
+      _errorMessage = "This song cannot be played";
       _isPlaying = false;
-      notifyListeners();
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -218,6 +245,7 @@ class MusicPlayerProvider extends ChangeNotifier {
       _queue.removeAt(0);
       _currentTrack = _queue.first;
       _canPrev = true;
+      _lyric = null;
       await play();
       if (_queue.length == 1) {
         _canNext = false;
@@ -231,6 +259,7 @@ class MusicPlayerProvider extends ChangeNotifier {
       _audioPlayer.stop();
       _queue.insert(0, _prevQueue.last);
       _prevQueue.removeLast();
+      _lyric = null;
       if (_prevQueue.isEmpty) {
         _canPrev = false;
       }
@@ -251,5 +280,10 @@ class MusicPlayerProvider extends ChangeNotifier {
     _queue.insert(newIndex + 1, item);
 
     notifyListeners();
+  }
+
+  Future<void> _getCurrentArtist() async {
+    _currentArtist =
+        await SpotifyService.getArtist(_currentTrack?.artists?.first.id ?? "");
   }
 }

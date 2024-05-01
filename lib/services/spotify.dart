@@ -68,7 +68,12 @@ class SpotifyService {
 
   static Future<List<Track>?> getMusicByPlaylist(String playlistId) async {
     final playlist = _spotifyApi.playlists.getTracksByPlaylistId(playlistId);
-    final pages = await playlist.getPage(10);
+    final pages = await playlist.getPage(50);
     return pages.items?.toList();
+  }
+
+  static Future<Artist> getArtist(String artistId) async {
+    final artist = await _spotifyApi.artists.get(artistId);
+    return artist;
   }
 }

@@ -40,7 +40,7 @@ class _MiniLyricState extends State<MiniLyric> {
                     children: [
                       Text("Lyric",
                           style:
-                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   )),
@@ -51,17 +51,29 @@ class _MiniLyricState extends State<MiniLyric> {
                             context.push(FullLyricScreens.id,
                                 extra: musicPlayerProvider);
                           },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                              Colors.black.withOpacity(.5),
+                            ),
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 24,
+                            minHeight: 24,
+                          ),
                           icon: const Icon(CupertinoIcons.fullscreen),
+                          iconSize: 16,
                         ),
                       ),
                     ]),
                 const SizedBox(height: 10),
                 SizedBox(
-                    height: 250,
-                    child: musicPlayerProvider.lyric != null
-                        ? const StreamLyric()
-                        : Center(
-                            child: Text(
+                  height: 250,
+                  child: musicPlayerProvider.lyric != null
+                      ? const StreamLyric(
+                          scrollAble: false,
+                        )
+                      : Center(
+                          child: Text(
                             'No lyric available',
                             style: Theme.of(context)
                                 .textTheme
@@ -70,7 +82,9 @@ class _MiniLyricState extends State<MiniLyric> {
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
-                          ))),
+                          ),
+                        ),
+                ),
                 const SizedBox(height: 10),
               ],
             ),
