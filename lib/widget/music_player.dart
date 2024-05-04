@@ -57,6 +57,9 @@ Column musicPlayer(
             iconSize: 30,
             color: Colors.black.withOpacity(.7),
             style: ButtonStyle(
+              padding: MaterialStateProperty.all(
+                const EdgeInsets.all(15),
+              ),
               backgroundColor: MaterialStateProperty.all(Colors.white),
               shape: MaterialStateProperty.all(
                 const CircleBorder(),
