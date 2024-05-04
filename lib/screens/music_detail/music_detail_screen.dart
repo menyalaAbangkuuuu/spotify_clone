@@ -13,7 +13,9 @@ import 'package:spotify_clone/widget/music_player.dart';
 
 class MusicDetailScreen extends StatelessWidget {
   static const routeName = '/music_detail';
+
   const MusicDetailScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Consumer<MusicPlayerProvider>(
@@ -62,7 +64,7 @@ class MusicDetailScreen extends StatelessWidget {
                     child: Container(
                       width: double.maxFinite,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(20),
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: NetworkImage(

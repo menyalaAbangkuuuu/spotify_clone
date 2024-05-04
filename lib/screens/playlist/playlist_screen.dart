@@ -1,16 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-=======
 import 'package:flutter/widgets.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_sticky_widgets/flutter_sticky_widgets.dart';
->>>>>>> 57aba935741a56bc842eef15829cb9cd7941afc3
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:spotify/spotify.dart' hide Image, Offset;
 import 'package:spotify_clone/screens/search_music/widget/search_item_music.dart';
 
+import '../../providers/music_player_provider.dart';
 import '../../services/spotify.dart';
 
 class PlaylistScreen extends StatefulWidget {
@@ -123,7 +122,9 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                         iconSize: 56,
                         icon: const Icon(Icons.play_circle),
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          Provider.of<MusicPlayerProvider>(context,
+                                  listen: false)
+                              .addFromPlaylist(tracks, 0);
                         },
                       ),
                     ),
@@ -155,12 +156,8 @@ class MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   MySliverPersistentHeaderDelegate({required this.playlist});
 
   @override
-<<<<<<< HEAD
-  double get minExtent => 60.0;
-
-=======
   double get minExtent => 100.0;
->>>>>>> 57aba935741a56bc842eef15829cb9cd7941afc3
+
   @override
   double get maxExtent => 100.0;
 

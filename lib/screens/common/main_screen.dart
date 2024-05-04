@@ -70,12 +70,12 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.search, color: Colors.white.withOpacity(0.6)),
             label: 'Search',
           ),
-          NavigationDestination(
-            selectedIcon: const Icon(Icons.library_music, color: Colors.white),
-            icon: Icon(Icons.library_music_outlined,
-                color: Colors.white.withOpacity(0.6)),
-            label: 'Library',
-          ),
+          // NavigationDestination(
+          //   selectedIcon: const Icon(Icons.library_music, color: Colors.white),
+          //   icon: Icon(Icons.library_music_outlined,
+          //       color: Colors.white.withOpacity(0.6)),
+          //   label: 'Library',
+          // ),
         ],
       ),
     );

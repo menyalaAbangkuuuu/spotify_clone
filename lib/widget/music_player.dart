@@ -56,14 +56,10 @@ Column musicPlayer(
             ),
             color: Colors.black.withOpacity(.7),
             style: ButtonStyle(
-<<<<<<< HEAD
               minimumSize: MaterialStateProperty.all(const Size(50, 50)),
-              padding: MaterialStateProperty.all(EdgeInsets.zero),
-=======
               padding: MaterialStateProperty.all(
                 const EdgeInsets.all(15),
               ),
->>>>>>> 57aba935741a56bc842eef15829cb9cd7941afc3
               backgroundColor: MaterialStateProperty.all(Colors.white),
               shape: MaterialStateProperty.all(
                 const CircleBorder(),

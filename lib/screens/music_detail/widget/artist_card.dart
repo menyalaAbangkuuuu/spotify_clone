@@ -82,7 +82,7 @@ Card artistCard(BuildContext context, Artist? artist) {
                                 ),
                       ),
                       Text(
-                          "${NumberFormat.compact().format(artist?.followers?.total)} followers",
+                          "${NumberFormat.compact().format(artist?.followers?.total ?? 0)} followers",
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     color: Colors.white.withOpacity(.6),
