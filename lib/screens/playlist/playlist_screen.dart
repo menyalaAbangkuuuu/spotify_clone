@@ -1,5 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+=======
+import 'package:flutter/widgets.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:flutter_sticky_widgets/flutter_sticky_widgets.dart';
+>>>>>>> 57aba935741a56bc842eef15829cb9cd7941afc3
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:spotify/spotify.dart' hide Image, Offset;
@@ -105,20 +111,33 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                       },
                     ),
                   ),
-                  SliverPersistentHeader(
-                    delegate: MySliverPersistentHeaderDelegate(),
-                    pinned: true,
+                  SliverToBoxAdapter(
+                    child: Container(
+                      child: Text("Playlist"),
+                    ),
                   ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      int trackIndex = index;
-                      final track = tracks[trackIndex];
-                      return searchItemMusic(context,
-                          track: track,
-                          isFromPlaylist: true,
-                          currentIndex: index,
-                          tracks: tracks);
-                    }, childCount: tracks.length),
+                  SliverStickyHeader(
+                    header: Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        iconSize: 56,
+                        icon: const Icon(Icons.play_circle),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        int trackIndex = index;
+                        final track = tracks[trackIndex];
+                        return searchItemMusic(context,
+                            track: track,
+                            isFromPlaylist: true,
+                            currentIndex: index,
+                            tracks: tracks);
+                      }, childCount: tracks.length),
+                    ),
                   ),
                 ],
               ),
@@ -131,30 +150,46 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
 }
 
 class MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
-  @override
-  double get minExtent => 60.0;
+  final Playlist playlist;
+
+  MySliverPersistentHeaderDelegate({required this.playlist});
 
   @override
-  double get maxExtent => 60.0;
+<<<<<<< HEAD
+  double get minExtent => 60.0;
+
+=======
+  double get minExtent => 100.0;
+>>>>>>> 57aba935741a56bc842eef15829cb9cd7941afc3
+  @override
+  double get maxExtent => 100.0;
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       alignment: Alignment.center,
+      height: 300,
       child: Row(
         children: [
-          IconButton(
-            icon: const Icon(FontAwesomeIcons.play),
-            onPressed: () {},
+          Expanded(
+            child: Text(playlist.description ?? "",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                )),
           ),
-          IconButton(
-            icon: const Icon(FontAwesomeIcons.random),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(FontAwesomeIcons.ellipsisH),
-            onPressed: () {},
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(FontAwesomeIcons.play),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(FontAwesomeIcons.random),
+                onPressed: () {},
+              ),
+            ],
           ),
         ],
       ),
