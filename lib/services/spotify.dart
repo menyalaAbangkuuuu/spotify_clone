@@ -1,5 +1,6 @@
 import 'package:spotify/spotify.dart';
 import 'package:spotify_clone/constants/credentials.dart';
+import 'package:spotify_clone/model/playlist_extension.dart';
 
 final _spotifyApi = SpotifyApi(
     SpotifyApiCredentials(Credentials.clientId, Credentials.clientSecret));
@@ -61,13 +62,18 @@ class SpotifyService {
     return await _spotifyApi.playlists.get(playlistSimple.id ?? '');
   }
 
-  static Future<Playlist> getPlaylistById(String playlistId) async {
+  static Future<PlaylistWithBackground> getPlaylistById(
+      String playlistId) async {
     final playlist = await _spotifyApi.playlists.get(playlistId);
     final playlistMusic =
         _spotifyApi.playlists.getTracksByPlaylistId(playlistId);
-    final pages = await playlistMusic.getPage(50);
-    playlist.tracks?.itemsNative = pages.items;
-    return playlist;
+    final pages = await playlistMusic.all();
+    playlist.tracks?.itemsNative =
+        pages.toList().where((element) => element.type != "episode").toList();
+    final backgroundColor = await playlist.fetchBackgroundColor();
+
+    return PlaylistWithBackground(
+        playlist: playlist, backgroundColor: backgroundColor);
   }
 
   static Future<List<Track>?> getMusicByPlaylist(String playlistId) async {

@@ -53,6 +53,7 @@ dependencies:
   cached_network_image: ^3.3.1
   loading_animation_widget: ^1.2.1
   font_awesome_flutter: ^10.7.0
+  flutter_sticky_widgets: ^0.0.3
   
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
