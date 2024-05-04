@@ -54,9 +54,10 @@ Column musicPlayer(
                   ? CupertinoIcons.pause_fill
                   : CupertinoIcons.play_fill,
             ),
-            iconSize: 30,
             color: Colors.black.withOpacity(.7),
             style: ButtonStyle(
+              minimumSize: MaterialStateProperty.all(const Size(50, 50)),
+              padding: MaterialStateProperty.all(EdgeInsets.zero),
               backgroundColor: MaterialStateProperty.all(Colors.white),
               shape: MaterialStateProperty.all(
                 const CircleBorder(),

@@ -1,14 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sticky_widgets/flutter_sticky_widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:spotify/spotify.dart' hide Image, Offset;
 import 'package:spotify_clone/screens/search_music/widget/search_item_music.dart';
-import '../../model/playlist_extension.dart';
+
 import '../../services/spotify.dart';
 
 class PlaylistScreen extends StatefulWidget {
@@ -27,6 +23,7 @@ class PlaylistScreen extends StatefulWidget {
 
 class _PlaylistScreenState extends State<PlaylistScreen> {
   final ScrollController _controller = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -136,6 +133,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
 class MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   double get minExtent => 60.0;
+
   @override
   double get maxExtent => 60.0;
 
