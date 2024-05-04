@@ -37,7 +37,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => MusicPlayerProvider()),
         ChangeNotifierProvider(create: (context) => CategoryProvider()),
         ChangeNotifierProvider(create: (context) => PlaylistProvider()),
-        Provider(create: (context) => SpotifyService()),
       ],
       child: MaterialApp.router(
         routerDelegate: AppRouter.router.routerDelegate,
