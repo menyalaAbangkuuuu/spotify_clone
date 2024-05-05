@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:flutter_sticky_widgets/flutter_sticky_widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
@@ -125,6 +124,9 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                           Provider.of<MusicPlayerProvider>(context,
                                   listen: false)
                               .addFromPlaylist(tracks, 0);
+                          Provider.of<MusicPlayerProvider>(context,
+                                  listen: false)
+                              .play();
                         },
                       ),
                     ),
