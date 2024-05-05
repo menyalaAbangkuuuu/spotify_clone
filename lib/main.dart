@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/config/route.dart';
@@ -20,6 +22,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  final GoRouter router = AppRouter.router;
+
+  FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    router.refresh();
+  });
   runApp(
     const MyApp(),
   );

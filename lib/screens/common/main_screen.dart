@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:spotify_clone/screens/search/search_screen.dart';
 import 'package:spotify_clone/screens/home/home_screen.dart';
+import 'package:spotify_clone/widget/custom_drawer.dart';
 import 'package:spotify_clone/widget/mini_player.dart';
+
+final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
 class MainScreen extends StatefulWidget {
   final Widget screen;
@@ -42,6 +45,8 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
+      drawer: const CustomDrawer(),
       body: Column(
         children: [
           Expanded(child: widget.screen),
