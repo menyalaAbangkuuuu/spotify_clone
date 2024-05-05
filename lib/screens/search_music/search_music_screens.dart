@@ -56,6 +56,7 @@ class _SearchMusicScreenState extends State<SearchMusicScreen> {
           var searchProvider =
               Provider.of<SearchProvider>(context, listen: false);
           searchProvider.searchSong(query);
+          _scrollController.jumpTo(0);
           setState(() {
             _isEmpty = false;
           });
@@ -155,7 +156,8 @@ class _SearchMusicScreenState extends State<SearchMusicScreen> {
                         }
                       }
                       var searchResult = searchProvider.searchResults[index];
-                      return searchItemMusic(context, track: searchResult);
+                      return searchItemMusic(context,
+                          track: searchResult, currentIndex: index);
                     },
                   );
                 },

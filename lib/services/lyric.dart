@@ -18,8 +18,6 @@ class LyricService {
     if (response.statusCode == 200) {
       var jsonData = jsonDecode(response.body);
       return Lyric.fromJson(jsonData['data']);
-    } else {
-      print(response.body);
     }
     return null;
   }

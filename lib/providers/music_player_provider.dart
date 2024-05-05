@@ -138,10 +138,8 @@ class MusicPlayerProvider extends ChangeNotifier {
   /// semua list lagu sebelum index akan dimasukan ke prevQueue
   /// semua list lagu setelah index akan dimasukan ke queue
   void addFromPlaylist(List<Track> tracks, index) {
-    if (index != 0) {
-      _canPrev = true;
-      _canNext = true;
-      notifyListeners();
+    if (index == 0) {
+      _canPrev = false;
     }
     _audioPlayer.stop();
     _prevQueue.clear();

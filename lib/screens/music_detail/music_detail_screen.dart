@@ -109,7 +109,8 @@ class MusicDetailScreen extends StatelessWidget {
                   ),
                   const MiniLyric(),
                   const SizedBox(height: 10),
-                  artistCard(context, musicPlayerProvider.currentArtist)
+                  artistCard(context, musicPlayerProvider.currentArtist,
+                      musicPlayerProvider.isLoading)
                 ],
               ),
             ),
