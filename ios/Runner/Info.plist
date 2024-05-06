@@ -4,6 +4,8 @@
 <dict>
 <key>FlutterDeepLinkingEnabled</key>
 <true/>
+<key>GIDClientID</key>
+<string>716247414791-di6i0kdd77u99bdl43sbdmc0h9pa9923.apps.googleusercontent.com</string>
 <key>CFBundleURLTypes</key>
 <array>
     <dict>
@@ -13,6 +15,7 @@
     <string>192.168.100.243</string>
     <key>CFBundleURLSchemes</key>
     <array>
+    <string>com.googleusercontent.apps.716247414791-di6i0kdd77u99bdl43sbdmc0h9pa9923</string>
     <string>appscheme</string>
     </array>
     </dict>

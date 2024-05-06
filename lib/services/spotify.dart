@@ -1,5 +1,6 @@
 import 'package:spotify/spotify.dart';
 import 'package:spotify_clone/constants/credentials.dart';
+import 'package:spotify_clone/model/playlist_extension.dart';
 
 final _spotifyApi = SpotifyApi(
     SpotifyApiCredentials(Credentials.clientId, Credentials.clientSecret));
@@ -32,14 +33,10 @@ class SpotifyService {
     return pages.items?.toList();
   }
 
-  static Future<Playlist> getPlaylist(String playlistId) async {
-    final playlist = await _spotifyApi.playlists.get(playlistId);
-    return playlist;
-  }
-
-  static Future<Playlist> getPlaylistDetail(String playlistId) async {
-    final playlist = await _spotifyApi.playlists.get(playlistId);
-    return playlist;
+  static Future<List<Track>?> getPlaylistDetail(String playlistId) async {
+    final playlist = _spotifyApi.playlists.getTracksByPlaylistId(playlistId);
+    final pages = await playlist.getPage(10);
+    return pages.items?.toList();
   }
 
   static Future<List<PlaylistSimple>?> getFeaturedPlaylists() async {
@@ -63,5 +60,30 @@ class SpotifyService {
   static Future<Playlist> getPlaylistFromSimple(
       PlaylistSimple playlistSimple) async {
     return await _spotifyApi.playlists.get(playlistSimple.id ?? '');
+  }
+
+  static Future<PlaylistWithBackground> getPlaylistById(
+      String playlistId) async {
+    final playlist = await _spotifyApi.playlists.get(playlistId);
+    final playlistMusic =
+        _spotifyApi.playlists.getTracksByPlaylistId(playlistId);
+    final pages = await playlistMusic.all();
+    playlist.tracks?.itemsNative =
+        pages.toList().where((element) => element.type != "episode").toList();
+    final backgroundColor = await playlist.fetchBackgroundColor();
+
+    return PlaylistWithBackground(
+        playlist: playlist, backgroundColor: backgroundColor);
+  }
+
+  static Future<List<Track>?> getMusicByPlaylist(String playlistId) async {
+    final playlist = _spotifyApi.playlists.getTracksByPlaylistId(playlistId);
+    final pages = await playlist.getPage(50);
+    return pages.items?.toList();
+  }
+
+  static Future<Artist> getArtist(String artistId) async {
+    final artist = await _spotifyApi.artists.get(artistId);
+    return artist;
   }
 }

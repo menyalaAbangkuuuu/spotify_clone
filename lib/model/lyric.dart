@@ -15,11 +15,11 @@ class Lyric {
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['lyrics'] = lyrics.toJson();
-    _data['colors'] = colors.toJson();
-    _data['hasVocalRemoval'] = hasVocalRemoval;
-    return _data;
+    final data = <String, dynamic>{};
+    data['lyrics'] = lyrics.toJson();
+    data['colors'] = colors.toJson();
+    data['hasVocalRemoval'] = hasVocalRemoval;
+    return data;
   }
 }
 

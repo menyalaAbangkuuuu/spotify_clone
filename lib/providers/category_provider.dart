@@ -8,12 +8,10 @@ class CategoryProvider with ChangeNotifier {
   }
 
   List<Category> _categories = [];
-
   List<Category> get categories => _categories;
 
-  Category? _category;
-
-  Category? get category => _category;
+  bool _canLoadMore = true;
+  bool get canLoadMore => _canLoadMore;
 
   void fetchData() async {
     final data = await SpotifyService.getCategories() ?? [];
@@ -25,8 +23,13 @@ class CategoryProvider with ChangeNotifier {
   void fetchMore({int offset = 0}) async {
     final data = await SpotifyService.getCategories(offset: offset);
 
-    _categories.addAll(data ?? []);
+    if (data!.isEmpty) {
+      _canLoadMore = false;
+      notifyListeners();
+      return;
+    }
 
+    _categories.addAll(data);
     notifyListeners();
   }
 
