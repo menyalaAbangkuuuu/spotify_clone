@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -13,6 +13,7 @@ import 'package:spotify_clone/view/widget/slider_item_music.dart';
 
 class SearchMusicScreens extends StatefulWidget {
   static const String id = '/search_music';
+
   const SearchMusicScreens({super.key});
 
   @override
@@ -22,6 +23,7 @@ class SearchMusicScreens extends StatefulWidget {
 class _SearchMusicScreensState extends State<SearchMusicScreens> {
   TextEditingController searchController = TextEditingController();
   Timer? _debounce;
+  bool _isEmpty = true;
 
   @override
   void dispose() {
@@ -32,7 +34,7 @@ class _SearchMusicScreensState extends State<SearchMusicScreens> {
 
   _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) {
-      _debounce!.cancel(); // Cancel any existing timer
+      _debounce!.cancel();
     }
     _debounce = Timer(
       const Duration(milliseconds: 500),

@@ -36,7 +36,10 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SafeArea(
         child: Column(
           children: <Widget>[
-            Expanded(child: TopTracksWidget()),
+            Expanded(
+              child: TopTracksWidget(),
+            ),
+            
           ],
         ),
       ),

@@ -51,6 +51,7 @@ class _MainScreenState extends State<MainScreen> {
         preferredSize: const Size.fromHeight(50),
         child: SearchScreenAppBar(
           showSearchText: _currentPageIndex == 1,
+          showMPText: _currentPageIndex == 0,
         ),
       ),
       body: Column(

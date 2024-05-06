@@ -4,7 +4,7 @@ import 'package:spotify/spotify.dart' as spotify;
 import 'package:spotify_clone/providers/music_provider.dart';
 
 class TopTracksWidget extends StatelessWidget {
-  const TopTracksWidget({super.key});
+  const TopTracksWidget({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,47 +16,148 @@ class TopTracksWidget extends StatelessWidget {
       return const Center(child: Text('Loading top playlists...'));
     }
 
-    // Use ListView.builder to display each track
-    return ListView.builder(
-      itemCount:
-          musicProvider.topTracks!.length, // The count of items in the list
-      itemBuilder: (context, index) {
-        // Get the current track
-        spotify.PlaylistSimple track = musicProvider.topTracks![index];
-        // Create a list tile for each track
-        return Card(
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start, // Align items to the start
-            children: [
-              ListTile(
-                title: Text(track.name ?? ""), // Display the track's name
-                // You can add more properties here, like leading icons, subtitles, etc.
-              ),
-              // Add an image widget below the ListTile
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0), // Menambahkan padding horizontal
-                child: track.images != null && track.images!.isNotEmpty
-                    ? Image.network(track.images!.first.url ?? "",
-                        fit: BoxFit.cover)
-                    : Container(),
-              ),
-              // Add some spacing between the ListTile and the image
-              SizedBox(height: 8.0),
-              // Add text below the image
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 8.0,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Vertical Track List
+          
+          GridView.builder(
+            shrinkWrap: true, // Adjusts to the content size
+            
+            itemCount: musicProvider.topTracks!.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, // Number of columns
+              childAspectRatio: 2.9, // Ratio of width to height
+            ),
+            itemBuilder: (context, index) {
+              // Get the current track
+              spotify.PlaylistSimple track = musicProvider.topTracks![index];
+
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
                 ),
-                child: Text(track.description ?? "No description available"),
-              ),
-            ],
+                margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 3, // 30% of space => (100 - 70) / 100
+                          child:
+                              track.images != null && track.images!.isNotEmpty
+                                  ? Image.network(
+                                      track.images!.first.url ?? "",
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Container(),
+                        ),
+                        Expanded(
+                          flex: 7, // 70% of space => (100 - 30) / 100
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ListTile(
+                                title: Text(
+                                  track.name ?? "",
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
-        );
-      },
+          SizedBox(height: 20,),
+          Container(
+            color: Color.fromARGB(255, 75, 0, 88),
+            margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: Row(
+              children: [
+                // Image with width 15% of container width
+                Container(
+                  height: 60,
+                  width: MediaQuery.of(context).size.width * 0.15,
+                  child: Image.network(
+                    'https://storage.googleapis.com/pr-newsroom-wp/1/2022/03/Screen-Shot-2022-03-02-at-12.24.01-PM.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Text(
+                  'K-Pop ON! (온) Hub',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+                Spacer(), // Add space between text and icon
+                // Three dots menu icon
+                IconButton(
+                  icon: Icon(Icons.more_vert),
+                  onPressed: () {},
+                ),
+              ],
+            ),
+          ),
+          // Horizontal Track List
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, top: 20.0),
+            child: Text(
+              "New Releases for you",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          SizedBox(
+            height: 210, // Height of the horizontal list
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: musicProvider.topTracks!.length,
+              itemBuilder: (context, index) {
+                spotify.PlaylistSimple track = musicProvider.topTracks![index];
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 150,
+                        height: 150,
+                        child: track.images != null && track.images!.isNotEmpty
+                            ? Image.network(
+                                track.images!.first.url ?? "",
+                                fit: BoxFit.cover,
+                              )
+                            : Container(),
+                      ),
+                      SizedBox(height: 8),
+                      SizedBox(
+                        width: 100,
+                        child: Text(
+                          track.name ?? "",
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: const Color.fromARGB(255, 134, 134, 134)),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
+
+

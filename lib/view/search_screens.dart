@@ -53,7 +53,7 @@ class _SearchScreensState extends State<SearchScreens> {
                 height: 20,
               ),
               Align(
-                alignment: Alignment.center,
+                alignment: Alignment.topLeft,
                 child: Text(
                   'Browse all',
                   style: TextStyle(
