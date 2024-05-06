@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:spotify_clone/screens/search/search_screen.dart';
 import 'package:spotify_clone/screens/home/home_screen.dart';
-import 'package:spotify_clone/widget/custom_drawer.dart';
-import 'package:spotify_clone/widget/mini_player.dart';
-
-final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+import 'package:spotify_clone/view/search_screens.dart';
+import 'package:spotify_clone/view/widget/search_screen_app_bar.dart';
 
 class MainScreen extends StatefulWidget {
   final Widget screen;
@@ -34,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
         context.go(MyHomePage.routeName);
         break;
       case 1:
-        context.go(SearchScreens.routeName);
+        context.go(SearchScreens.id);
         break;
       case 2:
         context.go('/library');
@@ -45,12 +42,16 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
-      drawer: const CustomDrawer(),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50),
+        child: SearchScreenAppBar(
+          showSearchText: _currentPageIndex == 1,
+        ),
+      ),
       body: Column(
         children: [
           Expanded(child: widget.screen),
-          const MiniPlayer(),
+          const MusicPlayer(),
         ],
       ),
       bottomNavigationBar: NavigationBar(
@@ -75,12 +76,12 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.search, color: Colors.white.withOpacity(0.6)),
             label: 'Search',
           ),
-          // NavigationDestination(
-          //   selectedIcon: const Icon(Icons.library_music, color: Colors.white),
-          //   icon: Icon(Icons.library_music_outlined,
-          //       color: Colors.white.withOpacity(0.6)),
-          //   label: 'Library',
-          // ),
+          NavigationDestination(
+            selectedIcon: const Icon(Icons.library_music, color: Colors.white),
+            icon: Icon(Icons.library_music_outlined,
+                color: Colors.white.withOpacity(0.6)),
+            label: 'Library',
+          ),
         ],
       ),
     );
