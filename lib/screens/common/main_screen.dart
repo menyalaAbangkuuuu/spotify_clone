@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:spotify_clone/screens/home/home_screen.dart';
-import 'package:spotify_clone/view/search_screens.dart';
-import 'package:spotify_clone/view/widget/search_screen_app_bar.dart';
+import 'package:spotify_clone/screens/search/search_screen.dart';
+import 'package:spotify_clone/screens/search/widget/search_appbar.dart';
+import 'package:spotify_clone/widget/custom_drawer.dart';
+import 'package:spotify_clone/widget/mini_player.dart';
+
+final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
 class MainScreen extends StatefulWidget {
   final Widget screen;
@@ -31,7 +35,7 @@ class _MainScreenState extends State<MainScreen> {
         context.go(MyHomePage.routeName);
         break;
       case 1:
-        context.go(SearchScreens.id);
+        context.go(SearchScreens.routeName);
         break;
       case 2:
         context.go('/library');
@@ -42,18 +46,14 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
-        child: SearchScreenAppBar(
-          showSearchText: _currentPageIndex == 1,
-        ),
-      ),
+      key: scaffoldKey,
       body: Column(
         children: [
           Expanded(child: widget.screen),
-          const MusicPlayer(),
+          const MiniPlayer(),
         ],
       ),
+      drawer: const CustomDrawer(),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentPageIndex,
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
