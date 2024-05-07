@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_clone/services/spotify.dart';
 
-class CategoryProvider with ChangeNotifier {
+class CategoryProvider extends ChangeNotifier {
   CategoryProvider() {
     fetchData();
   }
@@ -32,6 +32,4 @@ class CategoryProvider with ChangeNotifier {
     _categories.addAll(data);
     notifyListeners();
   }
-
-  getPlaylistFromSimple(PlaylistSimple playlist) {}
 }

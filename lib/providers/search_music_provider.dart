@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_clone/services/spotify.dart';
 
-class SearchProvider with ChangeNotifier {
+class SearchProvider extends ChangeNotifier {
   late List<Track> _searchResults = [];
   List<Track> get searchResults => _searchResults;
 

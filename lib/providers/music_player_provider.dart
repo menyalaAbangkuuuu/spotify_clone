@@ -116,7 +116,6 @@ class MusicPlayerProvider extends ChangeNotifier {
     }
     if (_queue.length > 1) {
       _canNext = true;
-      notifyListeners();
     }
     notifyListeners();
   }

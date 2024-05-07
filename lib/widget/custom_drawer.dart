@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -49,6 +50,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
               onPressed: () {
                 FirebaseAuth.instance.signOut();
+                GoogleSignIn().signOut();
               },
               child: const Text('Log out',
                   style: TextStyle(
