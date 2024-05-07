@@ -4,5 +4,5 @@ class Credentials {
   static String? clientId = dotenv.env["CLIENT_ID"];
   static String? clientSecret = dotenv.env["CLIENT_SECRET"];
   static String? token =
-      "AQATJ-jxe4xlvkZ1iPcYk27OU4nZkBary9YyT7fuqLQ2TrubAjnfRU8-UhNmZl3BBvONibcNC2zQLhjT0oSNq_qoHi9LzPQrBD33v7RdHxRwqANAVs1e_NUrBKWFNYX5vohlPP4_O0iVGG7oqyH2IpHgzDwSdvQRzcjQ2hMCzzQ_uks8n_B6KF2rM58Po-K8lwC6UJauh10kYDtkj6nOdfAbJ2s";
+      "AQAsAFbPcU0Ahb3h-xxLKFMkatYCApX_zIsenPZ1OYFRW9cUAZuTg5RrzCjje3cgETR0H1VqiZBnz8Mrk1c5AI7mGmc7HXoaVdpInc4q9DSoqIxg3UUAPHlXCTgTWyw4ZFJgbLKOflIO9OVVcIc0fnwEo_sDI6-0347evAX1ekKGnbv0qgzRoOCo8rNlGXG0MvG_BxOv1tolNMsMlUIuFlpoO6xD";
 }

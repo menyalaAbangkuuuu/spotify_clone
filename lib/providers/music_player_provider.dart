@@ -140,6 +140,9 @@ class MusicPlayerProvider extends ChangeNotifier {
   void addFromPlaylist(List<Track> tracks, index) {
     if (index == 0) {
       _canPrev = false;
+    } else {
+      _canPrev = true;
+      _canNext = true;
     }
     _audioPlayer.stop();
     _prevQueue.clear();
