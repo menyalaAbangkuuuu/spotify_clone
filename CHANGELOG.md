@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/menyalaAbangkuuuu/spotify_clone/compare/v1.0.3...v1.1.0) (2024-05-20)
+
+
+### Features
+
+* firebase ([57aba93](https://github.com/menyalaAbangkuuuu/spotify_clone/commit/57aba935741a56bc842eef15829cb9cd7941afc3))
+
+
+### Bug Fixes
+
+* bug and layout music player ([aedc3db](https://github.com/menyalaAbangkuuuu/spotify_clone/commit/aedc3db0ba93e6258fa3b42bfb41077368293289))
+* play button ([a873174](https://github.com/menyalaAbangkuuuu/spotify_clone/commit/a873174209a8f1984c2e991062e7c833ff0a1bb0))
+
 ## [1.0.3](https://github.com/menyalaAbangkuuuu/spotify_clone/compare/v1.0.2...v1.0.3) (2024-05-04)
 
 
