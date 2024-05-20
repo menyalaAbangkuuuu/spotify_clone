@@ -108,7 +108,7 @@ class _StreamLyricState extends State<StreamLyric> {
                                   ),
                               child: Text(
                                 musicPlayerProvider
-                                    .lyric!.lyrics.lines[index].words,
+                                    .lyric!.lyrics.lines[index].words ?? "",
                               ),
                             ),
                           ),

@@ -169,17 +169,18 @@ class MusicPlayerProvider extends ChangeNotifier {
     notifyListeners();
     try {
       Music music = await Youtube.getVideo(
-          songName: _currentTrack!.name!,
-          artistName: _currentTrack!.artists!.first.name!);
+          songName: _currentTrack!.name ?? "",
+          artistName: _currentTrack!.artists!.first.name ?? "");
       await _getCurrentArtist();
       _totalDuration = music.duration!;
       _currentTrackColor = await ColorGenerator.getImagePalette(
-              NetworkImage(_currentTrack!.album!.images!.first.url!)) ??
+              NetworkImage(_currentTrack!.album!.images!.first.url ?? "")) ??
           Colors.grey;
-      _lyric = await LyricService.getLyric(_currentTrack!.id!);
+      _lyric = await LyricService.getLyric(_currentTrack?.id ?? "");
       await _audioPlayer.play(UrlSource(music.url));
       _isPlaying = true;
     } catch (e) {
+      print(e);
       _errorMessage = "This song cannot be played";
       _isPlaying = false;
     } finally {

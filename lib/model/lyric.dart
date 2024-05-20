@@ -35,10 +35,8 @@ class Lyrics {
     required this.alternatives,
     required this.language,
     required this.isRtlLanguage,
-    required this.fullscreenAction,
     required this.showUpsell,
     required this.capStatus,
-    required this.impressionsRemaining,
   });
   late final String syncType;
   late final List<Lines> lines;
@@ -50,10 +48,8 @@ class Lyrics {
   late final List<dynamic> alternatives;
   late final String language;
   late final bool isRtlLanguage;
-  late final String fullscreenAction;
   late final bool showUpsell;
   late final String capStatus;
-  late final int impressionsRemaining;
 
   Lyrics.fromJson(Map<String, dynamic> json) {
     syncType = json['syncType'] ?? '';
@@ -66,10 +62,8 @@ class Lyrics {
     alternatives = List.castFrom<dynamic, dynamic>(json['alternatives']);
     language = json['language'];
     isRtlLanguage = json['isRtlLanguage'];
-    fullscreenAction = json['fullscreenAction'];
     showUpsell = json['showUpsell'];
     capStatus = json['capStatus'];
-    impressionsRemaining = json['impressionsRemaining'];
   }
 
   Map<String, dynamic> toJson() {
@@ -84,10 +78,8 @@ class Lyrics {
     data['alternatives'] = alternatives;
     data['language'] = language;
     data['isRtlLanguage'] = isRtlLanguage;
-    data['fullscreenAction'] = fullscreenAction;
     data['showUpsell'] = showUpsell;
     data['capStatus'] = capStatus;
-    data['impressionsRemaining'] = impressionsRemaining;
     return data;
   }
 }
@@ -100,7 +92,7 @@ class Lines {
     required this.endTimeMs,
   });
   late final int startTimeMs;
-  late final String words;
+  late final String? words;
   late final List<dynamic> syllables;
   late final int endTimeMs;
 
