@@ -6,7 +6,7 @@ import 'package:spotify_clone/services/custom_playlist.dart';
 //TODO : buat provider untuk custom playlist
 //di provider ini nanti bisa CRUD custom playlist kita
 // dan nnti mau ditampilkan di library
-// untuk semua fetching data itu dari https://yourdocumentationlink.com/path-to-provider-docs
+// untuk semua fetching data itu dari CustomPlaylistService
 
 class CustomPlaylistProvider extends ChangeNotifier {
   final _customPlaylistService = CustomPlaylistService();
