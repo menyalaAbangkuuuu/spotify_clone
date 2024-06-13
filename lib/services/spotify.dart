@@ -11,6 +11,11 @@ class SpotifyService {
     return response.items?.toList();
   }
 
+  static Future<Track> getTrack(String trackId) async {
+    final track = await _spotifyApi.tracks.get(trackId);
+    return track;
+  }
+
   static Future<List<dynamic>> searchMusic(String query,
       [int offset = 0]) async {
     final response = _spotifyApi.search.get(query, types: {SearchType.track});

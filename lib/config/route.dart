@@ -11,7 +11,7 @@ import 'package:spotify_clone/screens/music_detail/music_detail_screen.dart';
 import 'package:spotify_clone/screens/queue/queue_list_screen.dart';
 import 'package:spotify_clone/screens/search_music/search_music_screens.dart';
 import 'package:spotify_clone/screens/search/search_screen.dart';
-import 'package:spotify_clone/screens/library/library_screens.dart';
+import 'package:spotify_clone/screens/library/library_screen.dart';
 
 import '../screens/playlist/playlist_screen.dart';
 
@@ -40,6 +40,14 @@ class AppRouter {
             pageBuilder: (context, state) => const MaterialPage(
               child: SearchScreens(),
             ),
+          ),
+          GoRoute(
+            path: LibraryScreen.routeName,
+            pageBuilder: (context, state) {
+              return const MaterialPage(
+                child: LibraryScreen(),
+              );
+            },
           ),
           GoRoute(
             path: SearchMusicScreen.routeName,

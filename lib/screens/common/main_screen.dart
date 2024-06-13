@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:spotify_clone/screens/home/home_screen.dart';
+import 'package:spotify_clone/screens/library/library_screen.dart';
 import 'package:spotify_clone/screens/search/search_screen.dart';
 import 'package:spotify_clone/screens/search/widget/search_appbar.dart';
 import 'package:spotify_clone/widget/custom_drawer.dart';
@@ -38,7 +39,7 @@ class _MainScreenState extends State<MainScreen> {
         context.go(SearchScreens.routeName);
         break;
       case 2:
-        context.go('/library');
+        context.go(LibraryScreen.routeName);
         break;
     }
   }
@@ -75,6 +76,14 @@ class _MainScreenState extends State<MainScreen> {
             ),
             icon: Icon(Icons.search, color: Colors.white.withOpacity(0.6)),
             label: 'Search',
+          ),
+          NavigationDestination(
+            selectedIcon: const Icon(
+              Icons.library_music_outlined,
+              color: Colors.white,
+            ),
+            icon: Icon(Icons.library_music, color: Colors.white.withOpacity(0.6)),
+            label: 'my library',
           ),
         ],
       ),
