@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:spotify_clone/services/auth_service.dart';
+import 'package:spotify_clone/services/spotify.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = '/login';
+
   const LoginScreen({super.key});
 
   @override
@@ -11,6 +13,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+    SpotifyService.authenticate();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       await AuthService.logInWithGoogle();
                     },
                     style: ButtonStyle(
-                        padding: MaterialStateProperty.all(
+                        padding: WidgetStateProperty.all(
                           const EdgeInsets.all(15),
                         ),
                         shape: MaterialStateProperty

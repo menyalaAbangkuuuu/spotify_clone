@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +14,7 @@ import 'package:spotify_clone/screens/queue/queue_list_screen.dart';
 import 'package:spotify_clone/screens/search_music/search_music_screens.dart';
 import 'package:spotify_clone/screens/search/search_screen.dart';
 import 'package:spotify_clone/screens/library/library_screen.dart';
+import 'package:spotify_clone/services/spotify.dart';
 
 import '../screens/playlist/playlist_screen.dart';
 
@@ -135,6 +138,7 @@ class AppRouter {
       GoRoute(
         path: LibraryScreen.routeName,
         pageBuilder: (context, state) {
+          debugPrint(state.matchedLocation);
           return const MaterialPage<void>(
             child: LibraryScreen(),
           );
@@ -149,6 +153,15 @@ class AppRouter {
           }),
     ],
     redirect: (BuildContext context, GoRouterState state) async {
+      print(state.matchedLocation);
+      if (state.matchedLocation == "/auth") {
+        final uri = state.uri;
+
+        SpotifyService.handleAuthorization(uri);
+
+        return LibraryScreen.routeName; // Navigate to the appropriate page
+      }
+
       final bool loggedIn = FirebaseAuth.instance.currentUser != null;
       final bool loggingIn = state.matchedLocation == LoginScreen.routeName;
       if (!loggedIn) return LoginScreen.routeName;

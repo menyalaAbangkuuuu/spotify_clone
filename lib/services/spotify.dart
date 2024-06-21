@@ -1,11 +1,45 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_clone/constants/credentials.dart';
 import 'package:spotify_clone/model/playlist_extension.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-final _spotifyApi = SpotifyApi(
-    SpotifyApiCredentials(Credentials.clientId, Credentials.clientSecret));
+final SpotifyApiCredentials _credentials =
+    SpotifyApiCredentials(Credentials.clientId, Credentials.clientSecret);
+
+const _redirectUri = 'myapp://auth/auth';
 
 class SpotifyService {
+  static SpotifyApi _spotifyApi = SpotifyApi(_credentials);
+  static final _grant = SpotifyApi.authorizationCodeGrant(_credentials);
+  static final Uri _authUri = _grant.getAuthorizationUrl(
+    Uri.parse(_redirectUri),
+    scopes: [
+      ...AuthorizationScope.user.all,
+      AuthorizationScope.library.read,
+      ...AuthorizationScope.playlist.all,
+    ],
+  );
+
+  static Future<User> getMe() async {
+    final me = await _spotifyApi.me.get();
+    return me;
+  }
+
+  static void authenticate() async {
+    try {
+      await launchUrl(_authUri);
+    } catch (e) {
+      throw Exception("Failed to launch");
+    }
+  }
+
+  static void handleAuthorization(Uri uri) async {
+    final credential = await _spotifyApi.getCredentials();
+    if (credential.fullyQualified) return;
+    _spotifyApi = SpotifyApi.fromAuthCodeGrant(_grant, uri.toString());
+  }
+
   static Future<List<PlaylistSimple>?> getTopTracks() async {
     final response = await _spotifyApi.playlists.featured.getPage(10);
     return response.items?.toList();
