@@ -152,6 +152,10 @@ class AppRouter {
           }),
     ],
     redirect: (BuildContext context, GoRouterState state) async {
+      if (state.matchedLocation == "/auth") {
+        return MyHomePage.routeName;
+      }
+
       if (!await SpotifyService.isUserAuthenticated()) {
         return LoginScreen.routeName;
       }

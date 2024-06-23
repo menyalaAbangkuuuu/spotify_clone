@@ -1,11 +1,9 @@
 import 'dart:io';
 
-import 'package:flutter_web_auth/flutter_web_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_clone/constants/credentials.dart';
 import 'package:spotify_clone/model/playlist_extension.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 final SpotifyApiCredentials _credentials =
     SpotifyApiCredentials(Credentials.clientId, Credentials.clientSecret);
@@ -36,14 +34,19 @@ class SpotifyService {
 
   static Future<void> authenticate() async {
     try {
-      final res = await FlutterWebAuth.authenticate(
-          url: _authUri.toString(), callbackUrlScheme: "myapp");
+      final res = await FlutterWebAuth2.authenticate(
+          url: _authUri.toString(),
+          callbackUrlScheme: "myapp",
+          options: const FlutterWebAuth2Options(
+            silentAuth: true,
+          ));
 
       final credential = await _spotifyApi.getCredentials();
       if (credential.fullyQualified) return;
 
       _spotifyApi = SpotifyApi.fromAuthCodeGrant(_grant, res.toString());
     } catch (e) {
+      print(e);
       throw Exception("Failed to launch");
     }
   }
