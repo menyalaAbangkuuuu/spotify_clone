@@ -5,6 +5,7 @@ import 'package:spotify_clone/screens/search/widget/search_button.dart';
 
 class SearchScreens extends StatefulWidget {
   static const routeName = '/search';
+
   const SearchScreens({super.key});
 
   @override
@@ -13,14 +14,10 @@ class SearchScreens extends StatefulWidget {
 
 class _SearchScreensState extends State<SearchScreens> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: searchAppBar(context),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(50), child: SearchAppbar()),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),

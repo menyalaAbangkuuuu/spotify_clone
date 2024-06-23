@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:spotify_clone/services/auth_service.dart';
+import 'package:go_router/go_router.dart';
+import 'package:spotify_clone/screens/home/home_screen.dart';
+import 'package:spotify_clone/services/spotify.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = '/login';
+
   const LoginScreen({super.key});
 
   @override
@@ -11,6 +14,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,22 +57,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 child: TextButton(
                     onPressed: () async {
-                      await AuthService.logInWithGoogle();
+                      await SpotifyService.authenticate();
+                      if (context.mounted) {
+                        context.go(MyHomePage.routeName);
+                      }
                     },
                     style: ButtonStyle(
-                        padding: MaterialStateProperty.all(
+                        padding: WidgetStateProperty.all(
                           const EdgeInsets.all(15),
                         ),
-                        shape: MaterialStateProperty
-                            .all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(36.0),
                                 side: const BorderSide(color: Colors.white)))),
                     child: const Row(
                       children: [
-                        FaIcon(FontAwesomeIcons.google, color: Colors.white),
+                        FaIcon(FontAwesomeIcons.spotify,
+                            color: Color.fromRGBO(29, 185, 84, 1)),
                         Expanded(
                           child: Center(
-                            child: Text('Continue with Google',
+                            child: Text('Continue with Spotify',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,

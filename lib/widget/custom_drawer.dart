@@ -1,6 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:go_router/go_router.dart';
+import 'package:spotify_clone/screens/login/login_screen.dart';
+import 'package:spotify_clone/services/spotify.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -10,7 +11,6 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  final _user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -20,24 +20,61 @@ class _CustomDrawerState extends State<CustomDrawer> {
           children: [
             Column(
               children: [
-                ListTile(
-                  title: Text(
-                    _user?.displayName ?? 'Guest',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
+                FutureBuilder(
+                  future: SpotifyService.getMe(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return ListTile(
+                        leading: const CircularProgressIndicator(),
+                        title: Text(
+                          'Loading...',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
-                  ),
-                  leading: CircleAvatar(
-                    radius: 24,
-                    child: _user?.photoURL != null
-                        ? ClipOval(
-                            child: Image.network(
-                              _user!.photoURL!,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : const Icon(Icons.person),
-                  ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return ListTile(
+                        leading: const Icon(Icons.error),
+                        title: Text(
+                          'Error',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      );
+                    } else if (snapshot.hasData) {
+                      final user = snapshot.data;
+                      final imageUrl = user?.images?.isNotEmpty == true
+                          ? user!.images!.first.url
+                          : 'https://jsonplaceholder.com';
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(imageUrl!),
+                        ),
+                        title: Text(
+                          user?.displayName ?? 'Guest',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      );
+                    } else {
+                      return ListTile(
+                        leading: const Icon(Icons.error),
+                        title: Text(
+                          'Error',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      );
+                    }
+                  },
                 ),
                 Divider(
                   color: Colors.white.withOpacity(0.2),
@@ -49,8 +86,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 backgroundColor: Colors.white,
               ),
               onPressed: () {
-                FirebaseAuth.instance.signOut();
-                GoogleSignIn().signOut();
+                context.go(LoginScreen.routeName);
               },
               child: const Text('Log out',
                   style: TextStyle(

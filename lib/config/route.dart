@@ -1,4 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:spotify_clone/screens/category_detail/category_detail.dart';
@@ -12,6 +13,7 @@ import 'package:spotify_clone/screens/queue/queue_list_screen.dart';
 import 'package:spotify_clone/screens/search_music/search_music_screens.dart';
 import 'package:spotify_clone/screens/search/search_screen.dart';
 import 'package:spotify_clone/screens/library/library_screen.dart';
+import 'package:spotify_clone/services/spotify.dart';
 
 import '../screens/playlist/playlist_screen.dart';
 
@@ -135,6 +137,7 @@ class AppRouter {
       GoRoute(
         path: LibraryScreen.routeName,
         pageBuilder: (context, state) {
+          debugPrint(state.matchedLocation);
           return const MaterialPage<void>(
             child: LibraryScreen(),
           );
@@ -149,10 +152,9 @@ class AppRouter {
           }),
     ],
     redirect: (BuildContext context, GoRouterState state) async {
-      final bool loggedIn = FirebaseAuth.instance.currentUser != null;
-      final bool loggingIn = state.matchedLocation == LoginScreen.routeName;
-      if (!loggedIn) return LoginScreen.routeName;
-      if (loggingIn) return MyHomePage.routeName;
+      if (!await SpotifyService.isUserAuthenticated()) {
+        return LoginScreen.routeName;
+      }
 
       return null;
     },

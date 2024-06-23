@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 
-class LibraryScreen extends StatelessWidget {
-  static const routeName = '/library';
+class LibraryScreen extends StatefulWidget {
+  static const String routeName = '/library';
 
   const LibraryScreen({super.key});
 
+  @override
+  State<LibraryScreen> createState() => _LibraryScreenState();
+}
 
-  //TODO: buat screen untuk library
+class _LibraryScreenState extends State<LibraryScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Column(
           children: <Widget>[
-            Expanded(
-              child: Text("ini adalah library"),
+            Center(
+              child: Text(
+                'Library',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
             ),
           ],
         ),
