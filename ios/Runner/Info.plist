@@ -12,10 +12,9 @@
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
             <key>CFBundleURLName</key>
-            <string>192.168.100.243</string>
+            <string>com.kelvin.spotify_clone</string>
             <key>CFBundleURLSchemes</key>
             <array>
-                <string>com.googleusercontent.apps.716247414791-di6i0kdd77u99bdl43sbdmc0h9pa9923</string>
                 <string>myapp</string>
             </array>
         </dict>

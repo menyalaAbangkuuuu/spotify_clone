@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_clone/constants/credentials.dart';
@@ -26,18 +29,23 @@ class SpotifyService {
     return me;
   }
 
-  static void authenticate() async {
+  static Future<bool> isUserAuthenticated() async {
+    final cred = await _spotifyApi.getCredentials();
+    return cred.fullyQualified;
+  }
+
+  static Future<void> authenticate() async {
     try {
-      await launchUrl(_authUri);
+      final res = await FlutterWebAuth.authenticate(
+          url: _authUri.toString(), callbackUrlScheme: "myapp");
+
+      final credential = await _spotifyApi.getCredentials();
+      if (credential.fullyQualified) return;
+
+      _spotifyApi = SpotifyApi.fromAuthCodeGrant(_grant, res.toString());
     } catch (e) {
       throw Exception("Failed to launch");
     }
-  }
-
-  static void handleAuthorization(Uri uri) async {
-    final credential = await _spotifyApi.getCredentials();
-    if (credential.fullyQualified) return;
-    _spotifyApi = SpotifyApi.fromAuthCodeGrant(_grant, uri.toString());
   }
 
   static Future<List<PlaylistSimple>?> getTopTracks() async {
