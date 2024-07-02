@@ -17,7 +17,10 @@ class _SearchScreensState extends State<SearchScreens> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(50), child: SearchAppbar()),
+          preferredSize: Size.fromHeight(50),
+          child: SearchAppbar(
+            title: "search",
+          )),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),

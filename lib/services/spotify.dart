@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:oauth2/oauth2.dart' as oauth2;
 
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
@@ -7,12 +9,13 @@ import 'package:spotify/spotify.dart';
 import 'package:spotify_clone/constants/credentials.dart';
 import 'package:spotify_clone/model/playlist_extension.dart';
 
-final SpotifyApiCredentials _credentials =
-    SpotifyApiCredentials(Credentials.clientId, Credentials.clientSecret);
-
 const _redirectUri = 'myapp://auth/auth';
 
 class SpotifyService {
+  static final SpotifyApiCredentials _credentials = SpotifyApiCredentials(
+    Credentials.clientId,
+    Credentials.clientSecret,
+  );
   static SpotifyApi _spotifyApi = SpotifyApi(_credentials);
   static final _grant = SpotifyApi.authorizationCodeGrant(_credentials);
   static final Uri _authUri = _grant.getAuthorizationUrl(
@@ -24,14 +27,22 @@ class SpotifyService {
     ],
   );
 
+  static Future<bool> isUserAuthenticated() async {
+    final sharePrefs = await SharedPreferences.getInstance();
+    final token = sharePrefs.getString('accessToken');
+    final refreshToken = sharePrefs.getString('refreshToken');
+    final expiration = sharePrefs.getString('expiration');
+
+    if (token == null) return false;
+
+    _spotifyApi = SpotifyApi.withAccessToken(token);
+    final user = await _spotifyApi.me.get();
+    return user.id?.isNotEmpty ?? false;
+  }
+
   static Future<User> getMe() async {
     final me = await _spotifyApi.me.get();
     return me;
-  }
-
-  static Future<bool> isUserAuthenticated() async {
-    final cred = await _spotifyApi.getCredentials();
-    return cred.fullyQualified;
   }
 
   static Future<void> authenticate() async {
@@ -44,17 +55,28 @@ class SpotifyService {
         callbackUrlScheme: "myapp",
       );
 
+      _spotifyApi = SpotifyApi.fromAuthCodeGrant(_grant, res.toString());
       final credential = await _spotifyApi.getCredentials();
-      final jwt = JWT(credential);
+
       final sharePrefs = await SharedPreferences.getInstance();
-      if (credential.fullyQualified) return;
       await sharePrefs.setString('accessToken', credential.accessToken ?? "");
       await sharePrefs.setString('refreshToken', credential.refreshToken ?? "");
-      _spotifyApi = SpotifyApi.fromAuthCodeGrant(_grant, res.toString());
+      await sharePrefs.setString('scopes', credential.scopes?.join(",") ?? "");
+      await sharePrefs.setString(
+          'expiration', credential.expiration.toString());
     } catch (e) {
       print(e);
       throw Exception("Failed to launch");
     }
+  }
+
+  static Future<void> logOut() async {
+    final sharePrefs = await SharedPreferences.getInstance();
+    await sharePrefs.remove('accessToken');
+    await sharePrefs.remove('refreshToken');
+    await sharePrefs.remove('scopes');
+    await sharePrefs.remove('expiration');
+    _spotifyApi = SpotifyApi(_credentials);
   }
 
   static Future<List<PlaylistSimple>?> getTopTracks() async {
@@ -111,6 +133,16 @@ class SpotifyService {
     final response = _spotifyApi.playlists.getByCategoryId(categoryId);
     final pages = await response.getPage(10);
     return pages.items?.toList();
+  }
+
+  void createPlaylist(String playlistName) async {
+    final user = await _spotifyApi.me.get();
+    await _spotifyApi.playlists.createPlaylist(user.id ?? "", playlistName);
+  }
+
+  static Future<List<PlaylistSimple>> getPlaylistFromUser() async {
+    final playlists = await _spotifyApi.playlists.me.all();
+    return playlists.toList();
   }
 
   static Future<Playlist> getPlaylistFromSimple(

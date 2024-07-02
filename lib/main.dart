@@ -7,6 +7,7 @@ import 'package:spotify_clone/providers/auth_provider.dart';
 import 'package:spotify_clone/providers/category_provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/providers/music_provider.dart';
+import 'package:spotify_clone/providers/recent_played_provider.dart';
 import 'package:spotify_clone/providers/search_music_provider.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => SearchProvider()),
         ChangeNotifierProvider(create: (context) => MusicPlayerProvider()),
         ChangeNotifierProvider(create: (context) => CategoryProvider()),
+        ChangeNotifierProvider(create: (context) => RecentPlayedProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider())
       ],
       child: MaterialApp.router(

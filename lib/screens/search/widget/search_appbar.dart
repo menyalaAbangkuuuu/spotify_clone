@@ -6,7 +6,9 @@ import 'package:spotify_clone/providers/auth_provider.dart';
 import 'package:spotify_clone/screens/common/main_screen.dart';
 
 class SearchAppbar extends StatelessWidget {
-  const SearchAppbar({super.key});
+  final String title;
+
+  const SearchAppbar({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +25,15 @@ class SearchAppbar extends StatelessWidget {
               if (userProvider.isLoading) {
                 return const CircularProgressIndicator();
               }
+              if (userProvider.user == null) {
+                return const Icon(Icons.error);
+              }
+
               return CachedNetworkImage(
                   height: 36,
                   width: 36,
-                  imageUrl: userProvider.user?.images?.first.url ?? "",
+                  imageUrl: userProvider.user?.images?.first.url ??
+                      "https://jsonplaceholder.com",
                   imageBuilder: (context, imageProvider) => Container(
                         width: 36.0,
                         height: 36.0,
@@ -56,9 +63,9 @@ class SearchAppbar extends StatelessWidget {
             }),
           ),
           const SizedBox(width: 10),
-          const Text(
-            'Search',
-            style: TextStyle(
+          Text(
+            title,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),

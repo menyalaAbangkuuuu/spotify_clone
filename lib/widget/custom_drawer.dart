@@ -86,6 +86,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 backgroundColor: Colors.white,
               ),
               onPressed: () {
+                SpotifyService.logOut();
                 context.go(LoginScreen.routeName);
               },
               child: const Text('Log out',

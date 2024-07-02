@@ -6,14 +6,17 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
+import 'package:spotify_clone/providers/recent_played_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
 
 class QueueScreen extends StatelessWidget {
   static const routeName = '/queue';
+
   const QueueScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final recentPlayedProvider = context.read<RecentPlayedProvider>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -62,6 +65,8 @@ class QueueScreen extends StatelessWidget {
                     (context, i) => ListTile(
                       onTap: () {
                         musicPlayerProvider.setToFirst(i);
+                        recentPlayedProvider
+                            .addRecentPlayed(musicPlayerProvider.currentTrack!);
                         musicPlayerProvider.play();
                       },
                       title: Text(
@@ -157,6 +162,7 @@ class QueueScreen extends StatelessWidget {
                             child: ListTile(
                               onTap: () {
                                 musicPlayerProvider.setToFirst(index);
+
                                 musicPlayerProvider.play();
                               },
                               title: Text(

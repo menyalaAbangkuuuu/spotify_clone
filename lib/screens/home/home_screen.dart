@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:spotify_clone/screens/home/widget/top_playlist_widget.dart';
+import 'package:spotify_clone/screens/search/widget/search_appbar.dart';
 
 class MyHomePage extends StatefulWidget {
   static const String routeName = "/home";
+
   const MyHomePage({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -33,13 +35,17 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return const Scaffold(
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: SearchAppbar(
+            title: "",
+          )),
       body: SafeArea(
         child: Column(
           children: <Widget>[
             Expanded(
               child: TopTracksWidget(),
             ),
-            
           ],
         ),
       ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:spotify_clone/providers/auth_provider.dart';
 import 'package:spotify_clone/screens/home/home_screen.dart';
 import 'package:spotify_clone/services/spotify.dart';
 
@@ -21,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.read<AuthProvider>();
     return Scaffold(
       body: Center(
         child: Padding(
@@ -57,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 child: TextButton(
                     onPressed: () async {
-                      await SpotifyService.authenticate();
+                      await authProvider.login();
                       if (context.mounted) {
                         context.go(MyHomePage.routeName);
                       }

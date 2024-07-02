@@ -155,8 +155,8 @@ class AppRouter {
       if (state.matchedLocation == "/auth") {
         return MyHomePage.routeName;
       }
-
-      if (!await SpotifyService.isUserAuthenticated()) {
+      final isAuth = await SpotifyService.isUserAuthenticated();
+      if (!isAuth) {
         return LoginScreen.routeName;
       }
 
