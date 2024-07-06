@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:spotify_clone/screens/artist/artist_screen.dart';
+import 'package:spotify_clone/screens/artist/artist_screen.dart';
 import 'package:spotify_clone/screens/category_detail/category_detail.dart';
 import 'package:spotify_clone/screens/common/splash_screen.dart';
 import 'package:spotify_clone/screens/login/login_screen.dart';
@@ -10,6 +12,7 @@ import 'package:spotify_clone/screens/home/home_screen.dart';
 import 'package:spotify_clone/screens/common/main_screen.dart';
 import 'package:spotify_clone/screens/music_detail/music_detail_screen.dart';
 import 'package:spotify_clone/screens/queue/queue_list_screen.dart';
+import 'package:spotify_clone/screens/savedSong/saved_song_screen.dart';
 import 'package:spotify_clone/screens/search_music/search_music_screens.dart';
 import 'package:spotify_clone/screens/search/search_screen.dart';
 import 'package:spotify_clone/screens/library/library_screen.dart';
@@ -52,6 +55,12 @@ class AppRouter {
             },
           ),
           GoRoute(
+            path: SavedSongScreen.routeName,
+            pageBuilder: (context, state) => const MaterialPage(
+              child: SavedSongScreen(),
+            ),
+          ),
+          GoRoute(
             path: SearchMusicScreen.routeName,
             pageBuilder: (context, state) {
               return const MaterialPage(
@@ -86,6 +95,16 @@ class AppRouter {
           ),
         ],
       ),
+      GoRoute(
+          path: '${ArtistScreen.routeName}/:id',
+          pageBuilder: (context, state) {
+            final id = state.pathParameters['id']!;
+            return MaterialPage(
+              child: ArtistScreen(
+                artistId: id,
+              ),
+            );
+          }),
       GoRoute(
         path: SplashScreen.routeName,
         pageBuilder: (context, state) {

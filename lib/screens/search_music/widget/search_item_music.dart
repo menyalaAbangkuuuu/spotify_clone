@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:spotify/spotify.dart';
+import 'package:spotify/spotify.dart' hide Image, Offset;
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/providers/recent_played_provider.dart';
 import 'package:spotify_clone/screens/search_music/widget/slider_item_music.dart';
@@ -111,11 +111,21 @@ Row searchItemMusic(BuildContext context,
                     height: 50.0,
                   ),
                 ),
-                errorWidget: (context, url, error) => const SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: Center(
-                    child: Icon(Icons.error),
+                errorWidget: (context, url, error) => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.music_note_outlined,
+                    size: 100,
                   ),
                 ),
               ),

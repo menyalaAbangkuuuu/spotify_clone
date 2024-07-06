@@ -43,26 +43,33 @@ class MusicPlayerProvider extends ChangeNotifier {
   }
 
   bool _isPlaying = false;
+
   bool get isPlaying => _isPlaying;
 
   final AudioPlayer _audioPlayer = AudioPlayer();
+
   AudioPlayer get audioPlayer => _audioPlayer;
 
   /// The current track that is being played
   Track? _currentTrack;
+
   Track? get currentTrack => _currentTrack;
 
   /// The color of the current track
   Color _currentTrackColor = Colors.grey;
+
   Color get currentTrackColor => _currentTrackColor;
 
   Duration _currentPosition = Duration.zero;
+
   Duration get currentPosition => _currentPosition;
 
   Duration _totalDuration = Duration.zero;
+
   Duration get totalDuration => _totalDuration;
 
   Artist? _currentArtist;
+
   Artist? get currentArtist => _currentArtist;
 
   final List<Track> _queue = [];
@@ -73,19 +80,29 @@ class MusicPlayerProvider extends ChangeNotifier {
   final List<Track> _prevQueue = [];
 
   Lyric? _lyric;
+
   Lyric? get lyric => _lyric;
 
   String _errorMessage = "";
+
   String get errorMessage => _errorMessage;
 
   bool _canPrev = false;
+
   bool get canPrev => _canPrev;
 
   bool _canNext = false;
+
   bool get canNext => _canNext;
 
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
+
+  // TODO nanti ini dibuat dokumentasinya ya
+  bool _currentTrackIsLiked = false;
+
+  bool get currentTrackIsLiked => _currentTrackIsLiked;
 
   /// resume the audio player
   void resume() {
@@ -136,19 +153,30 @@ class MusicPlayerProvider extends ChangeNotifier {
   /// function ini digunakan untuk menambahkan lagu dari playlist ke queue
   /// semua list lagu sebelum index akan dimasukan ke prevQueue
   /// semua list lagu setelah index akan dimasukan ke queue
-  void addFromPlaylist(List<Track> tracks, index) {
-    if (index == 0) {
-      _canPrev = false;
-    } else {
-      _canPrev = true;
-      _canNext = true;
-    }
+  void addFromPlaylist(List<Track> tracks, int index) {
+    assert(index >= 0 && index < tracks.length, "Index out of bounds");
+
+    // Determine navigation capabilities
+    _canPrev = index > 0;
+    _canNext = queue.isNotEmpty || index < tracks.length - 1;
+
+    // Stop the current playback
     _audioPlayer.stop();
-    _prevQueue.clear();
-    _prevQueue.addAll(tracks.sublist(0, index));
-    _queue.clear();
-    _queue.addAll(tracks.sublist(index));
-    _currentTrack = _queue.first;
+
+    // Update the previous queue
+    _prevQueue
+      ..clear()
+      ..addAll(tracks.sublist(0, index));
+
+    // Update the current queue
+    _queue
+      ..clear()
+      ..addAll(tracks.sublist(index));
+
+    // Set the current track
+    _currentTrack = _queue.isNotEmpty ? _queue.first : null;
+
+    // Notify listeners about the changes
     notifyListeners();
   }
 
@@ -162,25 +190,46 @@ class MusicPlayerProvider extends ChangeNotifier {
   /// If the queue is empty, this method does nothing.
   /// If the current track is null, this method does nothing.
 
+  // TODO ini dijelasin ya diganti dengan Future.wait biar lebih cepat
   Future<void> play() async {
     if (_queue.isEmpty || _currentTrack == null) return;
 
     _isLoading = true;
     notifyListeners();
+
     try {
-      Music music = await Youtube.getVideo(
-          songName: _currentTrack!.name ?? "",
-          artistName: _currentTrack!.artists!.first.name ?? "");
-      await _getCurrentArtist();
+      // Start fetching multiple data concurrently
+      final musicFuture = Youtube.getVideo(
+        songName: _currentTrack!.name ?? "",
+        artistName: _currentTrack!.artists!.first.name ?? "",
+      );
+
+      final artistFuture = _getCurrentArtist();
+
+      final colorFuture = ColorGenerator.getImagePalette(
+        NetworkImage(_currentTrack!.album!.images!.first.url ?? ""),
+      );
+
+      final lyricFuture = LyricService.getLyric(_currentTrack?.id ?? "");
+
+      // Wait for all the futures to complete
+      final results = await Future.wait([
+        musicFuture,
+        artistFuture,
+        colorFuture,
+        lyricFuture,
+      ]);
+
+      // Extract the results
+      final Music music = results[0] as Music;
       _totalDuration = music.duration!;
-      _currentTrackColor = await ColorGenerator.getImagePalette(
-              NetworkImage(_currentTrack!.album!.images!.first.url ?? "")) ??
-          Colors.grey;
-      _lyric = await LyricService.getLyric(_currentTrack?.id ?? "");
+      _currentTrackColor = results[2] as Color? ?? Colors.grey;
+      _lyric = results[3] as Lyric?;
+
+      _checkIfTrackIsLiked();
       await _audioPlayer.play(UrlSource(music.url));
       _isPlaying = true;
     } catch (e) {
-      print(e);
       _errorMessage = "This song cannot be played";
       _isPlaying = false;
     } finally {
@@ -244,6 +293,13 @@ class MusicPlayerProvider extends ChangeNotifier {
     }
   }
 
+  // TODO ini nanti dijelaskan ya
+  void _checkIfTrackIsLiked() async {
+    _currentTrackIsLiked =
+        await SpotifyService.checkTrackSaved(_currentTrack?.id ?? "");
+    notifyListeners();
+  }
+
   void swap(int oldIndex, int newIndex) {
     if (newIndex > oldIndex) {
       newIndex -= 1;
@@ -259,5 +315,12 @@ class MusicPlayerProvider extends ChangeNotifier {
   Future<void> _getCurrentArtist() async {
     _currentArtist =
         await SpotifyService.getArtist(_currentTrack?.artists?.first.id ?? "");
+  }
+
+  // TODO nanti ini dibuat dokumentasinya ya
+  Future<void> saveTrack(String trackId) async {
+    await SpotifyService.addSongToSavedTracks(trackId);
+    _currentTrackIsLiked = true;
+    notifyListeners();
   }
 }

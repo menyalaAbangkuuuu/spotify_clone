@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/screens/music_detail/widget/artist_card.dart';
 import 'package:spotify_clone/screens/music_detail/widget/mini_lyric.dart';
+import 'package:spotify_clone/services/spotify.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
 import 'package:spotify_clone/screens/queue/queue_list_screen.dart';
 import 'package:spotify_clone/widget/music_player.dart';
@@ -77,21 +78,64 @@ class MusicDetailScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  Text(
-                    musicPlayerProvider.currentTrack?.name ?? '',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w900,
-                          overflow: TextOverflow.ellipsis,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              musicPlayerProvider.currentTrack?.name ?? '',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w900,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                            ),
+                            Text(
+                              flattenArtistName(
+                                  musicPlayerProvider.currentTrack?.artists),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white70,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                            ),
+                          ],
                         ),
-                  ),
-                  Text(
-                    flattenArtistName(
-                        musicPlayerProvider.currentTrack?.artists),
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white70,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      ),
+                      IconButton(
+                          onPressed: musicPlayerProvider.currentTrackIsLiked
+                              ? null
+                              : () async {
+                                  await musicPlayerProvider.saveTrack(
+                                      musicPlayerProvider.currentTrack?.id ??
+                                          "");
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(
+                                      content:
+                                          Text('Song added to your library'),
+                                    ));
+                                  }
+                                },
+                          icon: musicPlayerProvider.currentTrackIsLiked
+                              ? const Icon(
+                                  Icons.check_circle_outline_outlined,
+                                  color: Colors.green,
+                                  size: 48,
+                                )
+                              : const Icon(
+                                  Icons.add,
+                                  size: 48,
+                                ))
+                    ],
                   ),
                   const SizedBox(height: 10),
                   musicPlayer(context, musicPlayerProvider),
@@ -109,8 +153,7 @@ class MusicDetailScreen extends StatelessWidget {
                   ),
                   const MiniLyric(),
                   const SizedBox(height: 10),
-                  artistCard(context, musicPlayerProvider.currentArtist,
-                      musicPlayerProvider.isLoading)
+                  const ArtistCard()
                 ],
               ),
             ),

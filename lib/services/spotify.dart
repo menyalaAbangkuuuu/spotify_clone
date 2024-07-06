@@ -1,12 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:oauth2/oauth2.dart' as oauth2;
+import 'package:flutter/material.dart' hide Page, Image;
 
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_clone/constants/credentials.dart';
+import 'package:spotify_clone/model/artist_detail.dart';
 import 'package:spotify_clone/model/playlist_extension.dart';
 
 const _redirectUri = 'myapp://auth/auth';
@@ -16,16 +14,28 @@ class SpotifyService {
     Credentials.clientId,
     Credentials.clientSecret,
   );
-  static SpotifyApi _spotifyApi = SpotifyApi(_credentials);
+
+  // TODO nanti ini dibuat dokumentasinya ya
+
+  static SpotifyApi _spotifyApi =
+      SpotifyApi(_credentials, onCredentialsRefreshed: (cred) async {
+    final sharePrefs = await SharedPreferences.getInstance();
+    await sharePrefs.setString('accessToken', cred.accessToken ?? "");
+    await sharePrefs.setString('refreshToken', cred.refreshToken ?? "");
+    await sharePrefs.setString('scopes', cred.scopes?.join(",") ?? "");
+    await sharePrefs.setString('expiration', cred.expiration.toString());
+  });
   static final _grant = SpotifyApi.authorizationCodeGrant(_credentials);
   static final Uri _authUri = _grant.getAuthorizationUrl(
     Uri.parse(_redirectUri),
     scopes: [
       ...AuthorizationScope.user.all,
-      AuthorizationScope.library.read,
+      ...AuthorizationScope.library.all,
       ...AuthorizationScope.playlist.all,
     ],
   );
+
+  // TODO nanti ini dibuat dokumentasinya ya
 
   static Future<bool> isUserAuthenticated() async {
     final sharePrefs = await SharedPreferences.getInstance();
@@ -33,7 +43,8 @@ class SpotifyService {
     final refreshToken = sharePrefs.getString('refreshToken');
     final expiration = sharePrefs.getString('expiration');
 
-    if (token == null) return false;
+    if (token == null ||
+        DateTime.parse(expiration ?? "").isBefore(DateTime.now())) return false;
 
     _spotifyApi = SpotifyApi.withAccessToken(token);
     final user = await _spotifyApi.me.get();
@@ -44,6 +55,8 @@ class SpotifyService {
     final me = await _spotifyApi.me.get();
     return me;
   }
+
+  // TODO nanti ini dibuat dokumentasinya ya
 
   static Future<void> authenticate() async {
     try {
@@ -65,10 +78,11 @@ class SpotifyService {
       await sharePrefs.setString(
           'expiration', credential.expiration.toString());
     } catch (e) {
-      print(e);
       throw Exception("Failed to launch");
     }
   }
+
+  // TODO nanti ini dibuat dokumentasinya ya
 
   static Future<void> logOut() async {
     final sharePrefs = await SharedPreferences.getInstance();
@@ -135,14 +149,27 @@ class SpotifyService {
     return pages.items?.toList();
   }
 
-  void createPlaylist(String playlistName) async {
-    final user = await _spotifyApi.me.get();
-    await _spotifyApi.playlists.createPlaylist(user.id ?? "", playlistName);
-  }
-
   static Future<List<PlaylistSimple>> getPlaylistFromUser() async {
     final playlists = await _spotifyApi.playlists.me.all();
-    return playlists.toList();
+    final PlaylistSimple likedSong = PlaylistSimple()
+      ..name = "Liked Songs"
+      ..id = "liked-songs"
+      ..description = "Your liked songs"
+      ..images = [
+        Image()
+          ..url =
+              "https://i1.sndcdn.com/artworks-y6qitUuZoS6y8LQo-5s2pPA-t500x500.jpg"
+      ];
+    return [likedSong, ...playlists];
+  }
+
+  static Future<List<TrackSaved>> getUserSavedTracks() async {
+    final response = await _spotifyApi.tracks.me.saved.all();
+    return response.toList();
+  }
+
+  static Future<void> addSongToSavedTracks(String trackId) async {
+    await _spotifyApi.tracks.me.saveOne(trackId);
   }
 
   static Future<Playlist> getPlaylistFromSimple(
@@ -152,26 +179,75 @@ class SpotifyService {
 
   static Future<PlaylistWithBackground> getPlaylistById(
       String playlistId) async {
-    final playlist = await _spotifyApi.playlists.get(playlistId);
-    final playlistMusic =
-        _spotifyApi.playlists.getTracksByPlaylistId(playlistId);
-    final pages = await playlistMusic.all();
-    playlist.tracks?.itemsNative =
-        pages.toList().where((element) => element.type != "episode").toList();
-    final backgroundColor = await playlist.fetchBackgroundColor();
+    final playlistFuture = _spotifyApi.playlists.get(playlistId);
+    final playlistMusicFuture = getMusicByPlaylist(playlistId);
+
+    final results = await Future.wait([playlistFuture, playlistMusicFuture]);
+
+    final playlist = results[0] as Playlist;
+    final playlistMusic = results[1] as List<Track>;
+
+    playlist.tracks?.itemsNative = playlistMusic;
+
+    final backgroundColor = playlist.images?.first.url == null
+        ? Colors.black
+        : await playlist.fetchBackgroundColor();
 
     return PlaylistWithBackground(
         playlist: playlist, backgroundColor: backgroundColor);
   }
 
-  static Future<List<Track>?> getMusicByPlaylist(String playlistId) async {
+  static Future<List<Track>> getMusicByPlaylist(String playlistId) async {
     final playlist = _spotifyApi.playlists.getTracksByPlaylistId(playlistId);
     final pages = await playlist.getPage(50);
-    return pages.items?.toList();
+    return pages.items
+            ?.toList()
+            .where((element) => element.type != "episode")
+            .toList() ??
+        [];
   }
 
   static Future<Artist> getArtist(String artistId) async {
     final artist = await _spotifyApi.artists.get(artistId);
     return artist;
+  }
+
+  // TODO nanti ini dibuat dokumentasinya ya
+
+  static Future<bool> checkTrackSaved(String trackId) async {
+    final response = await _spotifyApi.tracks.me.containsOne(trackId);
+    return response;
+  }
+
+  // TODO nanti ini dibuat dokumentasinya ya
+
+  static Future<ArtistDetail> getArtistData(String artistId) async {
+    final artistFuture = _spotifyApi.artists.get(artistId);
+    final topTracksFuture = _spotifyApi.artists.topTracks(artistId, Market.ID);
+    final albumsPageFuture = _spotifyApi.artists.albums(artistId);
+    final albums = albumsPageFuture.getPage(10);
+
+    // Run all the futures in parallel and wait for all of them to complete
+    final results = await Future.wait([artistFuture, topTracksFuture, albums]);
+
+    // Extract results
+    final artist = results[0] as Artist;
+    final topTracks = (results[1] as Iterable<Track>).toList();
+    final album = (results[2] as Page<Album>).items?.toList() ?? [];
+
+    return ArtistDetail(artist: artist, albums: album, topTracks: topTracks);
+  }
+
+  // TODO nanti ini dibuat dokumentasinya ya
+
+  static Future<void> createPlaylist(String playlistName) async {
+    final user = await _spotifyApi.me.get();
+    await _spotifyApi.playlists.createPlaylist(user.id ?? "", playlistName);
+  }
+
+  // TODO nanti ini dibuat dokumentasinya ya
+  static Future<void> addSongToPlaylist(
+      String playlistName, String trackId) async {
+    await _spotifyApi.playlists.addTrack(trackId, playlistName);
   }
 }

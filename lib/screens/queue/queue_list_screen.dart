@@ -1,10 +1,12 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/providers/recent_played_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
@@ -215,8 +217,50 @@ class QueueScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              leading: Image.network(
-                                  currentItem.album!.images?[0].url ?? ''),
+                              leading: CachedNetworkImage(
+                                height: 50,
+                                width: 50,
+                                imageUrl:
+                                    currentItem.album?.images?.first.url ?? "",
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  width: 50.0,
+                                  height: 50.0,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
+                                  baseColor: Colors.black.withOpacity(.5),
+                                  highlightColor: Colors.grey[100]!,
+                                  child: Container(
+                                    color: Colors.black.withOpacity(.6),
+                                    height: 50.0,
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.5),
+                                        spreadRadius: 1,
+                                        blurRadius: 5,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Icon(
+                                    Icons.music_note_outlined,
+                                    size: 100,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
