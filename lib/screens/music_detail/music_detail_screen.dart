@@ -7,9 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/screens/music_detail/widget/artist_card.dart';
 import 'package:spotify_clone/screens/music_detail/widget/mini_lyric.dart';
-import 'package:spotify_clone/services/spotify.dart';
-import 'package:spotify_clone/utils/flatten_artists_name.dart';
 import 'package:spotify_clone/screens/queue/queue_list_screen.dart';
+import 'package:spotify_clone/utils/flatten_artists_name.dart';
 import 'package:spotify_clone/widget/music_player.dart';
 
 class MusicDetailScreen extends StatelessWidget {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart' hide Page, Image;
-
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/spotify.dart';
@@ -40,11 +39,13 @@ class SpotifyService {
   static Future<bool> isUserAuthenticated() async {
     final sharePrefs = await SharedPreferences.getInstance();
     final token = sharePrefs.getString('accessToken');
-    final refreshToken = sharePrefs.getString('refreshToken');
     final expiration = sharePrefs.getString('expiration');
 
     if (token == null ||
-        DateTime.parse(expiration ?? "").isBefore(DateTime.now())) return false;
+        expiration != null &&
+            DateTime.parse(expiration).isBefore(DateTime.now())) {
+      return false;
+    }
 
     _spotifyApi = SpotifyApi.withAccessToken(token);
     final user = await _spotifyApi.me.get();
@@ -78,6 +79,7 @@ class SpotifyService {
       await sharePrefs.setString(
           'expiration', credential.expiration.toString());
     } catch (e) {
+      print(e);
       throw Exception("Failed to launch");
     }
   }

@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:spotify_clone/screens/home/home_screen.dart';
 import 'package:spotify_clone/screens/library/library_screen.dart';
 import 'package:spotify_clone/screens/search/search_screen.dart';
-import 'package:spotify_clone/screens/search/widget/search_appbar.dart';
 import 'package:spotify_clone/widget/custom_drawer.dart';
 import 'package:spotify_clone/widget/mini_player.dart';
 
@@ -82,7 +81,8 @@ class _MainScreenState extends State<MainScreen> {
               Icons.library_music_outlined,
               color: Colors.white,
             ),
-            icon: Icon(Icons.library_music, color: Colors.white.withOpacity(0.6)),
+            icon:
+                Icon(Icons.library_music, color: Colors.white.withOpacity(0.6)),
             label: 'my library',
           ),
         ],

@@ -57,7 +57,7 @@ class _MiniLyricState extends State<MiniLyric> {
                                 extra: musicPlayerProvider);
                           },
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
+                            backgroundColor: WidgetStateProperty.all(
                               Colors.black.withOpacity(.5),
                             ),
                           ),

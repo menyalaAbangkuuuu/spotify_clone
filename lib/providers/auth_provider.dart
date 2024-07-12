@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/foundation.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_clone/services/spotify.dart';

@@ -1,21 +1,18 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:spotify_clone/screens/artist/artist_screen.dart';
-import 'package:spotify_clone/screens/artist/artist_screen.dart';
 import 'package:spotify_clone/screens/category_detail/category_detail.dart';
+import 'package:spotify_clone/screens/common/main_screen.dart';
 import 'package:spotify_clone/screens/common/splash_screen.dart';
+import 'package:spotify_clone/screens/home/home_screen.dart';
+import 'package:spotify_clone/screens/library/library_screen.dart';
 import 'package:spotify_clone/screens/login/login_screen.dart';
 import 'package:spotify_clone/screens/lyric/full_lyric_screen.dart';
-import 'package:spotify_clone/screens/home/home_screen.dart';
-import 'package:spotify_clone/screens/common/main_screen.dart';
 import 'package:spotify_clone/screens/music_detail/music_detail_screen.dart';
 import 'package:spotify_clone/screens/queue/queue_list_screen.dart';
 import 'package:spotify_clone/screens/savedSong/saved_song_screen.dart';
-import 'package:spotify_clone/screens/search_music/search_music_screens.dart';
 import 'package:spotify_clone/screens/search/search_screen.dart';
-import 'package:spotify_clone/screens/library/library_screen.dart';
+import 'package:spotify_clone/screens/search_music/search_music_screens.dart';
 import 'package:spotify_clone/services/spotify.dart';
 
 import '../screens/playlist/playlist_screen.dart';

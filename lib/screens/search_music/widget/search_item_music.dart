@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:spotify/spotify.dart' hide Image, Offset;
 import 'package:spotify_clone/providers/music_player_provider.dart';
-import 'package:spotify_clone/providers/recent_played_provider.dart';
 import 'package:spotify_clone/screens/search_music/widget/slider_item_music.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
 
@@ -15,7 +14,6 @@ Row searchItemMusic(BuildContext context,
     List<Track> tracks = const [],
     int currentIndex = 0}) {
   final musicProvider = context.read<MusicPlayerProvider>();
-  final recentPlayedProvider = context.read<RecentPlayedProvider>();
   return Row(
     children: [
       Text(
@@ -48,7 +46,6 @@ Row searchItemMusic(BuildContext context,
                 isFromPlaylist
                     ? musicProvider.addFromPlaylist(tracks, currentIndex)
                     : musicProvider.addToQueue(track);
-                recentPlayedProvider.addRecentPlayed(track);
                 musicProvider.play();
               },
               title: Text(

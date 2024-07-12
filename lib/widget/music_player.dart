@@ -56,12 +56,12 @@ Column musicPlayer(
             ),
             color: Colors.black.withOpacity(.7),
             style: ButtonStyle(
-              minimumSize: MaterialStateProperty.all(const Size(50, 50)),
-              padding: MaterialStateProperty.all(
+              minimumSize: WidgetStateProperty.all(const Size(50, 50)),
+              padding: WidgetStateProperty.all(
                 const EdgeInsets.all(15),
               ),
-              backgroundColor: MaterialStateProperty.all(Colors.white),
-              shape: MaterialStateProperty.all(
+              backgroundColor: WidgetStateProperty.all(Colors.white),
+              shape: WidgetStateProperty.all(
                 const CircleBorder(),
               ),
             ),

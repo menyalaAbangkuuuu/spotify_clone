@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/model/artist_detail.dart';
@@ -47,7 +47,7 @@ class ArtistScreen extends StatelessWidget {
                           builder: (BuildContext context,
                               BoxConstraints constraints) {
                             var top = constraints.biggest.height;
-                            return Container(
+                            return SizedBox(
                               height: top,
                               child: top > 90
                                   ? Container(

@@ -1,14 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:spotify/spotify.dart' hide Image, Offset;
 import 'package:spotify_clone/screens/search_music/widget/search_item_music.dart';
-import 'package:spotify_clone/utils/format_duration.dart';
 
 import '../../providers/music_player_provider.dart';
 import '../../services/spotify.dart';
@@ -43,7 +38,7 @@ class _SavedSongScreenState extends State<SavedSongScreen> {
           );
         } else {
           final playlistData = snapshot.data as List<TrackSaved>;
-          final tracks = playlistData.toList() ?? [];
+          final tracks = playlistData.toList();
 
           return Scaffold(
             body: SafeArea(

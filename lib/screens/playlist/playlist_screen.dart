@@ -8,6 +8,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify/spotify.dart' hide Offset, Image;
 import 'package:spotify_clone/model/playlist_extension.dart';
+import 'package:spotify_clone/providers/auth_provider.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/screens/playlist/widget/add_song_drawer.dart';
 import 'package:spotify_clone/screens/search_music/widget/search_item_music.dart';
@@ -102,6 +103,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = context.watch<AuthProvider>();
     return FutureBuilder<PlaylistWithBackground>(
       future: _futurePlaylist,
       builder: (context, snapshot) {
@@ -263,45 +265,52 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate((context, index) {
                         if (index == 0) {
-                          if (tracks.isEmpty) {
-                            return Center(
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                child: TextButton(
-                                    style: const ButtonStyle(
-                                        backgroundColor: WidgetStatePropertyAll(
-                                            Colors.white)),
-                                    onPressed: () {
-                                      _showBottomDrawer(
-                                          context, widget.playlistId);
-                                    },
-                                    child: const Text("add to this playlist",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold))),
-                              ),
-                            );
+                          if (auth.user?.id !=
+                              playlistData.playlist.owner?.id) {
+                            return const SizedBox.shrink();
                           } else {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ListTile(
-                                onTap: () => _showBottomDrawer(
-                                    context, widget.playlistId),
-                                leading: Container(
-                                  color: Colors.grey.shade700,
-                                  height: 50,
-                                  width: 50,
-                                  child: const Center(
-                                    child: Icon(
-                                      Icons.add,
-                                      size: 24,
+                            if (tracks.isEmpty) {
+                              return Center(
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  child: TextButton(
+                                      style: const ButtonStyle(
+                                          backgroundColor:
+                                              WidgetStatePropertyAll(
+                                                  Colors.white)),
+                                      onPressed: () {
+                                        _showBottomDrawer(
+                                            context, widget.playlistId);
+                                      },
+                                      child: const Text("add to this playlist",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.bold))),
+                                ),
+                              );
+                            } else {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListTile(
+                                  onTap: () => _showBottomDrawer(
+                                      context, widget.playlistId),
+                                  leading: Container(
+                                    color: Colors.grey.shade700,
+                                    height: 50,
+                                    width: 50,
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.add,
+                                        size: 24,
+                                      ),
                                     ),
                                   ),
+                                  title: const Text("add to this playlist"),
                                 ),
-                                title: const Text("add to this playlist"),
-                              ),
-                            );
+                              );
+                            }
                           }
                         }
 

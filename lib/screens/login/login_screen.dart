@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_clone/providers/auth_provider.dart';
 import 'package:spotify_clone/screens/home/home_screen.dart';
-import 'package:spotify_clone/services/spotify.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = '/login';

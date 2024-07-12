@@ -8,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:spotify_clone/providers/music_player_provider.dart';
-import 'package:spotify_clone/providers/recent_played_provider.dart';
 import 'package:spotify_clone/utils/flatten_artists_name.dart';
 
 class QueueScreen extends StatelessWidget {
@@ -18,7 +17,6 @@ class QueueScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final recentPlayedProvider = context.read<RecentPlayedProvider>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -67,8 +65,7 @@ class QueueScreen extends StatelessWidget {
                     (context, i) => ListTile(
                       onTap: () {
                         musicPlayerProvider.setToFirst(i);
-                        recentPlayedProvider
-                            .addRecentPlayed(musicPlayerProvider.currentTrack!);
+
                         musicPlayerProvider.play();
                       },
                       title: Text(

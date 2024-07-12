@@ -1,15 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:spotify_clone/providers/auth_provider.dart';
-import 'package:spotify_clone/screens/common/main_screen.dart';
 import 'package:spotify_clone/screens/playlist/playlist_screen.dart';
 import 'package:spotify_clone/screens/savedSong/saved_song_screen.dart';
-import 'package:spotify_clone/screens/search/search_screen.dart';
 import 'package:spotify_clone/services/spotify.dart';
 
 class LibraryScreen extends StatefulWidget {
@@ -84,7 +81,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColor,
+                          backgroundColor: Colors.green,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),

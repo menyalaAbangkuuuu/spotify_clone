@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify/spotify.dart' as spotify;
-import 'package:spotify_clone/providers/music_player_provider.dart';
 import 'package:spotify_clone/providers/music_provider.dart';
-import 'package:spotify_clone/providers/recent_played_provider.dart';
 
 class TopTracksWidget extends StatelessWidget {
   const TopTracksWidget({super.key});
@@ -13,7 +11,6 @@ class TopTracksWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // Access the MusicProvider
     final musicProvider = context.watch<MusicProvider>();
-    final playerProvider = context.read<MusicPlayerProvider>();
 
     // Check if topTracks is null or empty to show a loading or empty message
     if (musicProvider.topTracks == null || musicProvider.topTracks!.isEmpty) {
@@ -119,73 +116,6 @@ class TopTracksWidget extends StatelessWidget {
             ),
           ),
           // Horizontal Track List
-          Consumer<RecentPlayedProvider>(
-            builder: (context, recentPlayedProvider, child) {
-              if (recentPlayedProvider.recentPlayed.isEmpty) {
-                return const SizedBox();
-              }
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 8.0, top: 20.0),
-                    child: Text(
-                      "Recently Played",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 210, // Height of the horizontal list
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: recentPlayedProvider.recentPlayed.length,
-                      itemBuilder: (context, index) {
-                        final track = recentPlayedProvider.recentPlayed[index];
-                        return GestureDetector(
-                          onTap: () {
-                            playerProvider.addToQueue(track);
-                            playerProvider.play();
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 150,
-                                  height: 150,
-                                  child: track.album?.images?.first != null
-                                      ? Image.network(
-                                          track.album!.images?.first.url ?? "",
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Container(),
-                                ),
-                                const SizedBox(height: 8),
-                                SizedBox(
-                                  width: 100,
-                                  child: Text(
-                                    track.name ?? "",
-                                    style: const TextStyle(
-                                        fontSize: 11,
-                                        color:
-                                            Color.fromARGB(255, 134, 134, 134)),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
 
           const Padding(
             padding: EdgeInsets.only(left: 8.0, top: 20.0),
@@ -210,7 +140,7 @@ class TopTracksWidget extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
+                        SizedBox(
                           width: 150,
                           height: 150,
                           child:
